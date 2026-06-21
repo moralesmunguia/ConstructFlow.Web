@@ -1,0 +1,115 @@
+
+BDD-07-03 – DISEÑO DE APIs REST EMPRESARIALES
+CONSTRUCTFLOW V1.0
+
+OBJETIVO
+Definir endpoints, métodos HTTP, request, response, validaciones,
+seguridad JWT, códigos HTTP y versionado API.
+
+URL BASE
+https://api.constructflow.com/api/v1
+http://localhost/constructflow/api/v1
+
+HEADERS
+Content-Type: application/json
+Authorization: Bearer {JWT}
+
+RESPONSE EXITOSA
+{
+  "success": true,
+  "message": "Proceso ejecutado correctamente",
+  "data": {}
+}
+
+RESPONSE ERROR
+{
+  "success": false,
+  "message": "Error de validación",
+  "errors": []
+}
+
+API-01 AUTENTICACIÓN
+POST /auth/login
+POST /auth/refresh
+POST /auth/logout
+
+API-02 CLIENTES
+GET    /clientes
+GET    /clientes/{id}
+POST   /clientes
+PUT    /clientes/{id}
+DELETE /clientes/{id}
+
+API-03 COTIZACIONES
+GET  /cotizaciones
+GET  /cotizaciones/{id}
+POST /cotizaciones
+POST /cotizaciones/{id}/aprobar
+POST /cotizaciones/{id}/convertir-proyecto
+
+API-04 PROYECTOS
+GET  /proyectos
+GET  /proyectos/{id}
+POST /proyectos
+GET  /proyectos/{id}/dashboard
+GET  /proyectos/{id}/hitos
+GET  /proyectos/{id}/incidencias
+
+API-05 ACTIVIDADES
+GET  /actividades
+POST /actividades
+POST /actividades/{id}/avance
+POST /actividades/dependencia
+POST /actividades/{id}/comentarios
+
+API-06 EVIDENCIAS
+POST /evidencias
+GET  /evidencias
+POST /evidencias/{id}/comentarios
+
+API-07 DOCUMENTOS
+POST /documentos
+POST /documentos/{id}/version
+GET  /documentos/{id}/download
+
+API-08 FACTURACIÓN
+GET  /facturas
+POST /facturas
+POST /facturas/{id}/pagos
+GET  /facturas/cobranza-pendiente
+
+API-09 DASHBOARD EJECUTIVO
+GET /dashboard
+GET /dashboard/kpis
+GET /dashboard/alertas
+
+API-10 ADMINISTRACIÓN
+GET    /usuarios
+POST   /usuarios
+PUT    /usuarios/{id}
+DELETE /usuarios/{id}
+
+GET /roles
+GET /permisos
+
+CÓDIGOS HTTP
+200 OK
+201 Creado
+400 Error Validación
+401 No Autorizado
+403 Sin Permisos
+404 No Encontrado
+500 Error Interno
+
+SWAGGER
+/docs/swagger
+OpenAPI 3.0
+
+RESULTADO
+- 50+ Endpoints REST
+- Seguridad JWT
+- Multiempresa
+- Flutter Ready
+- Frontend Ready
+- Swagger Ready
+- Power BI Ready

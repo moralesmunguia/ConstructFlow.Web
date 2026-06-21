@@ -1,0 +1,383 @@
+﻿CONSTRUCTFLOW V1.0
+DOCUMENTO DE ESPECIFICACIÓN FUNCIONAL NIVEL 2
+DEF-N2-06
+MÓDULO DE FACTURACIÓN Y COBRANZA
+CONTROL DE DOCUMENTO
+Proyecto:
+ 
+ConstructFlow V1.0
+Cliente:
+ 
+ROM Constructora
+Documento:
+ 
+DEF-N2-06
+Módulo:
+ 
+Facturación y Cobranza
+Versión:
+ 
+1.0
+Estado:
+ 
+Análisis Funcional
+1. OBJETIVO
+Administrar el ciclo financiero de los proyectos desde la generación de estimaciones y facturación hasta la recuperación efectiva de los ingresos mediante la cobranza.
+El módulo permitirá controlar:
+Facturación por proyecto
+Facturación parcial
+Facturación total
+Cuentas por cobrar
+Aplicación de pagos
+Saldos pendientes
+Antigüedad de cartera
+Indicadores financieros
+2. OBJETIVOS FUNCIONALES
+OBJ-FAC-001
+Controlar ingresos por proyecto.
+OBJ-FAC-002
+Dar seguimiento a cuentas por cobrar.
+OBJ-FAC-003
+Medir desempeño financiero.
+OBJ-FAC-004
+Controlar vencimientos.
+OBJ-FAC-005
+Integrar información financiera con rentabilidad.
+3. ALCANCE
+El módulo contempla:
+Facturación
+Estimaciones
+Facturas
+Notas
+Control CFDI
+Relación Proyecto-Factura
+Cobranza
+Cuentas por cobrar
+Aplicación de pagos
+Saldos
+Antigüedad
+Seguimiento
+4. CASOS DE USO
+CU-FAC-001
+Registrar Factura
+CU-FAC-002
+Modificar Factura
+CU-FAC-003
+Cancelar Factura
+CU-FAC-004
+Registrar Pago
+CU-FAC-005
+Aplicar Pago
+CU-FAC-006
+Consultar Cartera
+CU-FAC-007
+Consultar Antigüedad
+CU-FAC-008
+Generar Reportes
+5. CICLO DE FACTURACIÓN
+text id="u5q4fj" Proyecto     ↓ Estimación     ↓ Factura     ↓ Cuenta por Cobrar     ↓ Pago     ↓ Liquidación
+6. FACTURACIÓN
+Definición
+Documento financiero asociado a un proyecto.
+Una factura podrá estar relacionada con:
+Un proyecto
+Una estimación
+Un contrato
+7. PANTALLA FAC-001
+LISTADO DE FACTURAS
+Campos
+Folio
+Serie
+Cliente
+Proyecto
+Fecha
+Importe
+Saldo
+Estado
+Filtros
+Cliente
+Proyecto
+Fecha
+Estado
+Acciones
+Nueva
+Editar
+Cancelar
+Registrar Pago
+PDF
+8. PANTALLA FAC-002
+ENCABEZADO FACTURA
+Campos
+Empresa
+Proyecto
+Obligatorio
+Cliente
+Obligatorio
+Serie
+Folio
+Fecha Factura
+Fecha Vencimiento
+Moneda
+MXN
+USD
+Tipo Cambio
+9. IMPORTES
+Subtotal
+IVA
+Retenciones
+ISR
+IVA Retenido
+Total
+Saldo Pendiente
+10. ESTADOS FACTURA
+Pendiente
+Parcialmente Pagada
+Pagada
+Cancelada
+Vencida
+11. ESTIMACIONES
+Objetivo
+Permitir generar cobros parciales por avance.
+Campos
+Proyecto
+Periodo
+Porcentaje Avance
+Importe
+Fecha
+Estado
+12. RELACIÓN PROYECTO-FACTURA
+Proyecto
+↓
+Estimación
+↓
+Factura
+↓
+Cobranza
+13. CONTROL CFDI
+Campos
+UUID
+Serie
+Folio Fiscal
+Fecha Timbrado
+RFC Emisor
+RFC Receptor
+XML
+PDF
+14. CUENTAS POR COBRAR
+Definición
+Monto pendiente de recuperación.
+Campos
+Factura
+Cliente
+Proyecto
+Saldo
+Fecha Vencimiento
+Días Vencidos
+Estado
+15. PANTALLA COB-001
+CARTERA
+Columnas
+Cliente
+Proyecto
+Factura
+Importe
+Saldo
+Vencimiento
+Días
+Estado
+Filtros
+Cliente
+Proyecto
+Estado
+Vencimiento
+16. PAGOS
+Registro
+Factura
+Fecha Pago
+Importe
+Método Pago
+Referencia
+Banco
+Observaciones
+17. APLICACIÓN DE PAGOS
+Pago
+↓
+Factura
+↓
+Saldo
+↓
+Actualización
+Estados resultantes
+Pagada
+Parcialmente Pagada
+18. ANTIGÜEDAD DE SALDOS
+Rangos
+0 - 30 días
+31 - 60 días
+61 - 90 días
+Más de 90 días
+19. SEMÁFORO DE COBRANZA
+Verde
+Corriente
+Amarillo
+Próxima a vencer
+Rojo
+Vencida
+20. DASHBOARD FINANCIERO
+Indicadores
+Facturación del Mes
+Cobranza del Mes
+Saldo Pendiente
+Cartera Vencida
+Días Promedio Cobro
+21. INTEGRACIONES
+Proyecto
+1 Proyecto
+N Facturas
+Factura
+N Pagos
+Facturación
+Rentabilidad
+Facturación
+Dashboard Ejecutivo
+22. MODELO DE DATOS
+CF_Factura
+FacturaID
+EmpresaID
+ProyectoID
+ClienteID
+Serie
+Folio
+UUID
+FechaFactura
+FechaVencimiento
+Moneda
+TipoCambio
+Subtotal
+IVA
+Retenciones
+Total
+Saldo
+Estado
+XMLURL
+PDFURL
+UsuarioCreacion
+FechaCreacion
+CF_Pago
+PagoID
+EmpresaID
+FacturaID
+FechaPago
+Importe
+MetodoPago
+Referencia
+Banco
+Observaciones
+UsuarioID
+FechaCreacion
+CF_Estimacion
+EstimacionID
+ProyectoID
+Periodo
+PorcentajeAvance
+Importe
+Estado
+FechaEstimacion
+23. API REST
+GET
+/api/facturas
+GET
+/api/facturas/{id}
+POST
+/api/facturas
+PUT
+/api/facturas/{id}
+POST
+/api/facturas/{id}/cancelar
+POST
+/api/facturas/{id}/pago
+GET
+/api/cartera
+GET
+/api/cobranza/dashboard
+24. REGLAS DE NEGOCIO
+RN-FAC-001
+Toda factura deberá pertenecer a un proyecto.
+RN-FAC-002
+No podrá registrarse una factura con importe cero.
+RN-FAC-003
+No podrá registrarse un pago mayor al saldo pendiente.
+RN-FAC-004
+La aplicación de pagos actualizará automáticamente el saldo.
+RN-FAC-005
+Las facturas pagadas no podrán modificarse.
+RN-FAC-006
+Las facturas canceladas deberán conservar historial.
+RN-FAC-007
+El sistema recalculará automáticamente la cartera.
+25. AUDITORÍA
+Registrar
+Usuario
+Fecha
+Acción
+IP
+Factura
+Pago
+Saldo Anterior
+Saldo Nuevo
+26. REPORTES
+Facturación por Proyecto
+Facturación por Cliente
+Facturación Mensual
+Cobranza Mensual
+Cartera Vencida
+Antigüedad de Saldos
+Facturas Pendientes
+27. KPI’S
+Facturación Acumulada
+Cobranza Acumulada
+Saldo Pendiente
+Cartera Vencida
+Días Promedio de Cobro
+Índice de Recuperación
+Fórmula:
+Cobrado / Facturado * 100
+28. CASOS DE PRUEBA UAT
+UAT-FAC-001
+Registrar Factura
+Resultado esperado:
+ 
+Factura creada.
+UAT-FAC-002
+Registrar Pago
+Resultado esperado:
+ 
+Saldo actualizado.
+UAT-FAC-003
+Pago Parcial
+Resultado esperado:
+ 
+Estado Parcialmente Pagada.
+UAT-FAC-004
+Pago Total
+Resultado esperado:
+ 
+Estado Pagada.
+UAT-FAC-005
+Consultar Cartera
+Resultado esperado:
+ 
+Saldos correctos.
+UAT-FAC-006
+Generar Antigüedad
+Resultado esperado:
+ 
+Clasificación correcta.
+UAT-FAC-007
+Cancelar Factura
+Resultado esperado:
+ 
+Estado Cancelada.
+OBSERVACIÓN DE ARQUITECTURA
+El módulo de Facturación y Cobranza constituye la fuente principal de ingresos del sistema y será el enlace directo entre la operación de proyectos y los indicadores financieros de rentabilidad, flujo de efectivo y desempeño empresarial.
+

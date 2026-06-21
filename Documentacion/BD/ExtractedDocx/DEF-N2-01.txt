@@ -1,0 +1,288 @@
+﻿CONSTRUCTFLOW V1.0
+DOCUMENTO DE ESPECIFICACIÓN FUNCIONAL NIVEL 2
+DEF-N2-01
+VISIÓN GENERAL, ARQUITECTURA, ROLES, SEGURIDAD, MULTIEMPRESA Y NAVEGACIÓN
+CONTROL DE DOCUMENTO
+Proyecto
+ConstructFlow V1.0
+Cliente
+ROM Constructora
+Desarrollador
+CORA Soluciones Digitales
+Documento
+DEF-N2-01
+Versión
+1.0
+Estado
+Análisis Funcional
+1. PROPÓSITO DEL SISTEMA
+ConstructFlow es una plataforma web empresarial orientada a la administración integral de proyectos de construcción y mantenimiento.
+Su objetivo es centralizar en una sola solución la gestión comercial, operativa, administrativa y estratégica de la organización.
+La plataforma permitirá controlar:
+Cotizaciones
+Proyectos
+Actividades
+Evidencias
+Documentos
+Facturación
+Cobranza
+Costos
+Rentabilidad
+Indicadores
+Dashboard Ejecutivo
+2. OBJETIVOS DEL NEGOCIO
+OBJ-001
+Centralizar la información de proyectos.
+OBJ-002
+Eliminar controles dispersos en Excel.
+OBJ-003
+Incrementar la visibilidad operativa.
+OBJ-004
+Mejorar el control financiero.
+OBJ-005
+Proporcionar indicadores estratégicos para la toma de decisiones.
+3. ARQUITECTURA FUNCIONAL
+La plataforma estará organizada en tres capas funcionales.
+OPERACIÓN
+Responsable:
+Supervisores
+Residentes
+Gerentes de Proyecto
+Módulos:
+Cotizaciones
+Proyectos
+Actividades
+Gantt
+Evidencias
+Documentos
+ADMINISTRACIÓN
+Responsable:
+Administración
+Finanzas
+Módulos:
+Facturación
+Cobranza
+Costos
+Rentabilidad
+DIRECCIÓN
+Responsable:
+Dirección General
+Socios
+Módulos:
+Dashboard Ejecutivo
+KPI’s
+Reportes
+4. ARQUITECTURA TECNOLÓGICA
+Plataforma
+Aplicación Web Responsive.
+Backend
+PHP 8+
+Patrón:
+MVC
+Frontend
+HTML5
+CSS3
+JavaScript
+Bootstrap
+Base de Datos
+MySQL 8+
+Servicios
+API REST
+JSON
+Infraestructura
+Servidor Linux
+Apache
+HTTPS
+SSL
+5. MODELO MULTIEMPRESA
+Objetivo
+Permitir que múltiples empresas operen en la misma plataforma sin compartir información.
+Regla General
+Toda entidad de negocio deberá contener:
+EmpresaID
+Entidades afectadas
+Usuarios
+Clientes
+Cotizaciones
+Proyectos
+Actividades
+Facturas
+Costos
+Documentos
+Evidencias
+Regla RN-ME-001
+Un usuario únicamente podrá visualizar información de las empresas asignadas.
+Regla RN-ME-002
+Los folios serán independientes por empresa.
+Regla RN-ME-003
+Los KPI’s se calcularán por empresa.
+6. SEGURIDAD
+Principios
+Mínimo privilegio
+Segregación de funciones
+Auditoría completa
+Autenticación
+Usuario
+Contraseña
+Recuperación por correo
+Políticas
+Longitud mínima:
+8 caracteres
+Requerir:
+Mayúscula
+Minúscula
+Número
+Sesiones
+Tiempo máximo:
+60 minutos de inactividad
+Auditoría
+Toda operación crítica será registrada.
+7. ROLES DEL SISTEMA
+ROL-001
+Administrador General
+Permisos:
+Control total.
+ROL-002
+Dirección
+Permisos:
+Consulta estratégica.
+Dashboard.
+Indicadores.
+Reportes.
+ROL-003
+Administración
+Permisos:
+Facturación.
+Cobranza.
+Costos.
+Reportes administrativos.
+ROL-004
+Gerente de Proyecto
+Permisos:
+Gestión integral de proyectos.
+ROL-005
+Supervisor
+Permisos:
+Actividades.
+Evidencias.
+Documentos.
+ROL-006
+Consulta
+Permisos:
+Solo lectura.
+8. MATRIZ GENERAL DE ACCESO
+Módulo Admin Dirección Administración Gerente Supervisor
+Dashboard C C C C C
+Cotizaciones CRUD C C CRUD C
+Proyectos CRUD C C CRUD CRUD
+Actividades CRUD C C CRUD CRUD
+Evidencias CRUD C C CRUD CRUD
+Documentos CRUD C C CRUD CRUD
+Facturación CRUD C CRUD C C
+Cobranza CRUD C CRUD C C
+Costos CRUD C CRUD C C
+Rentabilidad CRUD C CRUD C C
+Usuarios CRUD - - - -
+9. NAVEGACIÓN GENERAL
+Menú Principal
+Dashboard
+Operación
+Cotizaciones
+Proyectos
+Actividades
+Gantt
+Evidencias
+Documentos
+Administración
+Facturación
+Cobranza
+Costos
+Rentabilidad
+Dirección
+KPI’s
+Dashboard Ejecutivo
+Reportes
+Configuración
+Empresas
+Usuarios
+Roles
+Parámetros
+10. DASHBOARD INICIAL
+Al iniciar sesión el usuario visualizará:
+Tarjetas KPI
+Proyectos Activos
+Actividades Pendientes
+Facturación del Mes
+Cobranza Pendiente
+Rentabilidad Promedio
+Gráficas
+Avance de proyectos
+Facturación mensual
+Cobranza mensual
+Rentabilidad
+11. REGLAS GENERALES DEL SISTEMA
+RN-GEN-001
+Todo registro deberá almacenar:
+Fecha Creación
+Usuario Creación
+RN-GEN-002
+Todo registro deberá almacenar:
+Fecha Modificación
+Usuario Modificación
+RN-GEN-003
+Los registros no serán eliminados físicamente.
+Se utilizará eliminación lógica.
+RN-GEN-004
+Toda transacción crítica deberá quedar auditada.
+12. CATÁLOGOS MAESTROS
+Empresas
+Usuarios
+Roles
+Clientes
+Monedas
+Unidades
+Estados
+Tipos de Documento
+Categorías de Costos
+13. REQUERIMIENTOS NO FUNCIONALES
+Tiempo de respuesta:
+< 3 segundos
+Disponibilidad:
+99%
+Base de Datos:
+MySQL
+Arquitectura:
+MVC
+Seguridad:
+HTTPS
+Auditoría:
+Completa
+14. ENTREGABLES RELACIONADOS
+DEF-N2-02
+ 
+Módulo Cotizaciones
+DEF-N2-03
+ 
+Módulo Proyectos
+DEF-N2-04
+ 
+Módulo Actividades y Gantt
+DEF-N2-05
+ 
+Módulo Evidencias y Documentos
+DEF-N2-06
+ 
+Facturación y Cobranza
+DEF-N2-07
+ 
+Costos y Rentabilidad
+DEF-N2-08
+ 
+Dashboard Ejecutivo y KPI’s
+DEF-N2-09
+ 
+Modelo de Datos y APIs
+DEF-N2-10
+ 
+Casos de Prueba UAT
+

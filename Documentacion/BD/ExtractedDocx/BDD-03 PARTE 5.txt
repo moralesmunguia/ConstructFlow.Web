@@ -1,0 +1,55 @@
+﻿BDD-03 PARTE 5
+ADMINISTRACIÓN AVANZADA, AUDITORÍA, WORKFLOW E INTEGRACIONES
+ALCANCE
+Auditoría
+CF_Auditoria
+CF_AuditoriaDetalle
+Notificaciones
+CF_Notificacion
+CF_NotificacionUsuario
+CF_NotificacionPlantilla
+Dashboard Personalizado
+CF_DashboardFavorito
+CF_Widget
+CF_WidgetUsuario
+Workflow
+CF_FlujoAprobacion
+CF_FlujoPaso
+CF_FlujoUsuario
+CF_FlujoHistorial
+Configuración Avanzada
+CF_Parametro
+CF_ConfiguracionEmpresa
+CF_ConfiguracionCorreo
+CF_ConfiguracionSAT
+Integraciones
+CF_Integracion
+CF_IntegracionLog
+CF_Webhook
+Sistema
+CF_BitacoraSistema
+CF_JobProgramado
+CF_ArchivoTemporal
+OBJETIVO
+Completar la capa empresarial de ConstructFlow para soportar:
+Multiempresa
+Auditoría completa
+Trazabilidad
+Workflow
+Integraciones futuras
+Portal de Clientes
+Aplicación Flutter
+Firma Electrónica
+SAT
+APIs externas
+RESULTADO
+Con Partes 1 a 5:
+Tablas estimadas: 45 a 55
+Foreign Keys: 90+
+Índices: 120+
+Stored Procedures: 25+
+Vistas: 20+
+Auditoría Completa: Sí
+Multiempresa: Sí
+Listo para Producción: Sí
+

@@ -1,0 +1,372 @@
+﻿CONSTRUCTFLOW V1.0
+DOCUMENTO DE ESPECIFICACIÓN FUNCIONAL NIVEL 2
+DEF-N2-05
+MÓDULO DE EVIDENCIAS Y DOCUMENTOS
+CONTROL DE DOCUMENTO
+Proyecto:
+ 
+ConstructFlow V1.0
+Cliente:
+ 
+ROM Constructora
+Documento:
+ 
+DEF-N2-05
+Módulo:
+ 
+Evidencias y Documentos
+Versión:
+ 
+1.0
+Estado:
+ 
+Análisis Funcional
+1. OBJETIVO
+Administrar, almacenar, clasificar y consultar toda la información documental y evidencia digital generada durante el ciclo de vida de los proyectos.
+El módulo funcionará como repositorio central corporativo para:
+Evidencias fotográficas
+Videos
+Planos
+Contratos
+Minutas
+Entregables
+Permisos
+Documentación técnica
+2. OBJETIVOS FUNCIONALES
+OBJ-DOC-001
+Centralizar información documental.
+OBJ-DOC-002
+Eliminar pérdida de archivos.
+OBJ-DOC-003
+Mantener trazabilidad documental.
+OBJ-DOC-004
+Controlar versiones.
+OBJ-DOC-005
+Asociar evidencia al avance físico.
+OBJ-DOC-006
+Permitir consulta rápida desde cualquier proyecto.
+3. ALCANCE
+El módulo gestionará dos componentes:
+Evidencias
+Información generada en campo.
+Ejemplos:
+Fotografías
+Videos
+Reportes
+Evidencias GPS
+Documentos
+Información formal del proyecto.
+Ejemplos:
+Contratos
+Planos
+Minutas
+Entregables
+Permisos
+4. CASOS DE USO
+CU-DOC-001
+Registrar Evidencia
+CU-DOC-002
+Consultar Evidencia
+CU-DOC-003
+Subir Documento
+CU-DOC-004
+Versionar Documento
+CU-DOC-005
+Descargar Documento
+CU-DOC-006
+Asociar Documento
+CU-DOC-007
+Consultar Historial
+CU-DOC-008
+Aprobar Documento
+5. EVIDENCIAS
+Definición
+Archivo digital que demuestra la ejecución de una actividad o avance de proyecto.
+Puede asociarse a:
+Proyecto
+Actividad
+Hito
+Incidencia
+6. TIPOS DE EVIDENCIA
+Fotografía
+Video
+Audio
+PDF
+Reporte
+Otro
+7. PANTALLA DOC-001
+REGISTRO DE EVIDENCIA
+Campos
+Empresa
+Proyecto
+Obligatorio
+Actividad
+Opcional
+Fecha
+Automática
+Usuario
+Automático
+Tipo Evidencia
+Lista
+Descripción
+Obligatoria
+Observaciones
+Opcional
+8. ARCHIVOS DE EVIDENCIA
+Formatos Permitidos
+JPG
+JPEG
+PNG
+PDF
+MP4
+MOV
+DOCX
+XLSX
+Tamaño Máximo
+50 MB por archivo
+Cantidad
+Sin límite configurable
+9. GEOLOCALIZACIÓN
+Objetivo
+Registrar ubicación de captura.
+Campos
+Latitud
+Longitud
+Precisión
+Origen
+Dispositivo móvil
+Navegador
+10. GALERÍA DE EVIDENCIAS
+Visualización
+Miniaturas
+Vista detalle
+Presentación tipo carrusel
+Filtros
+Proyecto
+Actividad
+Fecha
+Usuario
+Tipo
+11. DOCUMENTOS
+Definición
+Archivo formal asociado al proyecto.
+12. TIPOS DOCUMENTALES
+Contrato
+Plano
+Minuta
+Permiso
+Especificación Técnica
+Entregable
+Manual
+Otro
+13. PANTALLA DOC-002
+REGISTRO DOCUMENTAL
+Campos
+Proyecto
+Tipo Documento
+Nombre Documento
+Descripción
+Versión
+Fecha Documento
+Responsable
+Archivo
+14. VERSIONAMIENTO
+Objetivo
+Conservar historial documental.
+Ejemplo
+Plano Estructural
+Versión 1.0
+Plano Estructural
+Versión 1.1
+Plano Estructural
+Versión 1.2
+15. CONTROL DE VERSIONES
+Tabla
+CF_DocumentoVersion
+Campos
+VersionID
+DocumentoID
+Version
+Fecha
+Usuario
+Comentarios
+Archivo
+16. APROBACIÓN DOCUMENTAL
+Estados
+Borrador
+En Revisión
+Aprobado
+Rechazado
+Obsoleto
+17. MATRIZ DOCUMENTAL
+Cada documento podrá asociarse a:
+Proyecto
+Actividad
+Fase
+Cliente
+Contrato
+18. BÚSQUEDA DOCUMENTAL
+Filtros
+Proyecto
+Tipo
+Versión
+Responsable
+Fecha
+Palabras Clave
+19. REPOSITORIO DIGITAL
+Estructura lógica
+Empresa
+ └─ Proyecto
+      ├─ Contratos
+      ├─ Planos
+      ├─ Minutas
+      ├─ Entregables
+      ├─ Evidencias
+20. INTEGRACIÓN CON ACTIVIDADES
+Actividad
+↓
+Evidencia
+↓
+Validación
+↓
+Cierre Actividad
+RN-DOC-001
+Una actividad podrá requerir evidencia obligatoria para cerrarse.
+21. INTEGRACIÓN CON PROYECTOS
+Proyecto
+↓
+Documentos
+↓
+Versiones
+↓
+Historial
+22. MODELO DE DATOS
+CF_Evidencia
+EvidenciaID
+EmpresaID
+ProyectoID
+ActividadID
+TipoEvidencia
+Descripcion
+ArchivoURL
+Latitud
+Longitud
+FechaCaptura
+UsuarioID
+FechaCreacion
+CF_Documento
+DocumentoID
+EmpresaID
+ProyectoID
+TipoDocumento
+NombreDocumento
+Descripcion
+VersionActual
+Estado
+ArchivoURL
+FechaDocumento
+UsuarioID
+CF_DocumentoVersion
+VersionID
+DocumentoID
+Version
+ArchivoURL
+Comentarios
+UsuarioID
+FechaCreacion
+23. API REST
+GET
+/api/evidencias
+GET
+/api/evidencias/{id}
+POST
+/api/evidencias
+GET
+/api/documentos
+GET
+/api/documentos/{id}
+POST
+/api/documentos
+PUT
+/api/documentos/{id}
+POST
+/api/documentos/{id}/version
+GET
+/api/documentos/{id}/historial
+24. REGLAS DE NEGOCIO
+RN-DOC-001
+Toda evidencia deberá pertenecer a un proyecto.
+RN-DOC-002
+Toda evidencia deberá registrar usuario.
+RN-DOC-003
+Los documentos aprobados no podrán modificarse.
+RN-DOC-004
+Toda nueva versión conservará historial.
+RN-DOC-005
+No podrán eliminarse documentos con versiones asociadas.
+RN-DOC-006
+Toda evidencia deberá almacenar fecha de captura.
+RN-DOC-007
+La geolocalización será opcional y configurable.
+25. AUDITORÍA
+Registrar
+Usuario
+Fecha
+Acción
+IP
+Documento
+Versión
+Archivo
+26. REPORTES
+Documentos por Proyecto
+Documentos por Tipo
+Documentos Pendientes Aprobación
+Evidencias por Proyecto
+Evidencias por Actividad
+Historial de Versiones
+27. KPI’S
+Documentos Registrados
+Documentos Aprobados
+Documentos Pendientes
+Evidencias Registradas
+Actividades con Evidencia
+Cumplimiento Documental %
+28. CASOS DE PRUEBA UAT
+UAT-DOC-001
+Registrar Evidencia
+Resultado esperado:
+ 
+Evidencia almacenada.
+UAT-DOC-002
+Adjuntar Fotografía
+Resultado esperado:
+ 
+Imagen visible.
+UAT-DOC-003
+Registrar Documento
+Resultado esperado:
+ 
+Documento almacenado.
+UAT-DOC-004
+Crear Nueva Versión
+Resultado esperado:
+ 
+Historial actualizado.
+UAT-DOC-005
+Aprobar Documento
+Resultado esperado:
+ 
+Estado Aprobado.
+UAT-DOC-006
+Buscar Documento
+Resultado esperado:
+ 
+Documento localizado.
+UAT-DOC-007
+Consultar Historial
+Resultado esperado:
+ 
+Versiones visibles.
+OBSERVACIÓN DE ARQUITECTURA
+El módulo de Evidencias y Documentos constituye el repositorio corporativo central de ConstructFlow y será la principal fuente de soporte documental para auditorías, seguimiento de obra, validación de avances, entregables al cliente y control contractual.
+

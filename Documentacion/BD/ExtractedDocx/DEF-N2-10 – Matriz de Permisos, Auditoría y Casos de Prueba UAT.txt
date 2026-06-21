@@ -1,0 +1,386 @@
+﻿CONSTRUCTFLOW V1.0
+DOCUMENTO DE ESPECIFICACIÓN FUNCIONAL NIVEL 2
+DEF-N2-10
+MATRIZ DE PERMISOS, AUDITORÍA Y CASOS DE PRUEBA UAT
+CONTROL DE DOCUMENTO
+Proyecto:
+ 
+ConstructFlow V1.0
+Cliente:
+ 
+ROM Constructora
+Documento:
+ 
+DEF-N2-10
+Versión:
+ 
+1.0
+Estado:
+ 
+QA / Validación
+1. OBJETIVO
+Definir:
+Matriz de permisos
+Auditoría funcional
+Trazabilidad de requerimientos
+Casos de prueba UAT
+Criterios de aceptación
+Este documento será la base para:
+QA
+Pruebas funcionales
+Validación con usuario final
+Liberación a producción
+2. ROLES DEL SISTEMA
+ROL-001
+ 
+Administrador General
+ROL-002
+ 
+Dirección
+ROL-003
+ 
+Administración
+ROL-004
+ 
+Gerente de Proyecto
+ROL-005
+ 
+Supervisor
+ROL-006
+ 
+Consulta
+3. MATRIZ DE PERMISOS
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="pct" w:w="5000" /><w:tblLayout w:type="fixed" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="1237" /><w:gridCol w:w="1113" /><w:gridCol w:w="1113" /><w:gridCol w:w="1113" /><w:gridCol w:w="1113" /><w:gridCol w:w="1113" /><w:gridCol w:w="1113" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Módulo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Admin
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Dirección
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Administración
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Gerente
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Supervisor
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Consulta
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Dashboard
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Cotizaciones
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Proyectos
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">RU
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr></w:p></w:tc></w:tr><w:tr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Actividades
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Evidencias
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Documentos
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Facturación
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">-
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Cobranza
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">-
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Costos
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Rentabilidad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">-
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">R
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Configuración
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CRUD
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">-
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">-
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">-
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">-
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">-
+4. DEFINICIÓN DE PERMISOS
+C = Crear
+R = Consultar
+U = Actualizar
+D = Eliminar Lógicamente
+5. AUDITORÍA FUNCIONAL
+Toda operación relevante deberá registrarse.
+6. EVENTOS AUDITABLES
+Login
+Logout
+Cambio Contraseña
+Creación Usuario
+Modificación Usuario
+Eliminación Usuario
+Creación Cotización
+Aprobación Cotización
+Conversión Proyecto
+Creación Actividad
+Cambio Estado Actividad
+Registro Avance
+Registro Evidencia
+Carga Documento
+Nueva Versión Documento
+Registro Factura
+Cancelación Factura
+Registro Pago
+Registro Costo
+Cambio Presupuesto
+7. TABLA DE AUDITORÍA
+CF_Auditoria
+AuditoriaID
+EmpresaID
+UsuarioID
+Modulo
+Entidad
+EntidadID
+Accion
+ValorAnterior
+ValorNuevo
+IP
+FechaHora
+8. ACCIONES AUDITABLES
+INSERT
+UPDATE
+DELETE_LOGICO
+LOGIN
+LOGOUT
+APPROVE
+CANCEL
+EXPORT
+DOWNLOAD
+UPLOAD
+9. NIVELES DE CRITICIDAD
+Nivel 1
+Informativo
+Nivel 2
+Operativo
+Nivel 3
+Financiero
+Nivel 4
+Crítico
+10. TRAZABILIDAD DE REQUERIMIENTOS
+Objetivo
+Relacionar:
+Requerimiento
+↓
+Caso de Uso
+↓
+Pantalla
+↓
+API
+↓
+Caso UAT
+↓
+Resultado
+11. MATRIZ RTM
+REQ-PRO-001
+Crear Proyecto
+CU-PRO-001
+PRO-002
+POST /api/v1/proyectos
+UAT-PRO-001
+REQ-COT-001
+Crear Cotización
+CU-COT-001
+COT-002
+POST /api/v1/cotizaciones
+UAT-COT-001
+REQ-FAC-001
+Registrar Factura
+CU-FAC-001
+FAC-002
+POST /api/v1/facturas
+UAT-FAC-001
+12. ESTRATEGIA UAT
+Responsables
+Cliente
+ROM Constructora
+Equipo QA
+CORA
+Usuarios Clave
+Administración
+Operación
+Dirección
+13. CRITERIOS DE ACEPTACIÓN
+Cumplimiento funcional
+100%
+Errores críticos
+0
+Errores mayores
+0
+Errores menores
+≤ 5
+14. ESCENARIOS UAT
+MÓDULO COTIZACIONES
+UAT-COT-001
+Crear Cotización
+Precondición
+Usuario autenticado
+Acción
+Registrar cotización
+Resultado esperado
+Folio generado
+Estado Borrador
+UAT-COT-002
+Generar PDF
+Resultado esperado
+PDF descargable
+UAT-COT-003
+Aprobar Cotización
+Resultado esperado
+Estado Aprobada
+UAT-COT-004
+Convertir Proyecto
+Resultado esperado
+Proyecto creado
+15. ESCENARIOS UAT
+MÓDULO PROYECTOS
+UAT-PRO-001
+Crear Proyecto
+Resultado esperado
+Proyecto almacenado
+UAT-PRO-002
+Asignar Responsable
+Resultado esperado
+Responsable asociado
+UAT-PRO-003
+Consultar Dashboard
+Resultado esperado
+KPIs visibles
+UAT-PRO-004
+Cerrar Proyecto
+Resultado esperado
+Estado Cerrado
+16. ESCENARIOS UAT
+ACTIVIDADES
+UAT-ACT-001
+Crear Actividad
+UAT-ACT-002
+Registrar Avance
+UAT-ACT-003
+Reprogramar Actividad
+UAT-ACT-004
+Consultar Gantt
+17. ESCENARIOS UAT
+EVIDENCIAS Y DOCUMENTOS
+UAT-DOC-001
+Subir Evidencia
+UAT-DOC-002
+Consultar Evidencia
+UAT-DOC-003
+Registrar Documento
+UAT-DOC-004
+Versionar Documento
+18. ESCENARIOS UAT
+FACTURACIÓN Y COBRANZA
+UAT-FAC-001
+Registrar Factura
+UAT-FAC-002
+Aplicar Pago
+UAT-FAC-003
+Consultar Cartera
+UAT-FAC-004
+Generar Antigüedad
+19. ESCENARIOS UAT
+COSTOS Y RENTABILIDAD
+UAT-COS-001
+Registrar Costo
+UAT-COS-002
+Actualizar Presupuesto
+UAT-COS-003
+Consultar Rentabilidad
+UAT-COS-004
+Consultar Desviaciones
+20. ESCENARIOS UAT
+DASHBOARD
+UAT-DASH-001
+Consultar Dashboard Ejecutivo
+UAT-DASH-002
+Aplicar Filtros
+UAT-DASH-003
+Consultar KPI
+UAT-DASH-004
+Drill Down
+21. PRUEBAS DE SEGURIDAD
+SEG-001
+Acceso sin autenticación
+Resultado esperado
+401 Unauthorized
+SEG-002
+Acceso empresa distinta
+Resultado esperado
+Acceso denegado
+SEG-003
+Rol sin permisos
+Resultado esperado
+403 Forbidden
+22. PRUEBAS DE RENDIMIENTO
+PERF-001
+Consulta Dashboard
+Meta
+< 3 segundos
+PERF-002
+Listado Proyectos
+Meta
+< 2 segundos
+PERF-003
+Carga Evidencia
+Meta
+< 10 segundos
+23. ACTA DE ACEPTACIÓN
+Proyecto:
+ 
+ConstructFlow V1.0
+Cliente:
+ 
+ROM Constructora
+Proveedor:
+ 
+CORA Soluciones Digitales
+Resultado UAT
+Aprobado
+Pendiente
+Rechazado
+Observaciones
+Firma Cliente
+Firma CORA
+OBSERVACIÓN FINAL
+Este documento constituye la base oficial para la validación funcional, control de calidad y aceptación formal de ConstructFlow V1.0.
+Todos los módulos definidos en DEF-N2-01 a DEF-N2-09 deberán estar vinculados mediante una Matriz de Trazabilidad (RTM) que asegure que cada requerimiento tenga su caso de uso, pantalla, API y prueba UAT correspondiente.
+

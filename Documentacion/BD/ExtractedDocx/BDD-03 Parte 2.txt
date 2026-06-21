@@ -1,0 +1,434 @@
+﻿CONSTRUCTFLOW V1.0
+BDD-03
+DICCIONARIO DE DATOS COMPLETO
+PARTE 2
+COTIZACIONES Y PROYECTOS
+CONTROL DEL DOCUMENTO
+Proyecto:
+ 
+ConstructFlow V1.0
+Cliente:
+ 
+ROM Constructora
+Proveedor:
+ 
+CORA Soluciones Digitales
+Documento:
+ 
+BDD-03 Parte 2
+Versión:
+ 
+1.0
+Fecha:
+ 
+Junio 2026
+Estado:
+ 
+Diseño Base de Datos
+OBJETIVO
+Definir la estructura física de datos para los procesos de:
+Cotizaciones
+Versionamiento
+Conversión a Proyecto
+Administración de Proyectos
+Encargados
+Hitos
+Incidencias
+Bitácora
+Este bloque constituye el núcleo comercial y operativo de ConstructFlow.
+TABLA: CF_Concepto
+Descripción
+Catálogo de conceptos reutilizables para cotizaciones.
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Campo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Tipo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Descripción
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ConceptoID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">PK
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">EmpresaID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Empresa
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Codigo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(50)
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Código
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">NombreConcepto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(250)
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Nombre
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Descripcion
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">TEXT
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Descripción
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">UnidadMedida
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(50)
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Unidad
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">PrecioBase
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DECIMAL(18,4)
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Precio sugerido
+Índices
+IX_CF_Concepto_Empresa
+IX_CF_Concepto_Codigo
+TABLA: CF_Cotizacion
+Descripción
+Encabezado de cotización.
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Campo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Tipo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Descripción
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CotizacionID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">PK
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">EmpresaID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Empresa
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ClienteID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Cliente
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Folio
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(50)
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Consecutivo
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Fecha
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DATE
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Fecha emisión
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Vigencia
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DATE
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Fecha vencimiento
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Moneda
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(10)
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MXN/USD
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">TipoCambio
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DECIMAL(18,6)
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Tipo cambio
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Subtotal
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DECIMAL(18,2)
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Subtotal
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">IVA
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DECIMAL(18,2)
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">IVA
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Total
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DECIMAL(18,2)
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Total
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Estado
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(30)
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Estado
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VersionActual
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(20)
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Versión
+Estados
+BORRADOR
+REVISION
+APROBADA
+RECHAZADA
+CANCELADA
+CONVERTIDA
+Índices
+UX_CF_Cotizacion_Folio
+IX_CF_Cotizacion_Cliente
+IX_CF_Cotizacion_Fecha
+IX_CF_Cotizacion_Estado
+TABLA: CF_CotizacionDetalle
+Descripción
+Partidas de cotización.
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="3960" /><w:gridCol w:w="3960" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Campo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Tipo
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DetalleID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CotizacionID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ConceptoID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Descripcion
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(500)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Unidad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(50)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Cantidad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DECIMAL(18,4)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">PrecioUnitario
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DECIMAL(18,4)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Descuento
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DECIMAL(18,2)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Importe
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DECIMAL(18,2)
+Regla
+Una cotización puede contener N partidas.
+TABLA: CF_CotizacionVersion
+Descripción
+Historial de versiones.
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="3960" /><w:gridCol w:w="3960" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Campo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Tipo
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VersionID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CotizacionID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Version
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(20)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Comentarios
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">TEXT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">UsuarioID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">FechaVersion
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DATETIME
+Ejemplo
+V1.0
+V1.1
+V1.2
+V2.0
+TABLA: CF_Proyecto
+Descripción
+Entidad principal del sistema.
+Todo ConstructFlow gira alrededor de ProyectoID.
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="3960" /><w:gridCol w:w="3960" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Campo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Tipo
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ProyectoID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">EmpresaID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ClienteID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CotizacionID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CodigoProyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(50)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">NombreProyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(250)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">TipoProyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(50)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Descripcion
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">TEXT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">FechaInicio
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DATE
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">FechaFin
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DATE
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Estado
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(30)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">PresupuestoOriginal
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DECIMAL(18,2)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">PresupuestoActual
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DECIMAL(18,2)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">FacturacionAcumulada
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DECIMAL(18,2)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CobranzaAcumulada
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DECIMAL(18,2)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">CostoReal
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DECIMAL(18,2)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Rentabilidad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DECIMAL(18,2)
+Estados
+PLANEACION
+ACTIVO
+SUSPENDIDO
+CERRADO
+CANCELADO
+Índices
+UX_CF_Proyecto_CodigoProyecto
+IX_CF_Proyecto_Cliente
+IX_CF_Proyecto_Estado
+IX_CF_Proyecto_FechaInicio
+TABLA: CF_ProyectoFase
+Descripción
+Fases del proyecto.
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="3960" /><w:gridCol w:w="3960" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Campo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Tipo
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">FaseID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ProyectoID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">NombreFase
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(150)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">FechaInicio
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DATE
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">FechaFin
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DATE
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Estado
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(30)
+Ejemplos
+Ingeniería
+Planeación
+Procura
+Construcción
+Pruebas
+Entrega
+TABLA: CF_TipoEncargado
+Descripción
+Catálogo de responsables.
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="3960" /><w:gridCol w:w="3960" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Campo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Tipo
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">TipoEncargadoID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Codigo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(30)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Nombre
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(100)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Descripcion
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(250)
+Catálogo Inicial
+DIRECTOR
+GERENTE
+RESIDENTE
+SUPERVISOR
+ADMIN
+CLIENTE
+CALIDAD
+SEGURIDAD
+TABLA: CF_ProyectoEncargado
+Descripción
+Asignación de responsables por proyecto.
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="3960" /><w:gridCol w:w="3960" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Campo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Tipo
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ProyectoEncargadoID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ProyectoID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">UsuarioID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">TipoEncargadoID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">FechaInicio
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DATE
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">FechaFin
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DATE
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Principal
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Observaciones
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(500)
+Regla
+Un proyecto puede tener múltiples encargados.
+TABLA: CF_Hito
+Descripción
+Control de hitos contractuales.
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="3960" /><w:gridCol w:w="3960" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Campo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Tipo
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">HitoID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ProyectoID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Codigo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(50)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Nombre
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(250)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">FechaPlan
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DATE
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">FechaReal
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DATE
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Estado
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(30)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Observaciones
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(500)
+Estados
+PENDIENTE
+EN_PROCESO
+COMPLETADO
+ATRASADO
+TABLA: CF_BitacoraProyecto
+Descripción
+Bitácora ejecutiva del proyecto.
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="3960" /><w:gridCol w:w="3960" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Campo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Tipo
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BitacoraProyectoID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ProyectoID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">UsuarioID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">FechaEvento
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DATETIME
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">TipoEvento
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(50)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Descripcion
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">TEXT
+Ejemplos
+Inicio Proyecto
+Cambio Responsable
+Cambio Presupuesto
+Entrega Parcial
+Cierre Proyecto
+TABLA: CF_Incidencia
+Descripción
+Gestión de incidencias y problemas.
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="3960" /><w:gridCol w:w="3960" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Campo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Tipo
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">IncidenciaID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ProyectoID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ActividadID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">TipoIncidencia
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(50)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Prioridad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(20)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Descripcion
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">TEXT
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Estado
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">VARCHAR(30)
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">FechaIncidencia
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DATETIME
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">FechaCierre
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">DATETIME
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ResponsableID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">BIGINT
+Prioridades
+BAJA
+MEDIA
+ALTA
+CRITICA
+Estados
+ABIERTA
+ASIGNADA
+EN_PROCESO
+RESUELTA
+CERRADA
+RELACIONES PRINCIPALES
+Cliente
+  │
+  └── Cotización
+         │
+         └── Proyecto
+                │
+                ├── Fases
+                ├── Encargados
+                ├── Hitos
+                ├── Bitácora
+                └── Incidencias
+REGLAS DE NEGOCIO
+RN-COT-001
+Toda cotización deberá pertenecer a una empresa.
+RN-COT-002
+Una cotización aprobada podrá convertirse en proyecto.
+RN-PRO-001
+Todo proyecto deberá originarse de una cotización.
+RN-PRO-002
+Todo proyecto deberá tener al menos un encargado principal.
+RN-PRO-003
+Todo proyecto deberá tener una fase activa.
+RN-HIT-001
+Los hitos forman parte de la línea base del proyecto.
+RN-INC-001
+Toda incidencia deberá tener prioridad y responsable.
+RESUMEN BDD-03 PARTE 2
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="3960" /><w:gridCol w:w="3960" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Grupo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /><w:jc w:val="right" /></w:pPr><w:r><w:t xml:space="preserve">Tablas
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Cotizaciones
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /><w:jc w:val="right" /></w:pPr><w:r><w:t xml:space="preserve">4
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Proyectos
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /><w:jc w:val="right" /></w:pPr><w:r><w:t xml:space="preserve">7
+Total Tablas Documentadas: 11
+ACUMULADO BDD-03
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="3960" /><w:gridCol w:w="3960" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Parte
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /><w:jc w:val="right" /></w:pPr><w:r><w:t xml:space="preserve">Tablas
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Parte 1
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /><w:jc w:val="right" /></w:pPr><w:r><w:t xml:space="preserve">11
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Parte 2
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /><w:jc w:val="right" /></w:pPr><w:r><w:t xml:space="preserve">11
+Total Documentadas: 22
+ENTREGABLE SIGUIENTE
+BDD-03 PARTE 3
+Actividades, Gantt, Evidencias y Documentos
+Tablas:
+CF_Actividad
+CF_ActividadDependencia
+CF_ActividadAsignacion
+CF_ActividadComentario
+CF_Evidencia
+CF_Documento
+CF_DocumentoVersion
+CF_Archivo
+Esta sección definirá la operación diaria de obra y el control documental de ConstructFlow V1.0.
+

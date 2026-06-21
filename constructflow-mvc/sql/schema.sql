@@ -1,0 +1,67 @@
+-- SQL schema for ConstructFlow MVC (MySQL)
+
+CREATE DATABASE IF NOT EXISTS constructflow CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE constructflow;
+
+CREATE TABLE IF NOT EXISTS empresas (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL,
+  rfc VARCHAR(50),
+  email VARCHAR(255),
+  telefono VARCHAR(50),
+  direccion TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS users (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255),
+  email VARCHAR(255) UNIQUE,
+  password VARCHAR(255),
+  current_empresa_id BIGINT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS cotizaciones (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  empresa_id BIGINT,
+  user_id BIGINT,
+  numero VARCHAR(100),
+  atencion VARCHAR(255),
+  compras VARCHAR(255),
+  fecha DATE,
+  forma_pago VARCHAR(255),
+  descripcion TEXT,
+  total DECIMAL(13,2) DEFAULT 0,
+  incluye_iva TINYINT(1) DEFAULT 0,
+  fecha_inicio_tentativa DATE,
+  costo_real DECIMAL(13,2) DEFAULT 0,
+  estado VARCHAR(50) DEFAULT 'borrador',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS cotizacion_items (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  cotizacion_id BIGINT,
+  orden INT DEFAULT 0,
+  descripcion TEXT,
+  cantidad DECIMAL(13,2) DEFAULT 1,
+  unidad VARCHAR(50),
+  precio_unitario DECIMAL(13,2) DEFAULT 0,
+  importe DECIMAL(13,2) DEFAULT 0,
+  comentarios TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS cotizacion_versions (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  cotizacion_id BIGINT,
+  user_id BIGINT,
+  changes JSON,
+  version_number INT DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

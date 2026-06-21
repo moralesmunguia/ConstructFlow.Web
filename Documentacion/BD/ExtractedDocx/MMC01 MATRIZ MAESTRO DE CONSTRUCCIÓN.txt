@@ -1,0 +1,413 @@
+﻿CONSTRUCTFLOW V1.0
+MMC-01
+MATRIZ MAESTRO DE CONSTRUCCIÓN
+DOCUMENTO OFICIAL DE CONTROL DE DESARROLLO
+INFORMACIÓN GENERAL
+Proyecto:
+ 
+ConstructFlow V1.0
+Cliente:
+ 
+ROM Constructora
+Proveedor:
+ 
+CORA Soluciones Digitales
+Arquitectura:
+ 
+PHP 8 + MVC + MySQL + API REST
+Fecha Base:
+ 
+Junio 2026
+Versión:
+ 
+1.0
+Estado:
+ 
+Planeación y Construcción
+OBJETIVO
+La Matriz Maestro de Construcción (MMC) es el documento rector para el seguimiento integral del proyecto ConstructFlow V1.0.
+Su propósito es garantizar la trazabilidad completa entre:
+Requerimientos
+Diseño Funcional
+Desarrollo
+Base de Datos
+APIs
+Pruebas QA
+UAT
+Liberación
+ESTRUCTURA DE CONTROL
+Flujo de Construcción
+Requerimiento
+ 
+↓
+ 
+DEF
+ 
+↓
+ 
+Pantalla
+ 
+↓
+ 
+Base de Datos
+ 
+↓
+ 
+Backend
+ 
+↓
+ 
+Frontend
+ 
+↓
+ 
+QA
+ 
+↓
+ 
+UAT
+ 
+↓
+ 
+Producción
+ESTADOS OFICIALES
+PND = Pendiente
+ANA = Análisis
+DIS = Diseño
+DEV = Desarrollo
+QA = Pruebas Internas
+UAT = Validación Cliente
+APR = Aprobado
+PRD = Producción
+PRIORIDADES
+A = Alta
+M = Media
+B = Baja
+MÓDULO 01
+ADMINISTRACIÓN Y SEGURIDAD
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Funcionalidad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Prioridad
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ADM-001
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Multiempresa
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ADM-002
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Usuarios
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ADM-003
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Roles
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ADM-004
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Permisos
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ADM-005
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Auditoría
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ADM-006
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Configuración General
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ADM-007
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Parámetros Sistema
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ADM-008
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Catálogos Generales
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ADM-009
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Bitácora Accesos
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ADM-010
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Recuperar Contraseña
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+MÓDULO 02
+COTIZACIONES
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Funcionalidad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Prioridad
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COT-001
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Crear Cotización
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COT-002
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Editar Cotización
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COT-003
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Versionamiento
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COT-004
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Duplicar Cotización
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COT-005
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Generar PDF
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COT-006
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Aprobar Cotización
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COT-007
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Rechazar Cotización
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COT-008
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Convertir a Proyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COT-009
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Historial Cambios
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COT-010
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Dashboard Cotizaciones
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+MÓDULO 03
+PROYECTOS
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Funcionalidad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Prioridad
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-PRO-001
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Crear Proyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-PRO-002
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Editar Proyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-PRO-003
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Dashboard Proyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-PRO-004
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Equipo Proyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-PRO-005
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Fases Proyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-PRO-006
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Indicadores Proyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-PRO-007
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Calendario Proyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-PRO-008
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Bitácora Proyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-PRO-009
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Rentabilidad Proyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-PRO-010
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Cierre Proyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+MÓDULO 04
+ACTIVIDADES Y GANTT
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Funcionalidad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Prioridad
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ACT-001
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Crear Actividad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ACT-002
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Editar Actividad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ACT-003
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Dependencias
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ACT-004
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Vista Gantt
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ACT-005
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Registro Avance
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ACT-006
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Reprogramación
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ACT-007
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Alertas Vencimiento
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ACT-008
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Ruta Crítica
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ACT-009
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Actividades Atrasadas
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-ACT-010
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">KPIs Actividades
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+MÓDULO 05
+EVIDENCIAS Y DOCUMENTOS
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Funcionalidad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Prioridad
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DOC-001
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Subir Evidencia
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DOC-002
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Galería Evidencias
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DOC-003
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Geolocalización
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DOC-004
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Registro Documentos
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DOC-005
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Versionamiento
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DOC-006
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Historial
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DOC-007
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Aprobación
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DOC-008
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Repositorio Digital
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DOC-009
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Búsqueda Documental
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DOC-010
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">KPIs Documentales
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+MÓDULO 06
+FACTURACIÓN Y COBRANZA
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Funcionalidad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Prioridad
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-FAC-001
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Registrar Factura
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-FAC-002
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Importar CFDI
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-FAC-003
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Adjuntar XML
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-FAC-004
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Adjuntar PDF
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-FAC-005
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Registrar Pago
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-FAC-006
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Aplicar Pago
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-FAC-007
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Antigüedad Saldos
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-FAC-008
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Cobranza
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-FAC-009
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Dashboard Financiero
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-FAC-010
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Reportes
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+MÓDULO 07
+COSTOS Y RENTABILIDAD
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Funcionalidad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Prioridad
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COS-001
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Presupuesto Proyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COS-002
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Versionamiento Presupuesto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COS-003
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Registrar Costos
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COS-004
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Costos Comprometidos
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COS-005
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Desviaciones
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COS-006
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Rentabilidad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COS-007
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Utilidad Bruta
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COS-008
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Margen Proyecto
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COS-009
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Dashboard Costos
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-COS-010
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Reporte Ejecutivo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+MÓDULO 08
+DASHBOARD EJECUTIVO
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /><w:gridCol w:w="2640" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">ID
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Funcionalidad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Prioridad
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DSH-001
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Dashboard Ejecutivo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DSH-002
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Dashboard Operativo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DSH-003
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Dashboard Financiero
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DSH-004
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Dashboard Supervisor
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DSH-005
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Alertas
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DSH-006
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Drill Down
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DSH-007
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Exportar PDF
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DSH-008
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Exportar Excel
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">M
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DSH-009
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Scorecard Ejecutivo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">MMC-DSH-010
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">KPIs Corporativos
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">A
+RESUMEN GENERAL DEL PROYECTO
+Módulos:
+ 
+8
+Funcionalidades:
+ 
+80
+Pantallas estimadas:
+ 
+45
+APIs estimadas:
+ 
+120
+Tablas MySQL:
+ 
+40
+Casos UAT:
+ 
+150+
+Horas estimadas:
+ 
+1,200 - 1,500 hrs
+Duración estimada:
+ 
+16 semanas
+CRITERIO DE CIERRE
+Una funcionalidad será considerada terminada únicamente cuando:
+✓ Diseño aprobado
+✓ Base de datos implementada
+✓ Backend completado
+✓ Frontend completado
+✓ QA aprobado
+✓ UAT aprobado
+✓ Documentación actualizada
+✓ Liberada a Producción
+Estado Final:
+ 
+PRD
+APROBACIONES
+Cliente:
+ 
+ROM Constructora
+Fecha
+Proveedor:
+ 
+CORA Soluciones Digitales
+Fecha
+

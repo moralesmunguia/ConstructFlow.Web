@@ -1,0 +1,58 @@
+﻿CONSTRUCTFLOW V1.0
+Control total de tus proyectos.
+Propuesta Comercial y Económica
+Cora Soluciones Digitales
+MENSAJE EJECUTIVO
+La información correcta en el momento adecuado permite tomar mejores decisiones. ConstructFlow centraliza cotizaciones, proyectos, actividades, documentación, facturación, cobranza y rentabilidad en una sola plataforma.
+EL DESAFÍO
+Información dispersa en hojas de cálculo, correos y documentos. Seguimiento manual de actividades, fechas compromiso, entregables y cobranza.
+LA SOLUCIÓN
+ConstructFlow administra el ciclo completo: Cotización → Proyecto → Orden de Compra → Orden de Trabajo → Actividades → Evidencias → Entregables → Facturación → Cobranza → Pago → Rentabilidad.
+BENEFICIOS PARA LA ORGANIZACIÓN
+Control centralizado de proyectos, gestión documental, seguimiento operativo, facturación, cobranza, costos reales, rentabilidad y KPI's ejecutivos.
+MÓDULOS PRINCIPALES
+• Cotizaciones con control de versiones.
+• Proyectos.
+• Actividades y Diagrama de Gantt.
+• Evidencias fotográficas.
+• Gestión documental.
+• Facturación y cobranza.
+• Costos reales y rentabilidad.
+• KPI's y Dashboard Ejecutivo.
+TABLERO EJECUTIVO
+Indicadores operativos, comerciales, financieros y de rentabilidad para apoyar la toma de decisiones.
+ALCANCE FUNCIONAL
+• Multiempresa.
+• Usuarios ilimitados.
+• Roles y permisos.
+• Clientes, contactos y responsables.
+• Cotizaciones.
+• Proyectos.
+• Actividades.
+• Evidencias.
+• Gestión documental.
+• Entregables.
+• Facturación.
+• Cobranza.
+• Costos reales.
+• KPI's.
+• Alertas por correo.
+• Exportación a Excel, PDF e impresión.
+INVERSIÓN
+ConstructFlow V1.0
+Análisis, diseño, desarrollo, pruebas, capacitación, implementación y puesta en producción.
+INVERSIÓN TOTAL: $275,000.00 MXN + IVA
+FORMA DE PAGO
+30% Anticipo
+20% Aprobación de Análisis y Diseño
+25% Entrega de Versión Funcional
+25% Liberación a Producción
+CAPACITACIÓN Y GARANTÍA
+Incluye 8 horas de capacitación presencial y 90 días naturales de garantía.
+EVOLUCIÓN FUTURA
+Aplicación móvil Flutter, portal de clientes, firma electrónica e integraciones empresariales.
+ACEPTACIÓN
+Nombre del Cliente: ____________________
+Firma: ____________________
+Fecha: ____________________
+

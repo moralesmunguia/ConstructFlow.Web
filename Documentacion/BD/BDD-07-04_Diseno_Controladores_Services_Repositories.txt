@@ -1,0 +1,298 @@
+
+BDD-07-04 – DISEÑO DE CONTROLADORES, SERVICES Y REPOSITORIES
+CONSTRUCTFLOW V1.0
+
+============================================================
+OBJETIVO
+============================================================
+
+Definir la arquitectura de clases PHP para implementar:
+
+- MVC
+- Repository Pattern
+- Service Layer
+- JWT Security
+- APIs REST
+- Multiempresa
+
+Arquitectura:
+
+Controller
+    ↓
+Service
+    ↓
+Repository
+    ↓
+Database
+
+============================================================
+CONTROLADORES
+============================================================
+
+AuthController
+- login()
+- refreshToken()
+- logout()
+- forgotPassword()
+
+ClienteController
+- index()
+- show()
+- store()
+- update()
+- delete()
+
+CotizacionController
+- index()
+- show()
+- store()
+- aprobar()
+- convertirProyecto()
+
+ProyectoController
+- index()
+- show()
+- store()
+- update()
+- dashboard()
+- hitos()
+- incidencias()
+
+ActividadController
+- index()
+- show()
+- store()
+- update()
+- avance()
+- dependencias()
+- comentarios()
+
+DocumentoController
+- upload()
+- download()
+- versionar()
+
+EvidenciaController
+- upload()
+- index()
+- comentarios()
+
+FacturaController
+- index()
+- show()
+- store()
+- registrarPago()
+
+DashboardController
+- resumen()
+- kpis()
+- alertas()
+
+UsuarioController
+- index()
+- show()
+- store()
+- update()
+- delete()
+
+============================================================
+SERVICES
+============================================================
+
+AuthService
+Responsabilidades:
+- Validar credenciales
+- Generar JWT
+- Refresh Token
+- Logout
+
+ClienteService
+Responsabilidades:
+- Reglas de negocio clientes
+- Validaciones RFC
+- Contactos
+- Direcciones
+
+CotizacionService
+Responsabilidades:
+- Generar folio
+- Calcular importes
+- Aprobar cotización
+- Convertir proyecto
+
+ProyectoService
+Responsabilidades:
+- Crear proyecto
+- Calcular avance
+- Calcular rentabilidad
+- Registrar bitácora
+
+ActividadService
+Responsabilidades:
+- Actualizar avance
+- Calcular ruta crítica
+- Validar dependencias
+- Horas planeadas y reales
+
+DocumentoService
+Responsabilidades:
+- Versionamiento
+- Control documental
+- Descargas
+
+EvidenciaService
+Responsabilidades:
+- Geolocalización
+- Evidencias fotográficas
+- Comentarios
+
+FacturaService
+Responsabilidades:
+- Facturación
+- Cobranza
+- Pagos
+- Saldos
+
+DashboardService
+Responsabilidades:
+- KPI's
+- Alertas
+- Dashboard Ejecutivo
+
+UsuarioService
+Responsabilidades:
+- Roles
+- Permisos
+- Seguridad
+
+============================================================
+REPOSITORIES
+============================================================
+
+ClienteRepository
+- getAll()
+- getById()
+- insert()
+- update()
+- delete()
+
+CotizacionRepository
+- getAll()
+- getById()
+- insert()
+- aprobar()
+
+ProyectoRepository
+- getAll()
+- getById()
+- insert()
+- update()
+
+ActividadRepository
+- getAll()
+- getById()
+- insert()
+- update()
+
+DocumentoRepository
+- getAll()
+- getById()
+- insert()
+
+EvidenciaRepository
+- getAll()
+- getById()
+- insert()
+
+FacturaRepository
+- getAll()
+- getById()
+- insert()
+- registrarPago()
+
+UsuarioRepository
+- getAll()
+- getById()
+- insert()
+- update()
+
+============================================================
+MIDDLEWARE
+============================================================
+
+JwtMiddleware
+- Validar Token
+- Validar Expiración
+
+PermissionMiddleware
+- Validar Rol
+- Validar Permisos
+
+EmpresaMiddleware
+- Validar EmpresaID
+
+AuditMiddleware
+- Registrar Auditoría
+
+============================================================
+HELPERS
+============================================================
+
+JwtHelper
+ResponseHelper
+UploadHelper
+SecurityHelper
+DateHelper
+NumberHelper
+
+============================================================
+VALIDATORS
+============================================================
+
+ClienteValidator
+CotizacionValidator
+ProyectoValidator
+ActividadValidator
+FacturaValidator
+UsuarioValidator
+
+============================================================
+ESTRUCTURA FINAL
+============================================================
+
+app/
+
+controllers/
+services/
+repositories/
+models/
+middleware/
+validators/
+helpers/
+
+routes/
+
+storage/
+uploads/
+logs/
+
+config/
+
+public/
+
+============================================================
+RESULTADO BDD-07-04
+============================================================
+
+- Arquitectura MVC completa
+- Controllers definidos
+- Services definidos
+- Repositories definidos
+- Middleware definido
+- Validadores definidos
+- Multiempresa Ready
+- JWT Ready
+- Flutter Ready
+- Power BI Ready
+
+ConstructFlow Backend listo para iniciar desarrollo.

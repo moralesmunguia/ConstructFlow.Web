@@ -1,0 +1,203 @@
+﻿CONSTRUCTFLOW
+Administración profesional de proyectos de construcción y mantenimiento
+PROPUESTA ECONÓMICA PARA DESARROLLO DE SOFTWARE
+Fecha: ___ / ___ / 2026
+Cliente: __________________________
+Atención: _________________________
+PRESENTACIÓN
+Agradecemos la oportunidad de presentar esta propuesta para el desarrollo e implementación de ConstructFlow, una plataforma web diseñada para administrar de forma integral proyectos de construcción y mantenimiento.
+ConstructFlow permitirá centralizar la gestión de cotizaciones, proyectos, actividades, evidencias, entregables, facturación, cobranza y rentabilidad, proporcionando información en tiempo real para una mejor toma de decisiones.
+La plataforma será accesible desde computadora, tablet y teléfono móvil mediante navegador web, sin necesidad de instalar software adicional.
+OBJETIVO DEL PROYECTO
+Desarrollar una plataforma web multiempresa y multiusuario que permita administrar el ciclo completo de los proyectos, desde la generación de una cotización hasta el cierre operativo y financiero del proyecto.
+ALCANCE FUNCIONAL
+La solución incluirá los siguientes módulos:
+SEGURIDAD Y CONFIGURACIÓN
+• Multiempresa.
+ 
+• Multiusuario.
+ 
+• Roles y permisos.
+ 
+• Catálogo de responsables.
+ 
+• Bitácora de movimientos.
+CLIENTES Y COTIZACIONES
+• Administración de clientes.
+ 
+• Administración de contactos.
+ 
+• Generación de cotizaciones.
+ 
+• Historial de versiones.
+ 
+• Duplicación de cotizaciones.
+ 
+• Generación de PDF profesional.
+ 
+• Control de estatus de cotización.
+PROYECTOS
+• Generación de proyectos a partir de una o varias cotizaciones.
+ 
+• Control de fechas planeadas y reales.
+ 
+• Seguimiento general del proyecto.
+ 
+• Dashboard de proyecto.
+ACTIVIDADES
+• Captura manual de actividades.
+ 
+• Actividades obligatorias.
+ 
+• Actividades opcionales.
+ 
+• Actividades dependientes.
+ 
+• Actividades simultáneas.
+ 
+• Seguimiento de avance.
+ 
+• Control de actividades vencidas.
+ 
+• Vista tipo Gantt.
+EVIDENCIAS
+• Registro fotográfico Antes.
+ 
+• Registro fotográfico Durante.
+ 
+• Registro fotográfico Después.
+ 
+• Consulta histórica de evidencias.
+ÓRDENES DE COMPRA Y ÓRDENES DE TRABAJO
+• Registro de órdenes de compra.
+ 
+• Adjuntar documentos PDF.
+ 
+• Registro de órdenes de trabajo.
+ 
+• Control de documentos firmados.
+ENTREGABLES
+• Generación automática de reportes de entrega.
+ 
+• Inclusión de actividades realizadas.
+ 
+• Inclusión de evidencias fotográficas.
+ 
+• Exportación a PDF.
+FACTURACIÓN Y COBRANZA
+• Registro de facturas.
+ 
+• Carga de archivos PDF y XML.
+ 
+• Seguimiento de fechas compromiso de pago.
+ 
+• Registro de pagos recibidos.
+ 
+• Control de facturas pendientes.
+ 
+• Control de facturas vencidas.
+COSTOS Y RENTABILIDAD
+• Captura de costos reales.
+ 
+• Materiales.
+ 
+• Mano de obra.
+ 
+• Impuestos.
+ 
+• Otros gastos.
+ 
+• Comparativo contra importe cotizado.
+ 
+• Utilidad por proyecto.
+REPORTES
+• Actividades pendientes.
+ 
+• Actividades vencidas.
+ 
+• Actividades terminadas.
+ 
+• Proyectos activos.
+ 
+• Proyectos retrasados.
+ 
+• Proyectos por entregar.
+ 
+• Facturas pendientes.
+ 
+• Facturas vencidas.
+ 
+• Facturas pagadas.
+ 
+• Utilidad por proyecto.
+ 
+• Utilidad por cliente.
+ 
+• Utilidad por empresa.
+DASHBOARD EJECUTIVO
+• Indicadores operativos.
+ 
+• Indicadores financieros.
+ 
+• Indicadores de cobranza.
+ 
+• Indicadores de rentabilidad.
+ 
+• Alertas operativas.
+TECNOLOGÍA
+• Plataforma Web Responsive.
+ 
+• Compatible con PC, tablet y celular.
+ 
+• Base de datos centralizada.
+ 
+• Acceso mediante navegador web.
+ 
+• Hospedaje en infraestructura en la nube.
+BENEFICIOS
+• Centralización de la información.
+ 
+• Eliminación de controles dispersos en Excel.
+ 
+• Seguimiento puntual de proyectos.
+ 
+• Control documental digital.
+ 
+• Control de facturación y cobranza.
+ 
+• Medición de rentabilidad por proyecto.
+ 
+• Disponibilidad de información en tiempo real.
+ 
+• Mejor toma de decisiones.
+ENTREGABLES
+• Sistema ConstructFlow instalado y configurado.
+ 
+• Base de datos.
+ 
+• Capacitación funcional.
+ 
+• Manual de usuario.
+ 
+• Soporte durante la puesta en marcha.
+TIEMPO ESTIMADO DE IMPLEMENTACIÓN
+Análisis y Diseño: 3 semanas
+Desarrollo: 10 semanas
+Pruebas y Ajustes: 3 semanas
+Implementación y Capacitación: 2 semanas
+Tiempo total estimado:
+18 semanas
+INVERSIÓN
+Desarrollo e implementación de ConstructFlow:
+$ ______________________ MXN
+IVA no incluido.
+CONDICIONES DE PAGO
+50% al inicio del proyecto.
+30% al presentar versión funcional para pruebas.
+20% al concluir la implementación y liberación en producción.
+GARANTÍA
+90 días de garantía sobre defectos atribuibles al desarrollo posterior a la liberación del sistema.
+VIGENCIA DE LA PROPUESTA
+La presente propuesta tiene una vigencia de 30 días naturales a partir de la fecha de emisión.
+Agradecemos la oportunidad de participar en este proyecto y quedamos a sus órdenes para cualquier aclaración.
+

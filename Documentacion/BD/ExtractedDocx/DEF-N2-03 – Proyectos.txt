@@ -1,0 +1,372 @@
+﻿CONSTRUCTFLOW V1.0
+DOCUMENTO DE ESPECIFICACIÓN FUNCIONAL NIVEL 2
+DEF-N2-03
+MÓDULO DE PROYECTOS
+CONTROL DE DOCUMENTO
+Proyecto:
+ 
+ConstructFlow V1.0
+Cliente:
+ 
+ROM Constructora
+Documento:
+ 
+DEF-N2-03
+Módulo:
+ 
+Proyectos
+Versión:
+ 
+1.0
+Estado:
+ 
+Análisis Funcional
+1. OBJETIVO
+Administrar integralmente los proyectos de construcción y mantenimiento desde su creación hasta su cierre.
+El módulo de Proyectos será el núcleo operativo de ConstructFlow y concentrará toda la información relacionada con:
+Planeación
+Ejecución
+Seguimiento
+Evidencias
+Documentos
+Costos
+Facturación
+Rentabilidad
+2. OBJETIVOS FUNCIONALES
+OBJ-PRO-001
+Centralizar toda la información del proyecto.
+OBJ-PRO-002
+Controlar el avance físico y financiero.
+OBJ-PRO-003
+Administrar responsables y recursos.
+OBJ-PRO-004
+Controlar documentación y evidencias.
+OBJ-PRO-005
+Proporcionar trazabilidad completa.
+3. ACTORES
+Administrador General
+Gerente de Proyecto
+Supervisor
+Dirección
+Administración
+4. CICLO DE VIDA DEL PROYECTO
+Cotización Aprobada
+        ↓
+Proyecto Planeación
+        ↓
+Proyecto Activo
+        ↓
+Proyecto Cerrado
+Estados adicionales:
+Suspendido
+Cancelado
+5. CASOS DE USO
+CU-PRO-001
+Crear Proyecto
+CU-PRO-002
+Modificar Proyecto
+CU-PRO-003
+Asignar Responsables
+CU-PRO-004
+Administrar Presupuesto
+CU-PRO-005
+Registrar Avance
+CU-PRO-006
+Consultar Dashboard Proyecto
+CU-PRO-007
+Cerrar Proyecto
+6. PANTALLA PRO-001
+LISTADO DE PROYECTOS
+Campos
+Código
+Nombre
+Cliente
+Responsable
+Fecha Inicio
+Fecha Fin
+Presupuesto
+Avance %
+Estado
+Filtros
+Cliente
+Responsable
+Estado
+Fecha
+Acciones
+Nuevo
+Editar
+Dashboard
+Actividades
+Evidencias
+Documentos
+Costos
+Facturación
+7. PANTALLA PRO-002
+ENCABEZADO DEL PROYECTO
+Datos Generales
+ProyectoID
+Código
+Formato:
+PRO-YYYY-000001
+Nombre
+Obligatorio
+Cliente
+Obligatorio
+Tipo Proyecto
+Construcción
+Mantenimiento
+Remodelación
+Servicios
+Otro
+Descripción
+Texto libre
+8. DATOS OPERATIVOS
+Responsable
+Supervisor
+Fecha Inicio
+Fecha Fin
+Ubicación
+Ciudad
+Estado
+9. DATOS FINANCIEROS
+Presupuesto Original
+Presupuesto Actual
+Facturación Acumulada
+Cobranza Acumulada
+Costo Real
+Rentabilidad %
+10. RESPONSABLES
+Cada proyecto podrá tener:
+Gerente Proyecto
+Supervisor
+Cliente
+Administración
+Consulta
+Tabla
+CF_ProyectoResponsable
+Campos
+ProyectoID
+UsuarioID
+RolProyecto
+Activo
+11. TABLERO DEL PROYECTO
+Resumen Ejecutivo
+Indicadores
+Presupuesto
+Costo Real
+Facturación
+Cobranza
+Rentabilidad
+Avance %
+Actividades Pendientes
+Actividades Vencidas
+12. FASES DEL PROYECTO
+Cada proyecto podrá dividirse en fases.
+Ejemplo:
+Planeación
+Preparación
+Construcción
+Entrega
+Cierre
+Tabla
+CF_ProyectoFase
+13. AVANCE DEL PROYECTO
+Método de cálculo:
+Promedio ponderado de actividades.
+Fórmula:
+Avance Proyecto =
+ 
+Σ Avance Actividades / Total Actividades
+14. DOCUMENTOS ASOCIADOS
+Contratos
+Planos
+Permisos
+Minutas
+Entregables
+Fotografías
+15. EVIDENCIAS ASOCIADAS
+Fotografías
+Videos
+PDF
+Reportes
+Cada evidencia estará asociada a:
+Proyecto
+Actividad
+Usuario
+Fecha
+16. PRESUPUESTO
+Categorías
+Materiales
+Mano Obra
+Equipos
+Subcontratos
+Gastos Generales
+17. DASHBOARD DEL PROYECTO
+KPIs
+Avance %
+Presupuesto
+Costo Real
+Rentabilidad
+Facturación
+Cobranza
+Indicadores visuales
+Semáforo:
+Verde
+Amarillo
+Rojo
+18. INTEGRACIONES
+Integración Actividades
+1 Proyecto
+ 
+→ N Actividades
+Integración Evidencias
+1 Proyecto
+ 
+→ N Evidencias
+Integración Facturación
+1 Proyecto
+ 
+→ N Facturas
+Integración Costos
+1 Proyecto
+ 
+→ N Costos
+19. MODELO DE DATOS
+CF_Proyecto
+ProyectoID
+EmpresaID
+CodigoProyecto
+NombreProyecto
+ClienteID
+TipoProyecto
+Descripcion
+FechaInicio
+FechaFin
+ResponsableID
+SupervisorID
+Estado
+PresupuestoOriginal
+PresupuestoActual
+CostoReal
+FacturacionAcumulada
+CobranzaAcumulada
+Rentabilidad
+FechaCreacion
+UsuarioCreacion
+CF_ProyectoFase
+FaseID
+ProyectoID
+NombreFase
+FechaInicio
+FechaFin
+Estado
+CF_ProyectoResponsable
+ResponsableID
+ProyectoID
+UsuarioID
+RolProyecto
+Activo
+20. API REST
+GET
+/api/proyectos
+GET
+/api/proyectos/{id}
+POST
+/api/proyectos
+PUT
+/api/proyectos/{id}
+DELETE
+/api/proyectos/{id}
+(Eliminación lógica)
+GET
+/api/proyectos/{id}/dashboard
+GET
+/api/proyectos/{id}/costos
+GET
+/api/proyectos/{id}/facturacion
+21. REGLAS DE NEGOCIO
+RN-PRO-001
+Todo proyecto deberá pertenecer a una empresa.
+RN-PRO-002
+Todo proyecto deberá tener un responsable.
+RN-PRO-003
+No podrá cerrarse un proyecto con actividades pendientes.
+RN-PRO-004
+No podrá cerrarse un proyecto con documentos obligatorios faltantes.
+RN-PRO-005
+No podrá eliminarse un proyecto con facturación registrada.
+RN-PRO-006
+El avance será calculado automáticamente.
+RN-PRO-007
+Todo proyecto deberá tener al menos una fase.
+22. AUDITORÍA
+Registrar
+Usuario
+Fecha
+Acción
+IP
+Valores Anteriores
+Valores Nuevos
+23. REPORTES
+Proyectos Activos
+Proyectos por Cliente
+Proyectos por Responsable
+Proyectos Cerrados
+Rentabilidad por Proyecto
+Facturación por Proyecto
+Costo Real por Proyecto
+24. KPI’S
+Proyectos Activos
+Proyectos Cerrados
+Proyectos en Riesgo
+Avance Promedio
+Rentabilidad Promedio
+Costo vs Presupuesto
+25. CASOS DE PRUEBA UAT
+UAT-PRO-001
+Crear Proyecto
+Resultado esperado:
+ 
+Proyecto registrado.
+UAT-PRO-002
+Asignar Responsable
+Resultado esperado:
+ 
+Responsable asociado.
+UAT-PRO-003
+Registrar Presupuesto
+Resultado esperado:
+ 
+Presupuesto actualizado.
+UAT-PRO-004
+Registrar Avance
+Resultado esperado:
+ 
+Avance recalculado.
+UAT-PRO-005
+Cerrar Proyecto
+Resultado esperado:
+ 
+Estado Cerrado.
+UAT-PRO-006
+Consultar Dashboard
+Resultado esperado:
+ 
+Indicadores correctos.
+DEPENDENCIAS
+DEF-N2-04
+ 
+Actividades y Gantt
+DEF-N2-05
+ 
+Evidencias y Documentos
+DEF-N2-06
+ 
+Facturación y Cobranza
+DEF-N2-07
+ 
+Costos y Rentabilidad
+OBSERVACIÓN DE ARQUITECTURA
+El módulo de Proyectos constituye el núcleo funcional de ConstructFlow.
+Todos los módulos operativos y administrativos convergen en ProyectoID como llave principal de negocio.
+

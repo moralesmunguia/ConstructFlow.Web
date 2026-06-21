@@ -1,0 +1,367 @@
+﻿CONSTRUCTFLOW V1.0
+DOCUMENTO DE ESPECIFICACIÓN FUNCIONAL NIVEL 2
+DEF-N2-02
+MÓDULO DE COTIZACIONES
+CONTROL DE DOCUMENTO
+Proyecto:
+ 
+ConstructFlow V1.0
+Cliente:
+ 
+ROM Constructora
+Documento:
+ 
+DEF-N2-02
+Módulo:
+ 
+Cotizaciones
+Versión:
+ 
+1.0
+Estado:
+ 
+Análisis Funcional
+1. OBJETIVO
+Permitir la generación, administración, control y seguimiento de cotizaciones comerciales para clientes potenciales y clientes activos.
+El módulo deberá convertirse en el punto de entrada del ciclo comercial de la organización.
+2. OBJETIVOS FUNCIONALES
+OBJ-COT-001
+Reducir el tiempo de elaboración de propuestas.
+OBJ-COT-002
+Estandarizar formatos comerciales.
+OBJ-COT-003
+Controlar versiones de cotizaciones.
+OBJ-COT-004
+Dar trazabilidad desde la cotización hasta el proyecto.
+OBJ-COT-005
+Generar documentos PDF corporativos.
+3. ACTORES
+Administrador
+Control total.
+Gerente de Proyecto
+Creación y administración.
+Dirección
+Consulta.
+Administración
+Consulta y seguimiento.
+4. CASOS DE USO
+CU-COT-001
+Crear Cotización
+Actor:
+Gerente de Proyecto
+Descripción:
+Permite registrar una nueva cotización.
+Resultado:
+Cotización creada.
+CU-COT-002
+Modificar Cotización
+Actor:
+Gerente de Proyecto
+Resultado:
+Nueva versión generada.
+CU-COT-003
+Duplicar Cotización
+Actor:
+Gerente de Proyecto
+Resultado:
+Nueva cotización basada en una existente.
+CU-COT-004
+Generar PDF
+Actor:
+Gerente de Proyecto
+Resultado:
+Documento PDF descargable.
+CU-COT-005
+Aprobar Cotización
+Actor:
+Dirección
+Resultado:
+Cotización aprobada.
+CU-COT-006
+Convertir a Proyecto
+Actor:
+Gerente de Proyecto
+Resultado:
+Proyecto generado automáticamente.
+5. FLUJO GENERAL
+Nueva Cotización
+        ↓
+Captura Conceptos
+        ↓
+Revisión
+        ↓
+PDF
+        ↓
+Envío Cliente
+        ↓
+Aprobada
+        ↓
+Proyecto
+6. ESTADOS
+Borrador
+Cotización en captura.
+En Revisión
+Pendiente validación interna.
+Enviada
+Enviada al cliente.
+Aprobada
+Aceptada por cliente.
+Rechazada
+No aceptada.
+Cancelada
+Cancelada internamente.
+7. PANTALLA COT-001
+LISTADO DE COTIZACIONES
+Objetivo:
+Consulta general.
+Campos visibles
+Folio
+Cliente
+Proyecto
+Fecha
+Versión
+Importe
+Estado
+Responsable
+Filtros
+Cliente
+Fecha
+Estado
+Responsable
+Acciones
+Nuevo
+Editar
+Duplicar
+PDF
+Aprobar
+Convertir Proyecto
+8. PANTALLA COT-002
+ENCABEZADO
+Datos Generales
+Empresa
+EmpresaID
+Folio
+Generado automáticamente
+Formato:
+COT-YYYY-000001
+Ejemplo:
+COT-2026-000125
+Fecha
+Obligatorio
+Cliente
+Obligatorio
+Catálogo Clientes
+Contacto
+Opcional
+Proyecto
+Opcional
+Vigencia
+Obligatorio
+Moneda
+MXN
+ 
+USD
+Tipo Cambio
+Editable
+Estado
+Controlado por sistema
+9. PANTALLA COT-003
+DETALLE DE CONCEPTOS
+Columnas
+Código
+Descripción
+Unidad
+Cantidad
+Precio Unitario
+Descuento %
+Importe
+Cálculo
+Importe =
+ 
+Cantidad * Precio Unitario
+Subtotal =
+ 
+SUM(Importes)
+Descuento =
+ 
+SUM(Descuentos)
+IVA =
+ 
+16%
+Total =
+ 
+Subtotal - Descuento + IVA
+10. CATÁLOGO DE CONCEPTOS
+Tabla:
+CF_Conceptos
+Campos
+ConceptoID
+Código
+Descripción
+Unidad
+PrecioReferencia
+Activo
+11. VERSIONAMIENTO
+Objetivo
+Conservar historial completo.
+Versión Inicial
+1.0
+Modificación
+1.1
+1.2
+1.3
+…
+Tabla
+CF_CotizacionVersion
+Campos
+VersionID
+CotizacionID
+Version
+Fecha
+Usuario
+Comentarios
+12. PDF CORPORATIVO
+Contenido
+Logo ROM
+Logo ConstructFlow
+Datos Cliente
+Datos Proyecto
+Conceptos
+Subtotal
+IVA
+Total
+Condiciones
+Firmas
+Formato
+PDF
+Carta
+Vertical
+13. CONVERSIÓN A PROYECTO
+Botón
+Convertir Proyecto
+Validaciones
+Estado = Aprobada
+Proceso
+Crear Proyecto
+Crear Actividades Iniciales
+Copiar Documentos
+Copiar Cliente
+Resultado
+Proyecto Activo
+14. MODELO DE DATOS
+CF_Cotizacion
+CotizacionID
+EmpresaID
+Folio
+ClienteID
+ProyectoNombre
+Fecha
+Vigencia
+Moneda
+TipoCambio
+Subtotal
+IVA
+Total
+Estado
+VersionActual
+UsuarioCreacion
+FechaCreacion
+CF_CotizacionDetalle
+DetalleID
+CotizacionID
+ConceptoID
+Descripcion
+Unidad
+Cantidad
+PrecioUnitario
+Descuento
+Importe
+CF_CotizacionVersion
+VersionID
+CotizacionID
+Version
+UsuarioID
+Fecha
+Comentarios
+15. API REST
+GET
+/api/cotizaciones
+Lista
+GET
+/api/cotizaciones/{id}
+Detalle
+POST
+/api/cotizaciones
+Crear
+PUT
+/api/cotizaciones/{id}
+Actualizar
+POST
+/api/cotizaciones/{id}/aprobar
+Aprobación
+POST
+/api/cotizaciones/{id}/proyecto
+Convertir Proyecto
+GET
+/api/cotizaciones/{id}/pdf
+PDF
+16. REGLAS DE NEGOCIO
+RN-COT-001
+El folio será consecutivo por empresa.
+RN-COT-002
+No podrá aprobarse una cotización sin conceptos.
+RN-COT-003
+No podrá convertirse en proyecto si no está aprobada.
+RN-COT-004
+Toda modificación generará versión.
+RN-COT-005
+Las cotizaciones aprobadas no podrán eliminarse.
+RN-COT-006
+El IVA será configurable por empresa.
+17. AUDITORÍA
+Registrar
+Usuario
+Fecha
+Acción
+IP
+Antes
+Después
+18. REPORTES
+Cotizaciones por Cliente
+Cotizaciones por Mes
+Cotizaciones Aprobadas
+Cotizaciones Rechazadas
+Conversión Cotización → Proyecto
+19. KPI’S
+Cotizaciones Generadas
+Cotizaciones Aprobadas
+Monto Cotizado
+Monto Aprobado
+Tasa Conversión
+Fórmula:
+Aprobadas / Generadas * 100
+20. CASOS DE PRUEBA UAT
+UAT-COT-001
+Crear cotización.
+Resultado esperado:
+Folio generado.
+UAT-COT-002
+Agregar conceptos.
+Resultado esperado:
+Totales calculados.
+UAT-COT-003
+Generar PDF.
+Resultado esperado:
+PDF correcto.
+UAT-COT-004
+Aprobar cotización.
+Resultado esperado:
+Estado aprobado.
+UAT-COT-005
+Convertir proyecto.
+Resultado esperado:
+Proyecto creado.
+ENTREGABLE SIGUIENTE
+DEF-N2-03
+Módulo Proyectos
+

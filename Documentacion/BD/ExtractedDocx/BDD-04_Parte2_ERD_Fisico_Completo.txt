@@ -1,0 +1,60 @@
+﻿CONSTRUCTFLOW V1.0
+BDD-04 PARTE 2 – ERD FÍSICO COMPLETO
+Control del Documento
+Proyecto: ConstructFlow V1.0
+Cliente: ROM Constructora
+Proveedor: CORA Soluciones Digitales
+Versión: 1.0
+Fecha: Junio 2026
+Objetivo
+Definir el modelo físico completo de la base de datos, incluyendo PK, FK, cardinalidades, relaciones N:N resueltas, índices y dominios funcionales.
+Dominio 01 - Seguridad
+CF_Rol -> CF_Usuario
+CF_Rol -> CF_RolPermiso -> CF_Permiso
+CF_Usuario -> CF_Sesion
+CF_Usuario -> CF_WidgetUsuario
+Dominio 02 - Clientes
+CF_Cliente -> CF_ClienteContacto
+CF_Cliente -> CF_ClienteDireccion
+Dominio 03 - Cotizaciones
+CF_Cotizacion -> CF_CotizacionDetalle
+CF_Cotizacion -> CF_CotizacionVersion
+CF_Cotizacion -> CF_Proyecto
+Dominio 04 - Proyectos
+CF_Proyecto -> CF_ProyectoFase
+CF_Proyecto -> CF_ProyectoEncargado
+CF_Proyecto -> CF_Hito
+CF_Proyecto -> CF_Incidencia
+Dominio 05 - Actividades y Gantt
+CF_Proyecto -> CF_Actividad
+CF_Actividad -> CF_ActividadAsignacion
+CF_Actividad -> CF_ActividadComentario
+CF_Actividad -> CF_ActividadDependencia
+Dominio 06 - Documentos
+CF_Proyecto -> CF_Evidencia
+CF_Evidencia -> CF_EvidenciaComentario
+CF_Proyecto -> CF_Documento
+CF_Documento -> CF_DocumentoVersion
+CF_Archivo -> CF_DocumentoVersion
+Dominio 07 - Finanzas
+CF_Proyecto -> CF_Estimacion
+CF_Proyecto -> CF_Factura -> CF_Pago
+CF_Proyecto -> CF_Presupuesto -> CF_PresupuestoDetalle
+CF_Proyecto -> CF_Costo
+Dominio 08 - Dashboard
+CF_KPI
+CF_Alerta
+CF_Notificacion
+CF_DashboardFavorito
+Dominio 09 - Workflow
+CF_FlujoAprobacion -> CF_FlujoPaso
+CF_FlujoAprobacion -> CF_FlujoHistorial
+Dominio 10 - Auditoría
+CF_Auditoria -> CF_AuditoriaDetalle
+Resumen del ERD Físico
+Tablas estimadas: 66
+PK: 66
+FK: 95+
+Índices: 120+
+Dominios funcionales: 10
+

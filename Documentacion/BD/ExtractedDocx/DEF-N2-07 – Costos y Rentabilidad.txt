@@ -1,0 +1,361 @@
+﻿CONSTRUCTFLOW V1.0
+DOCUMENTO DE ESPECIFICACIÓN FUNCIONAL NIVEL 2
+DEF-N2-07
+MÓDULO DE COSTOS Y RENTABILIDAD
+CONTROL DE DOCUMENTO
+Proyecto:
+ 
+ConstructFlow V1.0
+Cliente:
+ 
+ROM Constructora
+Documento:
+ 
+DEF-N2-07
+Módulo:
+ 
+Costos y Rentabilidad
+Versión:
+ 
+1.0
+Estado:
+ 
+Análisis Funcional
+1. OBJETIVO
+Administrar, controlar y analizar los costos asociados a cada proyecto para determinar su rentabilidad real y proporcionar información financiera confiable para la toma de decisiones.
+El módulo permitirá:
+Control presupuestal
+Costos comprometidos
+Costos reales
+Desviaciones
+Utilidad bruta
+Rentabilidad
+Flujo financiero del proyecto
+2. OBJETIVOS FUNCIONALES
+OBJ-COS-001
+Controlar costos por proyecto.
+OBJ-COS-002
+Comparar Presupuesto vs Real.
+OBJ-COS-003
+Identificar desviaciones.
+OBJ-COS-004
+Determinar utilidad.
+OBJ-COS-005
+Calcular rentabilidad.
+OBJ-COS-006
+Proporcionar indicadores financieros.
+3. CONCEPTOS
+Presupuesto Original
+Monto aprobado al inicio del proyecto.
+Presupuesto Actual
+Presupuesto ajustado.
+Costo Comprometido
+Monto comprometido mediante OC o contratos.
+Costo Real
+Monto efectivamente ejecutado.
+Utilidad Bruta
+Ingresos - Costos
+Rentabilidad
+Porcentaje de utilidad sobre ingresos.
+4. CASOS DE USO
+CU-COS-001
+Registrar Presupuesto
+CU-COS-002
+Modificar Presupuesto
+CU-COS-003
+Registrar Costo
+CU-COS-004
+Consultar Desviaciones
+CU-COS-005
+Consultar Rentabilidad
+CU-COS-006
+Generar Reportes
+5. ESTRUCTURA DE COSTOS
+Categorías Principales
+Materiales
+Mano de Obra
+Equipos
+Subcontratos
+Gastos Generales
+Indirectos
+Otros
+6. PANTALLA COS-001
+PRESUPUESTO DEL PROYECTO
+Campos
+Proyecto
+Versión Presupuesto
+Fecha
+Importe Total
+Estado
+Borrador
+Aprobado
+Cerrado
+7. DESGLOSE PRESUPUESTAL
+Concepto
+Categoría
+Cantidad
+Costo Unitario
+Importe
+Observaciones
+8. CONTROL DE VERSIONES
+Objetivo
+Mantener historial presupuestal.
+Ejemplo
+Presupuesto V1.0
+Presupuesto V1.1
+Presupuesto V2.0
+9. COSTOS REALES
+Definición
+Costos ejecutados en la operación.
+Origen
+Captura Manual
+Orden Compra
+Factura Proveedor
+Importación
+10. PANTALLA COS-002
+REGISTRO DE COSTOS
+Campos
+Proyecto
+Actividad
+Opcional
+Categoría
+Proveedor
+Fecha
+Descripción
+Importe
+Documento Soporte
+11. PROVEEDORES
+Catálogo
+ProveedorID
+RFC
+Razón Social
+Contacto
+Teléfono
+Correo
+Activo
+12. COSTOS COMPROMETIDOS
+Origen
+Orden Compra
+Contrato
+Pedido
+Indicador
+Costo Comprometido
+13. DESVIACIONES
+Fórmula
+Desviación =
+ 
+Costo Real - Presupuesto
+Indicadores
+Monto
+Porcentaje
+Semáforos
+Verde
+≤ 5%
+Amarillo
+6% - 10%
+Rojo
+10%
+14. RENTABILIDAD
+Fórmula
+Utilidad Bruta =
+ 
+Ingresos - Costos
+Rentabilidad (%) =
+ 
+(Utilidad / Ingresos) * 100
+15. INDICADORES FINANCIEROS
+Ingresos
+Costos
+Utilidad
+Rentabilidad
+Margen Bruto
+Flujo Neto
+16. DASHBOARD DE COSTOS
+Tarjetas KPI
+Presupuesto Original
+Costo Comprometido
+Costo Real
+Desviación
+Rentabilidad
+17. DASHBOARD DE RENTABILIDAD
+Gráficas
+Ingresos vs Costos
+Rentabilidad por Proyecto
+Top Proyectos Rentables
+Top Proyectos Riesgo
+18. INTEGRACIÓN CON PROYECTOS
+Proyecto
+↓
+Presupuesto
+↓
+Costos
+↓
+Facturación
+↓
+Rentabilidad
+19. INTEGRACIÓN CON ACTIVIDADES
+Proyecto
+↓
+Actividad
+↓
+Costo
+↓
+Avance
+20. INTEGRACIÓN CON FACTURACIÓN
+Facturación
+↓
+Ingresos
+↓
+Rentabilidad
+21. MODELO DE DATOS
+CF_Presupuesto
+PresupuestoID
+EmpresaID
+ProyectoID
+Version
+Fecha
+ImporteTotal
+Estado
+UsuarioCreacion
+FechaCreacion
+CF_PresupuestoDetalle
+DetalleID
+PresupuestoID
+CategoriaCostoID
+Descripcion
+Cantidad
+CostoUnitario
+Importe
+CF_Costo
+CostoID
+EmpresaID
+ProyectoID
+ActividadID
+CategoriaCostoID
+ProveedorID
+FechaCosto
+Descripcion
+Importe
+DocumentoSoporte
+UsuarioCreacion
+CF_CategoriaCosto
+CategoriaCostoID
+Nombre
+Activo
+CF_Proveedor
+ProveedorID
+RFC
+RazonSocial
+Telefono
+Correo
+Activo
+22. API REST
+GET
+/api/presupuestos
+GET
+/api/presupuestos/{id}
+POST
+/api/presupuestos
+PUT
+/api/presupuestos/{id}
+GET
+/api/costos
+POST
+/api/costos
+GET
+/api/proyectos/{id}/rentabilidad
+GET
+/api/dashboard/costos
+23. REGLAS DE NEGOCIO
+RN-COS-001
+Todo costo deberá pertenecer a un proyecto.
+RN-COS-002
+No podrán registrarse costos negativos.
+RN-COS-003
+Toda modificación presupuestal generará versión.
+RN-COS-004
+Los costos deberán clasificarse por categoría.
+RN-COS-005
+La rentabilidad será recalculada automáticamente.
+RN-COS-006
+Toda desviación deberá quedar registrada.
+RN-COS-007
+Los proyectos cerrados no permitirán nuevos costos.
+24. AUDITORÍA
+Registrar
+Usuario
+Fecha
+Acción
+IP
+Importe Anterior
+Importe Nuevo
+Motivo
+25. REPORTES
+Presupuesto por Proyecto
+Costo Real por Proyecto
+Desviaciones
+Rentabilidad por Proyecto
+Rentabilidad por Cliente
+Costos por Categoría
+Top Costos
+26. KPI’S
+Presupuesto Total
+Costo Real
+Costo Comprometido
+Desviación %
+Rentabilidad %
+Utilidad Bruta
+Margen Promedio
+27. CASOS DE PRUEBA UAT
+UAT-COS-001
+Registrar Presupuesto
+Resultado esperado:
+ 
+Presupuesto almacenado.
+UAT-COS-002
+Registrar Costo
+Resultado esperado:
+ 
+Costo registrado.
+UAT-COS-003
+Modificar Presupuesto
+Resultado esperado:
+ 
+Nueva versión creada.
+UAT-COS-004
+Consultar Rentabilidad
+Resultado esperado:
+ 
+Cálculo correcto.
+UAT-COS-005
+Consultar Desviación
+Resultado esperado:
+ 
+Indicadores correctos.
+UAT-COS-006
+Proyecto con utilidad negativa
+Resultado esperado:
+ 
+Indicador rojo.
+UAT-COS-007
+Cerrar Proyecto
+Resultado esperado:
+ 
+Bloqueo de nuevos costos.
+OBSERVACIÓN DE ARQUITECTURA
+El módulo de Costos y Rentabilidad constituye el núcleo financiero de ConstructFlow.
+Su función principal es transformar la información operativa y administrativa en indicadores financieros que permitan medir la rentabilidad real de cada proyecto y soportar la toma de decisiones estratégicas de ROM Constructora.
+DEPENDENCIAS
+DEF-N2-03
+ 
+Proyectos
+DEF-N2-04
+ 
+Actividades y Gantt
+DEF-N2-06
+ 
+Facturación y Cobranza
+DEF-N2-08
+ 
+Dashboard Ejecutivo y KPI’s
+

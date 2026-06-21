@@ -1,0 +1,65 @@
+﻿CONSTRUCTFLOW V1.0
+Control total de tus proyectos.
+Propuesta Comercial y Económica
+Cora Soluciones Digitales
+1. Presentación
+ConstructFlow es una plataforma integral para la administración profesional de proyectos de construcción y mantenimiento. Centraliza cotizaciones, proyectos, actividades, evidencias, documentos, facturación, cobranza y rentabilidad en una sola solución web.
+2. Objetivo
+Implementar una plataforma web que permita administrar el ciclo completo de los proyectos desde la generación de cotizaciones hasta el cierre operativo y financiero.
+3. Situación Actual
+Muchas organizaciones operan mediante hojas de cálculo, correos y documentos dispersos, dificultando el control de proyectos, cambios de alcance, cobranza y rentabilidad.
+4. Solución Propuesta
+ConstructFlow permitirá gestionar Cotización → Proyecto → Actividades → Evidencias → Entregables → Facturación → Cobranza → Rentabilidad.
+5. Alcance Funcional
+• Multiempresa.
+• Usuarios ilimitados.
+• Roles y permisos.
+• Clientes, contactos y responsables.
+• Cotizaciones con control de versiones.
+• Proyectos.
+• Actividades y Diagrama de Gantt.
+• Evidencias Antes, Durante y Después.
+• Gestión documental.
+• Facturación documental.
+• Cobranza.
+• Costos reales.
+• KPI's y Dashboard Ejecutivo.
+• Alertas por correo.
+• Exportación a Excel, PDF e impresión.
+6. Módulo de Cotizaciones
+Generación de folios, duplicación de cotizaciones, historial de cambios, PDF profesional, control de alcance y asociación de múltiples cotizaciones a un proyecto.
+7. Módulo de Proyectos
+Control de órdenes de compra, órdenes de trabajo, fechas planeadas y reales, avance general y seguimiento operativo.
+8. Actividades y Gantt
+Actividades obligatorias, opcionales, dependientes y simultáneas. Control porcentual y seguimiento mediante Gantt.
+9. Evidencias y Gestión Documental
+Administración de archivos JPG, JPEG, PNG, PDF y XML con tamaño máximo de 20 MB por archivo.
+10. Facturación y Cobranza
+Registro de facturas, XML/PDF, pagos, fechas compromiso, vencimientos y seguimiento de cobranza.
+11. Costos y Rentabilidad
+Captura de materiales, mano de obra, impuestos y análisis de utilidad por proyecto y cliente.
+12. KPI's y Dashboard Ejecutivo
+Indicadores operativos, comerciales, financieros y de rentabilidad con dashboards por perfil.
+13. Notificaciones
+Alertas automáticas por correo para actividades, proyectos, facturas y pagos.
+14. Beneficios Esperados
+Mayor control, trazabilidad, información centralizada y soporte para la toma de decisiones.
+15. Ambientes
+Desarrollo, Pruebas y Producción.
+16. Infraestructura
+Hosting, dominio y certificados SSL serán proporcionados por el cliente. Incluye configuración inicial.
+17. Inversión
+Desarrollo ConstructFlow V1.0: $275,000.00 MXN + IVA.
+18. Forma de Pago
+30% Anticipo, 20% Análisis y Diseño, 25% Versión Funcional, 25% Producción.
+19. Capacitación y Garantía
+8 horas de capacitación presencial y 90 días de garantía.
+20. Propiedad Intelectual y Versiones Futuras
+Licencia permanente de uso. Flutter, portal de clientes y firma electrónica quedan para futuras versiones.
+21. Entregables
+Documento funcional, sistema, base de datos, manuales, capacitación, puesta en producción y garantía.
+22. Exclusiones
+No incluye hardware, hosting, dominio, firma electrónica, aplicación móvil ni integraciones externas.
+23. Aceptación
+Espacio para firma y aceptación del cliente.
+

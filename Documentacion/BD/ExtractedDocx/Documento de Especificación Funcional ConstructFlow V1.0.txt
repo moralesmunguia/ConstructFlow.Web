@@ -1,0 +1,270 @@
+﻿DOCUMENTO DE ESPECIFICACIÓN FUNCIONAL
+ConstructFlow V1.0
+Control Total de tus Proyectos
+Versión
+1.0
+Cliente
+ROM Constructora
+Desarrollador
+CORA Soluciones Digitales
+Estado
+Borrador Técnico Inicial
+1. INTRODUCCIÓN
+1.1 Objetivo
+Definir los requerimientos funcionales y operativos de la plataforma ConstructFlow V1.0 para la administración integral de proyectos de construcción y mantenimiento.
+El sistema permitirá centralizar la información operativa, administrativa y estratégica de la organización en una sola plataforma web.
+2. ALCANCE GENERAL
+ConstructFlow V1.0 contempla los siguientes módulos:
+Operación
+Cotizaciones
+Proyectos
+Actividades
+Diagrama de Gantt
+Evidencias
+Documentos
+Administración
+Facturación
+Cobranza
+Costos Reales
+Rentabilidad
+Dirección
+KPIs
+Dashboard Ejecutivo
+3. ARQUITECTURA FUNCIONAL
+Multiempresa
+Cada empresa operará de manera independiente.
+Características:
+Datos segregados por empresa
+Usuarios por empresa
+Configuración independiente
+Folios independientes
+4. SEGURIDAD
+Roles
+Administrador General
+Control total del sistema.
+Dirección
+Consulta indicadores ejecutivos.
+Administración
+Facturación y cobranza.
+Gerente de Proyecto
+Control operativo completo.
+Supervisor
+Seguimiento de actividades.
+Consulta
+Acceso únicamente de lectura.
+5. MÓDULO DE COTIZACIONES
+Objetivo
+Gestionar propuestas económicas y comerciales para clientes.
+Funciones
+Crear Cotización
+Datos:
+Folio
+Cliente
+Proyecto
+Fecha
+Vigencia
+Moneda
+Estatus
+Conceptos
+Campos:
+Código
+Descripción
+Unidad
+Cantidad
+Precio Unitario
+Importe
+Versionamiento
+Cada modificación generará:
+Número de versión
+Fecha
+Usuario
+PDF
+Generación automática de:
+Cotización comercial
+Formato corporativo
+Reglas de Negocio
+RN-COT-001
+El folio deberá ser consecutivo por empresa.
+RN-COT-002
+No podrán eliminarse cotizaciones aprobadas.
+RN-COT-003
+Una cotización aprobada podrá convertirse en proyecto.
+6. MÓDULO DE PROYECTOS
+Objetivo
+Administrar la ejecución integral de proyectos.
+Datos Principales
+Código Proyecto
+Nombre
+Cliente
+Responsable
+Fecha Inicio
+Fecha Fin
+Presupuesto
+Estado
+Estados
+Planeación
+Activo
+Suspendido
+Cerrado
+Cancelado
+Funciones
+Crear proyecto
+Asignar responsables
+Programar actividades
+Asociar documentos
+Asociar evidencias
+7. MÓDULO DE ACTIVIDADES
+Objetivo
+Controlar tareas y avances.
+Campos:
+Proyecto
+Actividad
+Responsable
+Fecha Inicio
+Fecha Fin
+Avance %
+Estado
+Estados:
+Pendiente
+En Proceso
+Completada
+Cancelada
+8. MÓDULO DE GANTT
+Objetivo
+Visualizar cronograma general.
+Funciones:
+Dependencias
+Hitos
+Ruta crítica
+Avance visual
+9. MÓDULO DE EVIDENCIAS
+Objetivo
+Registrar evidencia fotográfica de avances.
+Datos:
+Proyecto
+Actividad
+Fecha
+Fotografía
+Comentario
+Ubicación GPS
+Formatos:
+JPG
+PNG
+PDF
+10. MÓDULO DOCUMENTAL
+Objetivo
+Centralizar documentación.
+Tipos:
+Contratos
+Planos
+Minutas
+Entregables
+Permisos
+Control:
+Versiones
+Historial
+Descargas
+11. MÓDULO DE FACTURACIÓN
+Objetivo
+Control administrativo de facturas.
+Campos:
+Serie
+Folio
+Cliente
+Fecha
+Importe
+Estatus
+Estados:
+Pendiente
+Facturada
+Cancelada
+12. MÓDULO DE COBRANZA
+Objetivo
+Monitorear recuperación de ingresos.
+Campos:
+Factura
+Fecha Vencimiento
+Monto
+Saldo
+Indicadores:
+Cartera vigente
+Cartera vencida
+Días promedio de cobro
+13. MÓDULO DE COSTOS REALES
+Objetivo
+Controlar costos ejecutados.
+Categorías:
+Mano de Obra
+Materiales
+Equipos
+Subcontratos
+Gastos Generales
+Indicadores:
+Presupuesto
+Real
+Variación
+14. MÓDULO DE RENTABILIDAD
+Objetivo
+Determinar utilidad por proyecto.
+Indicadores:
+Ingreso
+Costos
+Utilidad Bruta
+Margen %
+Fórmula:
+Rentabilidad =
+ 
+(Utilidad / Ingreso) * 100
+15. DASHBOARD EJECUTIVO
+Indicadores:
+Proyectos Activos
+Proyectos en Riesgo
+Facturación Mensual
+Cobranza Pendiente
+Margen Promedio
+Rentabilidad
+16. KPI’S
+Operación:
+Avance Promedio
+Actividades Vencidas
+Administración:
+Facturación
+Cobranza
+Dirección:
+Rentabilidad
+ROI
+17. REPORTES
+Cotizaciones
+Proyectos
+Actividades
+Evidencias
+Costos
+Rentabilidad
+KPI’s
+Exportación:
+Excel
+PDF
+18. REQUERIMIENTOS NO FUNCIONALES
+Plataforma
+PHP 8+
+MySQL
+Apache
+MVC
+Rendimiento
+Tiempo de respuesta menor a 3 segundos.
+Seguridad
+HTTPS
+Contraseñas cifradas
+Auditoría de cambios
+Disponibilidad
+99% disponibilidad anual.
+19. FUTURAS VERSIONES
+V2.0
+App Flutter
+Portal de Clientes
+Firma Electrónica
+V3.0
+Integración ERP
+Automatización IA
+API Pública
+

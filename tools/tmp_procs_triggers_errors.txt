@@ -1,0 +1,14 @@
+Attempt to create procs/triggers: 2026-06-16
+
+Commands executed:
+- apply_sql_patch.ps1 -SqlFile Documentacion/BD/Script/ConstructFlow_BDD06_Vistas_SP_Triggers_Jobs.sql
+- apply_sql_patch.ps1 -SqlFile tools/tmp_create_triggers.sql
+
+Observed errors:
+- ERROR 1304 (42000) at line 65: PROCEDURE SP_Proyecto_Avance already exists
+- ERROR 1419 (HY000) at line 3: You do not have the SUPER privilege and binary logging is enabled (you *might* want to use the less safe log_bin_trust_function_creators variable)
+
+Recommendation:
+- Provide credentials with SUPER or have DBA set `log_bin_trust_function_creators = 1` globally and then run:
+    mysql -u root -p constructflow < Documentacion/BD/Script/ConstructFlow_BDD06_Procs_Triggers.sql
+

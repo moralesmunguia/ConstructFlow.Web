@@ -1,0 +1,358 @@
+﻿CONSTRUCTFLOW V1.0
+DOCUMENTO DE ESPECIFICACIÓN FUNCIONAL NIVEL 2
+DEF-N2-08
+DASHBOARD EJECUTIVO Y KPI’S
+CONTROL DE DOCUMENTO
+Proyecto:
+ 
+ConstructFlow V1.0
+Cliente:
+ 
+ROM Constructora
+Documento:
+ 
+DEF-N2-08
+Módulo:
+ 
+Dashboard Ejecutivo y KPI’s
+Versión:
+ 
+1.0
+Estado:
+ 
+Análisis Funcional
+1. OBJETIVO
+Proporcionar información estratégica, operativa y financiera en tiempo real para facilitar la toma de decisiones mediante tableros de control e indicadores clave de desempeño (KPI’s).
+El Dashboard Ejecutivo será el centro de inteligencia de negocio (BI) de ConstructFlow.
+2. OBJETIVOS FUNCIONALES
+OBJ-DASH-001
+Concentrar información crítica.
+OBJ-DASH-002
+Detectar desviaciones oportunamente.
+OBJ-DASH-003
+Monitorear desempeño operativo.
+OBJ-DASH-004
+Monitorear desempeño financiero.
+OBJ-DASH-005
+Facilitar decisiones estratégicas.
+OBJ-DASH-006
+Permitir análisis multidimensional.
+3. PRINCIPIOS DE DISEÑO
+Tiempo Real
+Información Accionable
+Indicadores Visuales
+Drill Down
+Semaforización
+Responsive
+4. TIPOS DE DASHBOARD
+Dashboard Ejecutivo
+Dirección General
+Dashboard Operativo
+Gerentes de Proyecto
+Dashboard Administrativo
+Administración y Finanzas
+Dashboard Supervisor
+Supervisores de Campo
+5. DASHBOARD EJECUTIVO
+Objetivo
+Visualizar el estado general de la empresa.
+Indicadores Principales
+Proyectos Activos
+Proyectos en Riesgo
+Facturación del Mes
+Cobranza Pendiente
+Costo Real Acumulado
+Rentabilidad Promedio
+6. TARJETAS KPI EJECUTIVAS
+KPI-001
+Proyectos Activos
+KPI-002
+Proyectos Cerrados
+KPI-003
+Avance Promedio
+KPI-004
+Facturación Mensual
+KPI-005
+Cobranza Mensual
+KPI-006
+Rentabilidad Global
+7. DASHBOARD OPERATIVO
+Objetivo
+Controlar ejecución de proyectos.
+Indicadores
+Actividades Pendientes
+Actividades Vencidas
+Avance por Proyecto
+Cumplimiento Cronograma
+Evidencias Pendientes
+8. DASHBOARD ADMINISTRATIVO
+Objetivo
+Monitorear flujo financiero.
+Indicadores
+Facturación
+Cobranza
+Cartera
+Antigüedad de Saldos
+Costo Acumulado
+Rentabilidad
+9. DASHBOARD SUPERVISOR
+Objetivo
+Control diario de obra.
+Indicadores
+Actividades Asignadas
+Actividades Terminadas
+Evidencias Registradas
+Actividades Atrasadas
+Incidencias
+10. GRÁFICAS EJECUTIVAS
+Gráfica 1
+Facturación Mensual
+Tipo:
+Columnas
+Gráfica 2
+Cobranza Mensual
+Tipo:
+Columnas
+Gráfica 3
+Rentabilidad por Proyecto
+Tipo:
+Barras
+Gráfica 4
+Avance de Proyectos
+Tipo:
+Dona
+Gráfica 5
+Costo vs Presupuesto
+Tipo:
+Comparativa
+11. SEMAFORIZACIÓN
+Verde
+Indicador dentro de meta
+Amarillo
+Indicador en riesgo
+Rojo
+Indicador fuera de meta
+12. ALERTAS
+ALR-001
+Proyecto atrasado
+ALR-002
+Actividad vencida
+ALR-003
+Factura vencida
+ALR-004
+Costo excedido
+ALR-005
+Rentabilidad negativa
+ALR-006
+Documento pendiente
+13. CENTRO DE ALERTAS
+Campos
+Fecha
+Tipo
+Proyecto
+Descripción
+Prioridad
+Estado
+Usuario
+14. DRILL DOWN
+Objetivo
+Permitir navegar desde el indicador hasta el detalle.
+Ejemplo
+Rentabilidad Global
+↓
+Proyecto
+↓
+Costo
+↓
+Detalle
+15. SCORECARD EJECUTIVO
+Categorías
+Operación
+Finanzas
+Rentabilidad
+Cobranza
+Cumplimiento
+16. INDICADORES OPERATIVOS
+KPI-OP-001
+Actividades Totales
+KPI-OP-002
+Actividades Terminadas
+KPI-OP-003
+Actividades Atrasadas
+KPI-OP-004
+Cumplimiento %
+KPI-OP-005
+Avance Promedio
+17. INDICADORES FINANCIEROS
+KPI-FIN-001
+Facturación
+KPI-FIN-002
+Cobranza
+KPI-FIN-003
+Saldo Pendiente
+KPI-FIN-004
+Cartera Vencida
+KPI-FIN-005
+Días Promedio Cobro
+18. INDICADORES DE RENTABILIDAD
+KPI-REN-001
+Rentabilidad Promedio
+KPI-REN-002
+Utilidad Bruta
+KPI-REN-003
+Costo vs Presupuesto
+KPI-REN-004
+Margen Promedio
+19. INDICADORES DOCUMENTALES
+KPI-DOC-001
+Documentos Registrados
+KPI-DOC-002
+Documentos Pendientes
+KPI-DOC-003
+Evidencias Registradas
+KPI-DOC-004
+Cumplimiento Documental
+20. FILTROS GLOBALES
+Empresa
+Proyecto
+Cliente
+Responsable
+Fecha
+Estado
+21. EXPORTACIÓN
+PDF
+Excel
+Imagen PNG
+22. MODELO DE DATOS
+CF_KPI
+KPIID
+Codigo
+Nombre
+Descripcion
+Formula
+Meta
+UnidadMedida
+Activo
+CF_Alerta
+AlertaID
+EmpresaID
+ProyectoID
+TipoAlerta
+Descripcion
+Prioridad
+Estado
+UsuarioAsignado
+FechaCreacion
+CF_DashboardFavorito
+FavoritoID
+UsuarioID
+Dashboard
+ConfiguracionJSON
+Activo
+23. API REST
+GET
+/api/dashboard/ejecutivo
+GET
+/api/dashboard/operativo
+GET
+/api/dashboard/administrativo
+GET
+/api/dashboard/supervisor
+GET
+/api/kpis
+GET
+/api/alertas
+POST
+/api/alertas
+24. REGLAS DE NEGOCIO
+RN-DASH-001
+Los KPI’s deberán recalcularse automáticamente.
+RN-DASH-002
+Las alertas se generarán automáticamente.
+RN-DASH-003
+Los dashboards serán filtrados por permisos.
+RN-DASH-004
+Toda gráfica deberá soportar Drill Down.
+RN-DASH-005
+La información deberá mostrarse por empresa.
+RN-DASH-006
+Los KPI’s históricos deberán conservarse.
+25. AUDITORÍA
+Registrar
+Usuario
+Fecha
+Dashboard
+Filtro
+Acción
+IP
+26. REPORTES
+Dashboard Ejecutivo PDF
+Indicadores Operativos
+Indicadores Financieros
+Indicadores Rentabilidad
+Alertas
+Scorecard Ejecutivo
+27. CASOS DE PRUEBA UAT
+UAT-DASH-001
+Consultar Dashboard Ejecutivo
+Resultado esperado:
+ 
+Indicadores visibles.
+UAT-DASH-002
+Consultar KPI
+Resultado esperado:
+ 
+Valor correcto.
+UAT-DASH-003
+Aplicar Filtros
+Resultado esperado:
+ 
+Datos actualizados.
+UAT-DASH-004
+Generar Alerta
+Resultado esperado:
+ 
+Alerta registrada.
+UAT-DASH-005
+Drill Down
+Resultado esperado:
+ 
+Detalle visible.
+UAT-DASH-006
+Exportar Dashboard
+Resultado esperado:
+ 
+Archivo generado.
+OBSERVACIÓN DE ARQUITECTURA
+El Dashboard Ejecutivo representa la capa superior de inteligencia de negocio de ConstructFlow.
+Toda la información generada por los módulos de Cotizaciones, Proyectos, Actividades, Evidencias, Facturación, Cobranza, Costos y Rentabilidad convergerá en este componente para proporcionar visibilidad integral y soporte a la toma de decisiones estratégicas.
+DEPENDENCIAS
+DEF-N2-03
+ 
+Proyectos
+DEF-N2-04
+ 
+Actividades y Gantt
+DEF-N2-05
+ 
+Evidencias y Documentos
+DEF-N2-06
+ 
+Facturación y Cobranza
+DEF-N2-07
+ 
+Costos y Rentabilidad
+DOCUMENTOS SIGUIENTES
+DEF-N2-09
+ 
+Modelo de Datos y APIs
+DEF-N2-10
+ 
+Casos de Prueba UAT
+DEF-N2-11
+ 
+Arquitectura Técnica y Seguridad
+DEF-N2-12
+ 
+Matriz de Permisos y Auditoría
+

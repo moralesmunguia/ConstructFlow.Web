@@ -1,0 +1,295 @@
+﻿CONSTRUCTFLOW V1.0
+BDD-03
+DICCIONARIO DE DATOS COMPLETO
+PARTE 1
+SEGURIDAD, CONFIGURACIÓN Y CLIENTES
+CONTROL DEL DOCUMENTO
+Proyecto:
+ 
+ConstructFlow V1.0
+Cliente:
+ 
+ROM Constructora
+Proveedor:
+ 
+CORA Soluciones Digitales
+Documento:
+ 
+BDD-03 Parte 1
+Versión:
+ 
+1.0
+Fecha:
+ 
+Junio 2026
+Estado:
+ 
+Diseño Base de Datos
+OBJETIVO
+Definir la estructura física de las entidades relacionadas con:
+Seguridad
+Usuarios
+Roles
+Permisos
+Menús
+Configuración
+Clientes
+Contactos
+Direcciones
+Sesiones
+Este documento constituye la base para la construcción física de la base de datos MySQL de ConstructFlow.
+ESTÁNDAR CORPORATIVO DE AUDITORÍA
+Todas las tablas del sistema deberán incluir los siguientes campos:
+CreatedUserID 
+INT
+(
+11
+) 
+NOT
+ 
+NULL
+ 
+DEFAULT
+ 
+0
+,
+ModifiedUserID 
+INT
+(
+11
+) 
+DEFAULT
+ 
+0
+,
+CreatedBy 
+VARCHAR
+(
+100
+) COLLATE utf8_bin 
+NOT
+ 
+NULL
+ 
+DEFAULT
+ 
+''
+,
+ModifiedBy 
+VARCHAR
+(
+100
+) COLLATE utf8_bin 
+NOT
+ 
+NULL
+ 
+DEFAULT
+ 
+''
+,
+CreateDate DATETIME 
+NOT
+ 
+NULL
+,
+ModifiedDate DATETIME 
+DEFAULT
+ 
+NULL
+,
+IsActive BIT(
+1
+) 
+NOT
+ 
+NULL
+ 
+DEFAULT
+ 
+1
+,
+RowVersion BIGINT 
+NOT
+ 
+NULL
+ 
+DEFAULT
+ 
+1
+TABLAS DOCUMENTADAS
+Seguridad
+CF_Rol
+Catálogo de roles del sistema.
+Ejemplos:
+Administrador
+Dirección
+Gerente de Proyecto
+Supervisor
+Consulta
+CF_Usuario
+Usuarios registrados en ConstructFlow.
+Relaciones:
+Empresa
+Rol
+Restricciones:
+Correo único
+Contraseña cifrada
+Acceso multiempresa
+CF_Menu
+Define la navegación principal del sistema.
+Ejemplos:
+Dashboard
+Cotizaciones
+Proyectos
+Actividades
+Evidencias
+Facturación
+Costos
+Configuración
+CF_Permiso
+Define permisos funcionales.
+Permisos soportados:
+Crear
+Consultar
+Modificar
+Eliminar
+CF_RolPermiso
+Relación N:N entre roles y permisos.
+Permite controlar acceso granular por funcionalidad.
+CF_Sesion
+Control de autenticación.
+Información almacenada:
+Usuario
+Token JWT
+Fecha inicio
+Fecha expiración
+Dirección IP
+Navegador
+Configuración
+CF_Empresa
+Empresas registradas dentro de la plataforma.
+Información principal:
+Razón social
+RFC
+Dirección
+Teléfono
+Correo
+Logo corporativo
+CF_Configuracion
+Parámetros operativos por empresa.
+Configuraciones:
+IVA
+Moneda
+Días de vencimiento
+SMTP
+Logo
+Correo corporativo
+Clientes
+CF_Cliente
+Catálogo principal de clientes.
+Información:
+RFC
+Razón Social
+Contacto Principal
+Correo
+Teléfono
+Dirección
+CF_ClienteContacto
+Permite múltiples contactos por cliente.
+Ejemplos:
+Director
+Compras
+Administración
+Finanzas
+Supervisor
+CF_ClienteDireccion
+Permite múltiples direcciones por cliente.
+Tipos soportados:
+Fiscal
+Oficina
+Obra
+Cobranza
+Entrega
+MODELO RELACIONAL
+Empresa
+ 
+│
+ 
+├── Usuarios
+ 
+│ ├── Roles
+ 
+│ ├── Permisos
+ 
+│ └── Sesiones
+ 
+│
+ 
+├── Configuración
+ 
+│
+ 
+└── Clientes
+ 
+├── Contactos
+ 
+└── Direcciones
+ÍNDICES PRINCIPALES
+CF_Empresa
+UX_CF_Empresa_RFC
+CF_Usuario
+UX_CF_Usuario_Correo
+IX_CF_Usuario_Empresa
+IX_CF_Usuario_Rol
+CF_Cliente
+UX_CF_Cliente_RFC
+IX_CF_Cliente_Empresa
+IX_CF_Cliente_Nombre
+CF_Sesion
+IX_CF_Sesion_Usuario
+IX_CF_Sesion_Fecha
+REGLAS DE NEGOCIO
+RN-SEG-001
+Todo usuario deberá pertenecer a una empresa.
+RN-SEG-002
+Todo usuario deberá tener un rol asignado.
+RN-SEG-003
+Los permisos serán administrados mediante Rol-Permiso.
+RN-SEG-004
+No se permitirá acceso a información de otra empresa.
+RN-CLI-001
+Un cliente podrá tener múltiples contactos.
+RN-CLI-002
+Un cliente podrá tener múltiples direcciones.
+RN-CLI-003
+El RFC del cliente deberá ser único por empresa.
+RN-CON-001
+Solo podrá existir una configuración activa por empresa.
+RESUMEN EJECUTIVO
+<w:tblPr><w:tblStyle w:val="Table" /><w:tblW w:type="auto" w:w="0" /><w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0" w:val="0020" /></w:tblPr><w:tblGrid><w:gridCol w:w="3960" /><w:gridCol w:w="3960" /></w:tblGrid><w:tr><w:trPr><w:tblHeader w:val="on" /></w:trPr><w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Grupo
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /><w:jc w:val="right" /></w:pPr><w:r><w:t xml:space="preserve">Tablas
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Seguridad
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /><w:jc w:val="right" /></w:pPr><w:r><w:t xml:space="preserve">6
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Configuración
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /><w:jc w:val="right" /></w:pPr><w:r><w:t xml:space="preserve">2
+<w:tc><w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /></w:pPr><w:r><w:t xml:space="preserve">Clientes
+<w:tcPr /><w:p><w:pPr><w:pStyle w:val="Compact" /><w:jc w:val="right" /></w:pPr><w:r><w:t xml:space="preserve">3
+Total Tablas Documentadas: 11
+ENTREGABLE SIGUIENTE
+BDD-03 PARTE 2
+Cotizaciones y Proyectos
+Tablas:
+CF_Concepto
+CF_Cotizacion
+CF_CotizacionDetalle
+CF_CotizacionVersion
+CF_Proyecto
+CF_ProyectoFase
+CF_TipoEncargado
+CF_ProyectoEncargado
+CF_Hito
+CF_BitacoraProyecto
+CF_Incidencia
+Esta sección constituye el núcleo operativo principal de ConstructFlow V1.0.
+

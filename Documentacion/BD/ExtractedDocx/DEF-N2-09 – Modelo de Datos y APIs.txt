@@ -1,0 +1,459 @@
+﻿CONSTRUCTFLOW V1.0
+DOCUMENTO DE ESPECIFICACIÓN FUNCIONAL NIVEL 2
+DEF-N2-09
+MODELO DE DATOS Y APIs
+CONTROL DE DOCUMENTO
+Proyecto:
+ 
+ConstructFlow V1.0
+Cliente:
+ 
+ROM Constructora
+Documento:
+ 
+DEF-N2-09
+Módulo:
+ 
+Modelo de Datos y APIs
+Versión:
+ 
+1.0
+Estado:
+ 
+Arquitectura Técnica
+1. OBJETIVO
+Definir la estructura lógica de datos, relaciones entre entidades, convenciones de diseño y especificaciones de integración mediante APIs REST para ConstructFlow.
+Este documento constituye la base para:
+Base de datos MySQL
+Backend PHP MVC
+APIs REST
+Seguridad
+Integraciones futuras
+2. CONVENCIONES GENERALES
+Base de Datos
+Motor:
+MySQL 8+
+Juego Caracteres
+utf8mb4
+Collation
+utf8mb4_unicode_ci
+3. NOMENCLATURA
+Tablas
+Prefijo:
+CF_
+Ejemplos:
+CF_Proyecto
+CF_Actividad
+CF_Cotizacion
+Llaves Primarias
+Formato:
+TablaID
+Ejemplo:
+ProyectoID
+ActividadID
+UsuarioID
+Llaves Foráneas
+Formato:
+EntidadID
+Ejemplo:
+ProyectoID
+ClienteID
+EmpresaID
+Campos Auditoría
+FechaCreacion
+UsuarioCreacion
+FechaModificacion
+UsuarioModificacion
+Activo
+4. ENTIDADES MAESTRAS
+CF_Empresa
+EmpresaID (PK)
+NombreEmpresa
+RFC
+Direccion
+Telefono
+Correo
+Activo
+CF_Usuario
+UsuarioID (PK)
+EmpresaID (FK)
+Nombre
+Correo
+PasswordHash
+RolID
+Activo
+CF_Rol
+RolID (PK)
+NombreRol
+Descripcion
+Activo
+CF_Cliente
+ClienteID (PK)
+EmpresaID
+RFC
+NombreCliente
+Contacto
+Telefono
+Correo
+Activo
+5. ENTIDADES COMERCIALES
+CF_Cotizacion
+CotizacionID
+EmpresaID
+ClienteID
+Folio
+Fecha
+Subtotal
+IVA
+Total
+Estado
+VersionActual
+CF_CotizacionDetalle
+DetalleID
+CotizacionID
+ConceptoID
+Cantidad
+PrecioUnitario
+Importe
+6. ENTIDADES OPERATIVAS
+CF_Proyecto
+ProyectoID
+EmpresaID
+ClienteID
+CodigoProyecto
+NombreProyecto
+Estado
+FechaInicio
+FechaFin
+PresupuestoOriginal
+PresupuestoActual
+CF_Fase
+FaseID
+ProyectoID
+NombreFase
+Estado
+CF_Actividad
+ActividadID
+ProyectoID
+FaseID
+CodigoWBS
+NombreActividad
+Estado
+Avance
+InicioPlan
+FinPlan
+InicioReal
+FinReal
+CF_ActividadDependencia
+DependenciaID
+ActividadOrigenID
+ActividadDestinoID
+TipoDependencia
+7. ENTIDADES DOCUMENTALES
+CF_Evidencia
+EvidenciaID
+ProyectoID
+ActividadID
+TipoEvidencia
+Descripcion
+ArchivoURL
+Latitud
+Longitud
+FechaCaptura
+CF_Documento
+DocumentoID
+ProyectoID
+TipoDocumento
+NombreDocumento
+VersionActual
+Estado
+ArchivoURL
+CF_DocumentoVersion
+VersionID
+DocumentoID
+Version
+ArchivoURL
+Comentarios
+8. ENTIDADES FINANCIERAS
+CF_Factura
+FacturaID
+ProyectoID
+ClienteID
+UUID
+Serie
+Folio
+Total
+Saldo
+Estado
+CF_Pago
+PagoID
+FacturaID
+FechaPago
+Importe
+MetodoPago
+Referencia
+CF_Estimacion
+EstimacionID
+ProyectoID
+Importe
+PorcentajeAvance
+Estado
+9. ENTIDADES DE COSTOS
+CF_Presupuesto
+PresupuestoID
+ProyectoID
+Version
+ImporteTotal
+Estado
+CF_PresupuestoDetalle
+DetalleID
+PresupuestoID
+CategoriaCostoID
+Importe
+CF_Costo
+CostoID
+ProyectoID
+ActividadID
+CategoriaCostoID
+ProveedorID
+Importe
+FechaCosto
+CF_Proveedor
+ProveedorID
+RFC
+RazonSocial
+Correo
+Telefono
+10. ENTIDADES BI
+CF_KPI
+KPIID
+Codigo
+Nombre
+Formula
+Meta
+UnidadMedida
+Activo
+CF_Alerta
+AlertaID
+ProyectoID
+TipoAlerta
+Descripcion
+Prioridad
+Estado
+11. MODELO RELACIONAL
+Empresa
+  |
+  +-- Usuarios
+  |
+  +-- Clientes
+          |
+          +-- Cotizaciones
+          |
+          +-- Proyectos
+                    |
+                    +-- Fases
+                    |
+                    +-- Actividades
+                    |
+                    +-- Evidencias
+                    |
+                    +-- Documentos
+                    |
+                    +-- Facturas
+                    |
+                    +-- Costos
+12. ÍNDICES RECOMENDADOS
+CF_Proyecto
+IDX_Proyecto_Empresa
+IDX_Proyecto_Cliente
+IDX_Proyecto_Estado
+CF_Actividad
+IDX_Actividad_Proyecto
+IDX_Actividad_Estado
+IDX_Actividad_Responsable
+CF_Factura
+IDX_Factura_Proyecto
+IDX_Factura_UUID
+IDX_Factura_Estado
+CF_Costo
+IDX_Costo_Proyecto
+IDX_Costo_Fecha
+13. ESTRATEGIA API
+Arquitectura:
+REST
+Formato:
+JSON
+Versionado:
+/api/v1/
+Ejemplo:
+/api/v1/proyectos
+14. AUTENTICACIÓN
+Método
+JWT
+Endpoint
+POST
+/api/v1/auth/login
+Request
+{
+ 
+“correo”
+:
+“usuario@empresa.com”
+,
+ 
+“password”
+:
+“********”
+ 
+}
+Response
+{
+ 
+“token”
+:
+“jwt_token”
+,
+ 
+“usuario”
+:
+“Juan Pérez”
+,
+ 
+“rol”
+:
+“Administrador”
+ 
+}
+15. API PROYECTOS
+GET
+/api/v1/proyectos
+GET
+/api/v1/proyectos/{id}
+POST
+/api/v1/proyectos
+PUT
+/api/v1/proyectos/{id}
+DELETE
+/api/v1/proyectos/{id}
+Eliminación lógica
+16. API ACTIVIDADES
+GET
+/api/v1/actividades
+POST
+/api/v1/actividades
+PUT
+/api/v1/actividades/{id}
+POST
+/api/v1/actividades/{id}/avance
+17. API EVIDENCIAS
+POST
+/api/v1/evidencias
+multipart/form-data
+GET
+/api/v1/evidencias
+GET
+/api/v1/evidencias/{id}
+18. API DOCUMENTOS
+POST
+/api/v1/documentos
+POST
+/api/v1/documentos/{id}/version
+GET
+/api/v1/documentos/{id}/historial
+19. API FACTURACIÓN
+GET
+/api/v1/facturas
+POST
+/api/v1/facturas
+POST
+/api/v1/facturas/{id}/cancelar
+POST
+/api/v1/facturas/{id}/pago
+20. API COSTOS
+GET
+/api/v1/costos
+POST
+/api/v1/costos
+GET
+/api/v1/proyectos/{id}/rentabilidad
+21. API DASHBOARD
+GET
+/api/v1/dashboard/ejecutivo
+GET
+/api/v1/dashboard/operativo
+GET
+/api/v1/dashboard/administrativo
+GET
+/api/v1/dashboard/supervisor
+22. FORMATO RESPUESTA ESTÁNDAR
+Éxito
+{
+ 
+“success”
+: true,
+ 
+“message”
+:
+ 
+“Operación exitosa”
+,
+ 
+“data”
+: {}
+ 
+}
+Error
+{
+ 
+“success”
+: false,
+ 
+“message”
+:
+ 
+“Error de validación”
+,
+ 
+“errors”
+: []
+ 
+}
+23. SEGURIDAD
+HTTPS obligatorio
+JWT
+Control por Roles
+Control Multiempresa
+Auditoría
+Rate Limit
+100 solicitudes/minuto
+24. AUDITORÍA API
+Registrar
+Usuario
+Endpoint
+Método
+IP
+Fecha
+Payload
+Resultado
+25. REGLAS DE ARQUITECTURA
+RN-API-001
+Toda API deberá validar EmpresaID.
+RN-API-002
+Toda API deberá validar JWT.
+RN-API-003
+No se permitirá acceso entre empresas.
+RN-API-004
+Toda eliminación será lógica.
+RN-API-005
+Toda operación crítica será auditada.
+26. INTEGRACIONES FUTURAS
+Portal Clientes
+Aplicación Flutter
+Firma Electrónica
+ERP Externo
+Power BI
+IA Predictiva
+OBSERVACIÓN DE ARQUITECTURA
+ProyectoID será la entidad central del ecosistema ConstructFlow.
+Todos los procesos operativos, documentales, administrativos y financieros convergerán en dicha entidad para garantizar trazabilidad completa de extremo a extremo.
+

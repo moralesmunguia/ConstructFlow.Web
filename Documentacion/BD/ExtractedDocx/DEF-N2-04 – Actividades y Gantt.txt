@@ -1,0 +1,403 @@
+﻿CONSTRUCTFLOW V1.0
+DOCUMENTO DE ESPECIFICACIÓN FUNCIONAL NIVEL 2
+DEF-N2-04
+MÓDULO DE ACTIVIDADES Y GANTT
+CONTROL DE DOCUMENTO
+Proyecto:
+ 
+ConstructFlow V1.0
+Cliente:
+ 
+ROM Constructora
+Documento:
+ 
+DEF-N2-04
+Módulo:
+ 
+Actividades y Gantt
+Versión:
+ 
+1.0
+Estado:
+ 
+Análisis Funcional
+1. OBJETIVO
+Administrar la planeación, ejecución, seguimiento y control de las actividades que conforman un proyecto.
+El módulo permitirá gestionar:
+WBS (Work Breakdown Structure)
+Actividades
+Subactividades
+Dependencias
+Calendarios
+Recursos
+Avances
+Ruta Crítica
+Gantt
+2. OBJETIVOS FUNCIONALES
+OBJ-ACT-001
+Descomponer proyectos en actividades controlables.
+OBJ-ACT-002
+Asignar responsables.
+OBJ-ACT-003
+Medir avance real.
+OBJ-ACT-004
+Detectar desviaciones.
+OBJ-ACT-005
+Visualizar cronogramas.
+OBJ-ACT-006
+Controlar cumplimiento.
+3. CONCEPTOS
+WBS
+Work Breakdown Structure.
+Estructura jerárquica del proyecto.
+Ejemplo:
+Proyecto
+ ├─ Fase 1
+ │   ├─ Actividad 1
+ │   ├─ Actividad 2
+ │
+ ├─ Fase 2
+ │   ├─ Actividad 3
+ │   ├─ Actividad 4
+Actividad
+Unidad mínima de trabajo.
+Subactividad
+Desglose interno de una actividad.
+Hito
+Evento sin duración.
+Dependencia
+Relación entre actividades.
+4. CASOS DE USO
+CU-ACT-001
+Crear Actividad
+CU-ACT-002
+Modificar Actividad
+CU-ACT-003
+Asignar Responsable
+CU-ACT-004
+Registrar Avance
+CU-ACT-005
+Crear Dependencia
+CU-ACT-006
+Consultar Gantt
+CU-ACT-007
+Reprogramar Actividad
+CU-ACT-008
+Cerrar Actividad
+5. CICLO DE VIDA
+Pendiente
+     ↓
+Asignada
+     ↓
+En Proceso
+     ↓
+Terminada
+Estados alternos:
+Suspendida
+Cancelada
+6. PANTALLA ACT-001
+LISTADO DE ACTIVIDADES
+Campos
+Proyecto
+WBS
+Actividad
+Responsable
+Inicio
+Fin
+Duración
+Avance %
+Estado
+Filtros
+Proyecto
+Responsable
+Estado
+Fecha
+Acciones
+Nueva
+Editar
+Evidencias
+Dependencias
+Gantt
+7. PANTALLA ACT-002
+ACTIVIDAD
+Datos Generales
+Proyecto
+Fase
+Código WBS
+Formato:
+1
+1.1
+1.1.1
+2
+2.1
+Nombre Actividad
+Obligatorio
+Descripción
+Opcional
+8. PROGRAMACIÓN
+Fecha Inicio Plan
+Fecha Fin Plan
+Duración Plan
+Días
+Fecha Inicio Real
+Fecha Fin Real
+Duración Real
+Calculada
+9. RESPONSABLES
+Responsable Principal
+Supervisor
+Equipo Trabajo
+Tabla
+CF_ActividadResponsable
+10. ESTADOS
+Pendiente
+Asignada
+En Proceso
+Terminada
+Suspendida
+Cancelada
+11. AVANCE
+Porcentaje
+0 - 100
+Método
+Manual
+Validaciones
+0 ≤ Avance ≤ 100
+Si Avance = 100
+Estado = Terminada
+12. DEPENDENCIAS
+Tipos
+Finish-To-Start (FS)
+Start-To-Start (SS)
+Finish-To-Finish (FF)
+Start-To-Finish (SF)
+Ejemplo
+Cimentación
+      ↓
+Estructura
+      ↓
+Acabados
+13. HITOS
+Definición
+Evento sin duración.
+Ejemplos
+Inicio Proyecto
+Entrega Contrato
+Entrega Cliente
+Cierre Proyecto
+14. REPROGRAMACIÓN
+Motivos
+Clima
+Cliente
+Materiales
+Personal
+Otro
+Registrar
+Motivo
+Fecha
+Usuario
+Comentarios
+15. GANTT
+Objetivo
+Visualizar cronograma completo.
+Características
+Zoom
+Día
+Semana
+Mes
+Trimestre
+Drag & Drop
+Dependencias visuales
+Ruta Crítica
+Semáforos
+16. PANTALLA ACT-003
+GANTT INTERACTIVO
+Columnas
+WBS
+Actividad
+Inicio
+Fin
+Duración
+Avance
+Responsable
+Estado
+Panel derecho
+Cronograma gráfico
+Colores
+Azul
+Programado
+Verde
+Completado
+Naranja
+En Proceso
+Rojo
+Atrasado
+17. CÁLCULO DE AVANCE
+Actividad
+Avance Manual
+Proyecto
+Promedio ponderado
+Fórmula
+Avance Proyecto =
+ 
+Σ Avance Actividades / Total Actividades
+18. RUTA CRÍTICA
+Objetivo
+Identificar actividades que impactan la fecha final.
+Indicador
+RutaCrítica = Sí/No
+Visual
+Color Rojo
+19. CALENDARIO LABORAL
+Configuración
+Lunes a Viernes
+Lunes a Sábado
+Personalizado
+Días Festivos
+Configurables
+20. INTEGRACIONES
+Proyecto
+1 Proyecto
+N Actividades
+Actividad
+N Evidencias
+Actividad
+N Documentos
+Actividad
+N Costos
+Actividad
+N Recursos
+21. MODELO DE DATOS
+CF_Actividad
+ActividadID
+EmpresaID
+ProyectoID
+FaseID
+CodigoWBS
+NombreActividad
+Descripcion
+InicioPlan
+FinPlan
+InicioReal
+FinReal
+DuracionPlan
+DuracionReal
+Avance
+Estado
+RutaCritica
+ResponsableID
+UsuarioCreacion
+FechaCreacion
+CF_ActividadDependencia
+DependenciaID
+ActividadOrigenID
+ActividadDestinoID
+TipoDependencia
+CF_ActividadResponsable
+ActividadResponsableID
+ActividadID
+UsuarioID
+Rol
+CF_Hito
+HitoID
+ProyectoID
+Nombre
+Fecha
+Estado
+22. API REST
+GET
+/api/actividades
+GET
+/api/actividades/{id}
+POST
+/api/actividades
+PUT
+/api/actividades/{id}
+POST
+/api/actividades/{id}/avance
+GET
+/api/proyectos/{id}/gantt
+POST
+/api/actividades/dependencia
+23. REGLAS DE NEGOCIO
+RN-ACT-001
+Toda actividad deberá pertenecer a un proyecto.
+RN-ACT-002
+Toda actividad deberá tener responsable.
+RN-ACT-003
+No podrá registrarse avance superior al 100%.
+RN-ACT-004
+No podrá cerrarse una actividad sin evidencias obligatorias.
+RN-ACT-005
+Toda reprogramación deberá registrar motivo.
+RN-ACT-006
+Las actividades críticas deberán mostrarse destacadas.
+RN-ACT-007
+El sistema recalculará automáticamente el avance del proyecto.
+24. AUDITORÍA
+Registrar
+Usuario
+Fecha
+Acción
+IP
+Valor Anterior
+Valor Nuevo
+25. REPORTES
+Actividades por Proyecto
+Actividades por Responsable
+Actividades Atrasadas
+Actividades Críticas
+Avance por Proyecto
+Ruta Crítica
+26. KPI’S
+Actividades Totales
+Actividades Terminadas
+Actividades Atrasadas
+Cumplimiento %
+Avance Promedio
+Desviación Cronograma
+27. CASOS DE PRUEBA UAT
+UAT-ACT-001
+Crear Actividad
+Resultado esperado:
+ 
+Actividad registrada.
+UAT-ACT-002
+Asignar Responsable
+Resultado esperado:
+ 
+Responsable asignado.
+UAT-ACT-003
+Registrar Avance
+Resultado esperado:
+ 
+Avance actualizado.
+UAT-ACT-004
+Crear Dependencia
+Resultado esperado:
+ 
+Dependencia registrada.
+UAT-ACT-005
+Consultar Gantt
+Resultado esperado:
+ 
+Cronograma correcto.
+UAT-ACT-006
+Reprogramar Actividad
+Resultado esperado:
+ 
+Nueva fecha registrada.
+UAT-ACT-007
+Cerrar Actividad
+Resultado esperado:
+ 
+Estado Terminada.
+DEPENDENCIAS
+DEF-N2-05
+Evidencias y Documentos
+DEF-N2-07
+Costos y Rentabilidad
+OBSERVACIÓN DE ARQUITECTURA
+El módulo Actividades y Gantt constituye el motor operativo de ConstructFlow.
+Toda medición de avance, cumplimiento, productividad y desempeño del proyecto dependerá de la correcta administración de las actividades y sus evidencias asociadas.
+

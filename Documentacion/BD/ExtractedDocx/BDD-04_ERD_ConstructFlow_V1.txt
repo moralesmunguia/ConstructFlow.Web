@@ -1,0 +1,71 @@
+﻿CONSTRUCTFLOW V1.0
+BDD-04 – MODELO ENTIDAD RELACIÓN (ERD) EMPRESARIAL
+Parte 1 – Arquitectura General del Modelo de Datos
+Control del Documento
+Proyecto: ConstructFlow V1.0
+Cliente: ROM Constructora
+Proveedor: CORA Soluciones Digitales
+Versión: 1.0
+Fecha: Junio 2026
+Objetivo
+Definir el modelo relacional empresarial de ConstructFlow mediante entidades, relaciones, cardinalidades, PK, FK y dominios funcionales.
+Dominios Funcionales
+01 Seguridad
+02 Configuración
+03 Clientes
+04 Cotizaciones
+05 Proyectos
+06 Planeación
+07 Documentos
+08 Financiero
+09 Dashboard
+10 Auditoría
+Mapa Maestro del Sistema
+EMPRESA → Seguridad → Clientes → Cotizaciones → Proyectos → Actividades → Documentos → Finanzas → Dashboard → Auditoría
+Dominio 01 – Seguridad
+Rol 1:N Usuario
+Rol 1:N RolPermiso
+Permiso 1:N RolPermiso
+Usuario 1:N Sesión
+Dominio 02 – Clientes
+Cliente 1:N Contacto
+Cliente 1:N Dirección
+Dominio 03 – Cotizaciones
+Cotización 1:N Detalle
+Cotización 1:N Versiones
+Cotización 1:1 Proyecto
+Dominio 04 – Proyectos
+Proyecto 1:N Fases
+Proyecto 1:N Encargados
+Proyecto 1:N Hitos
+Proyecto 1:N Incidencias
+Proyecto 1:N Bitácora
+Dominio 05 – Actividades y Gantt
+Proyecto 1:N Actividad
+Actividad 1:N Dependencia
+Actividad 1:N Asignación
+Actividad 1:N Comentario
+Dominio 06 – Documentos y Evidencias
+Proyecto 1:N Evidencia
+Evidencia 1:N Comentario
+Proyecto 1:N Documento
+Documento 1:N Versión
+Dominio 07 – Finanzas
+Proyecto 1:N Factura
+Factura 1:N Pago
+Proyecto 1:N Presupuesto
+Presupuesto 1:N Detalle
+Proyecto 1:N Costo
+Dominio 08 – Dashboard
+KPI
+Alertas
+DashboardFavorito
+WidgetUsuario
+Dominio 09 – Workflow
+FlujoAprobacion 1:N FlujoPaso
+FlujoAprobacion 1:N FlujoHistorial
+Dominio 10 – Auditoría
+Auditoria 1:N AuditoriaDetalle
+Resumen del ERD
+Modelo empresarial estimado de 66 tablas distribuidas en 10 dominios funcionales.
+
