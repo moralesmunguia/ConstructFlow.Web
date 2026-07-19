@@ -12,6 +12,9 @@ require_once '../app/Helpers/JwtHelper.php';
 require_once '../app/Controllers/AuthController.php';
 
 
+// Generar el hash de la nueva contraseña
+echo password_hash('TuNuevaContraseñaSegura123!', PASSWORD_BCRYPT);
+
 $route = isset($_GET['route'])
     ? $_GET['route']
     : '';

@@ -1,0 +1,117 @@
+/**
+ * datatable.css
+ * Ajustes de DataTables al lenguaje visual de ConstructFlow.
+ * Ref: DEF-WEB-000 sección 16.
+ */
+
+.cf-card-table { padding: 0; overflow: hidden; }
+.cf-card-table .table-responsive { padding: 0 4px; }
+
+table.cf-table {
+    font-size: 0.72rem;
+}
+
+table.cf-table thead th {
+    background: var(--cf-gris);
+    color: var(--cf-texto-secundario);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid var(--cf-borde);
+    white-space: nowrap;
+    padding: 8px 10px;
+}
+
+table.cf-table td {
+    vertical-align: middle;
+    color: var(--cf-texto-principal);
+    padding: 3px 10px;
+    line-height: 1.2;
+}
+
+table.cf-table.dataTable { border-collapse: separate !important; }
+
+/* ---------- Zebra striping ---------- */
+table.cf-table.dataTable tbody tr {
+    background: var(--cf-blanco);
+}
+table.cf-table.dataTable tbody tr.odd {
+    background: var(--cf-gris);
+}
+table.cf-table.dataTable tbody tr:hover {
+    background: var(--cf-superficie-hover) !important;
+}
+
+/* ---------- Alertas de vigencia ---------- */
+table.cf-table.dataTable tbody tr.cf-row-por-vencer,
+table.cf-table.dataTable tbody tr.cf-row-por-vencer.odd,
+table.cf-table.dataTable tbody tr.cf-row-por-vencer:hover {
+    background: rgba(245, 158, 11, 0.14) !important;
+}
+table.cf-table.dataTable tbody tr.cf-row-vencida,
+table.cf-table.dataTable tbody tr.cf-row-vencida.odd,
+table.cf-table.dataTable tbody tr.cf-row-vencida:hover {
+    background: rgba(239, 68, 68, 0.14) !important;
+}
+
+/* ---------- Total Venta a la derecha (columna 7 de 9: Folio, Cliente, Atención,
+   Descripción, Fecha, Vigencia, Total Venta, Estado, Acciones) ---------- */
+table.cf-table td.dt-body-right,
+table.cf-table th.dt-head-right {
+    text-align: right !important;
+}
+table#tblCotizaciones td:nth-child(7),
+table#tblCotizaciones th:nth-child(7),
+table#tblCotizaciones td:nth-child(8),
+table#tblCotizaciones th:nth-child(8) {
+    text-align: right !important;
+}
+.cf-total-venta {
+    display: inline-block;
+    width: 100%;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Controles (Show entries / búsqueda) ---------- */
+div.dataTables_wrapper div.dataTables_length,
+div.dataTables_wrapper div.dataTables_filter,
+div.dataTables_wrapper div.dataTables_info,
+div.dataTables_wrapper div.dataTables_paginate {
+    font-size: 0.82rem;
+    color: var(--cf-texto-secundario);
+}
+
+div.dataTables_wrapper div.dataTables_filter input,
+div.dataTables_wrapper div.dataTables_length select {
+    border: 1px solid var(--cf-borde);
+    border-radius: var(--cf-radius);
+    padding: 4px 10px;
+    font-size: 0.82rem;
+    background: var(--cf-blanco);
+}
+
+div.dataTables_wrapper div.dataTables_length select {
+    padding: 4px 28px 4px 10px;
+    min-width: 64px;
+}
+
+div.dataTables_wrapper div.dataTables_paginate .paginate_button.current {
+    background: var(--cf-azul) !important;
+    border-color: var(--cf-azul) !important;
+    color: var(--cf-texto-invertido) !important;
+    border-radius: 6px;
+}
+
+.cf-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.cf-page-title { font-size: 1.4rem; font-weight: 700; margin: 0; color: var(--cf-azul); }
+.cf-page-subtitle { margin: 2px 0 0; color: var(--cf-texto-secundario); font-size: 0.9rem; }
+
+.cf-row-actions .btn { padding: 3px 7px; }

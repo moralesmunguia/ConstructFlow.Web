@@ -1,0 +1,1 @@
+<?php http_response_code(410); die('Diagnóstico ya no disponible.');

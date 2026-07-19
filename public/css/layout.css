@@ -1,0 +1,225 @@
+/**
+ * layout.css
+ * Estructura del shell principal: topbar horizontal + área de contenido.
+ * Usado por app/views/layouts/app.php (pantallas privadas).
+ */
+
+* { box-sizing: border-box; }
+
+body.cf-app-body {
+    margin: 0;
+    font-family: var(--cf-font-base);
+    background: var(--cf-gris);
+    color: var(--cf-texto-principal);
+}
+
+.cf-app-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ---------- Topbar (logo + menú + usuario) ---------- */
+.cf-topbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    min-height: var(--cf-navbar-height);
+    background: var(--cf-azul);
+    padding: 8px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--cf-shadow);
+}
+
+.cf-topbar-brand {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.cf-topbar-brand img { display: block; }
+
+.cf-topbar-toggle {
+    display: none;
+    border: none;
+    background: none;
+    color: var(--cf-blanco);
+    font-size: 1.4rem;
+    margin-left: auto;
+}
+
+.cf-topbar-nav {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.cf-topbar-nav > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+}
+
+.cf-menu-item a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    border-radius: var(--cf-radius);
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 0.82rem;
+    white-space: nowrap;
+    transition: background 0.15s ease;
+}
+
+.cf-menu-item a:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--cf-blanco);
+}
+
+.cf-menu-item a i {
+    font-size: 0.95rem;
+    color: var(--cf-naranja);
+}
+
+/* ---------- Submenú (dropdown por hover en desktop) ---------- */
+.cf-menu-item {
+    position: relative;
+}
+
+.cf-has-submenu > a .cf-submenu-caret {
+    font-size: 0.7rem;
+    margin-left: 2px;
+    color: rgba(255,255,255,0.6);
+}
+
+.cf-submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    background: var(--cf-superficie);
+    border-radius: var(--cf-radius);
+    box-shadow: var(--cf-shadow);
+    padding: 10px 6px 6px;
+    margin: 0;
+    list-style: none;
+    z-index: 200;
+}
+
+.cf-has-submenu:hover .cf-submenu,
+.cf-has-submenu:focus-within .cf-submenu {
+    display: block;
+}
+
+.cf-submenu li a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: var(--cf-texto-principal);
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.cf-submenu li a:hover {
+    background: var(--cf-superficie-hover);
+}
+
+.cf-submenu li a i {
+    color: var(--cf-naranja);
+}
+
+/* ---------- Topbar derecha (notificaciones + usuario) ---------- */
+.cf-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+.cf-navbar-icon-btn {
+    border: none;
+    background: none;
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.85);
+    cursor: pointer;
+}
+
+.cf-navbar-user .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--cf-blanco);
+    font-size: 0.88rem;
+}
+
+.cf-navbar-user i.bi-person-circle {
+    font-size: 1.4rem;
+    color: var(--cf-naranja);
+}
+
+/* ---------- Breadcrumb ---------- */
+.cf-breadcrumb {
+    padding: 14px 24px 0;
+    font-size: 0.85rem;
+    color: var(--cf-texto-secundario);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cf-breadcrumb a {
+    color: var(--cf-texto-secundario);
+    text-decoration: none;
+}
+
+.cf-breadcrumb a:hover { color: var(--cf-naranja); }
+
+.cf-breadcrumb-current {
+    color: var(--cf-azul);
+    font-weight: 500;
+}
+
+/* ---------- Content ---------- */
+.cf-app-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.cf-app-content {
+    padding: 20px 24px 40px;
+    flex: 1;
+}
+
+.cf-app-footer {
+    padding: 14px 24px;
+    font-size: 0.8rem;
+    color: var(--cf-texto-secundario);
+    border-top: 1px solid var(--cf-borde);
+    background: var(--cf-superficie);
+}
+
+/* ---------- Dashboard placeholder ---------- */
+.cf-dashboard-welcome h1 {
+    font-family: var(--cf-font-heading);
+    color: var(--cf-azul);
+    font-size: 1.6rem;
+    margin-bottom: 6px;
+}
+
+.cf-dashboard-welcome p {
+    color: var(--cf-texto-secundario);
+}

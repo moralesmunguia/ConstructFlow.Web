@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap');
+
+:root{
+  --cf-azul: #0B1F47;
+  --cf-azul-oscuro: #08162F;
+  --cf-naranja: #F97316;
+  --cf-gris: #F5F7FA;
+  --cf-blanco: #FFFFFF;
+  --cf-texto-muted: #7A8699;
+}
+
+*{ box-sizing:border-box; }
+html, body{ height:100%; margin:0; }
+
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--cf-gris);
+  color:var(--cf-azul);
+}
+
+.login-wrap{
+  display:flex;
+  width:100%;
+  min-height:100vh;
+  overflow:hidden;
+}
+
+/* ===================== PANEL IZQUIERDO: MARCAS ===================== */
+.login-left{
+  flex:0 0 340px;
+  background:var(--cf-blanco);
+  padding:36px 32px;
+  display:flex;
+  flex-direction:column;
+}
+
+.brand-header{ display:flex; align-items:center; gap:12px; }
+.cf-badge{ height:48px; width:48px; border-radius:50%; object-fit:cover; box-shadow:0 3px 8px rgba(11,31,71,0.18); flex-shrink:0; }
+.cf-text{ display:flex; flex-direction:column; }
+.cf-name{ font-family:'Poppins',sans-serif; font-weight:800; font-size:1.15rem; color:var(--cf-azul); line-height:1.15; }
+.cf-name b{ color:var(--cf-naranja); font-weight:800; }
+.cf-tag{ font-size:0.72rem; color:var(--cf-texto-muted); margin-top:1px; }
+
+.rom-logo{ height:44px; width:auto; object-fit:contain; align-self:flex-start; margin-top:22px; }
+
+.left-desc{
+  font-size:0.85rem;
+  color:var(--cf-texto-muted);
+  line-height:1.5;
+  margin-top:20px;
+  max-width:260px;
+}
+
+.left-spacer{ flex:1 1 auto; }
+
+.benefit-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:22px;
+}
+.benefit-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:var(--cf-gris);
+  border-radius:10px;
+  padding:10px 12px;
+}
+.benefit-item .icon{
+  width:32px;height:32px;
+  border-radius:8px;
+  background:var(--cf-naranja);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  font-size:0.9rem;
+}
+.benefit-item span{ font-size:0.82rem; font-weight:500; color:var(--cf-azul); }
+
+.dev-by{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.dev-by span{ font-size:0.75rem; color:var(--cf-texto-muted); }
+.dev-by img{ height:72px; width:auto; object-fit:contain; align-self:flex-start; }
+
+.left-footer{
+  background:var(--cf-azul-oscuro);
+  color:#C7D0E2;
+  font-size:0.68rem;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  padding:10px 32px;
+  margin:20px -32px -36px;
+}
+
+/* ===================== FOTO DIAGONAL ===================== */
+.login-photo{
+  flex:0 0 42%;
+  position:relative;
+  overflow:hidden;
+  background:var(--cf-blanco);
+}
+.login-photo img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:left center;
+  display:block;
+}
+
+/* ===================== PANEL DERECHO: LOGIN ===================== */
+.login-panel{
+  flex:1 1 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:32px;
+  background:var(--cf-blanco);
+  min-width:340px;
+}
+
+.login-card{ width:100%; max-width:380px; }
+
+.login-card .lock-icon{
+  width:60px;height:60px;
+  border-radius:50%;
+  background:#FEF1E8;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 18px;
+}
+
+.login-card h2{
+  font-family:'Poppins',sans-serif;
+  text-align:center;
+  font-size:1.5rem;
+  margin:0 0 4px;
+}
+.login-card p.welcome{
+  text-align:center;
+  color:var(--cf-texto-muted);
+  margin-bottom:26px;
+  font-size:0.92rem;
+}
+.login-card p.welcome b{ color:var(--cf-azul); }
+
+.form-group{ margin-bottom:16px; }
+.form-group label{
+  display:block;
+  font-size:0.85rem;
+  font-weight:600;
+  margin-bottom:6px;
+}
+
+.input-icon{ position:relative; }
+.input-icon i{
+  position:absolute;
+  left:14px; top:50%;
+  transform:translateY(-50%);
+  color:#A6AFC2;
+}
+.input-icon input{
+  width:100%;
+  padding:11px 14px 11px 42px;
+  border:1px solid #E1E6EE;
+  border-radius:10px;
+  font-size:0.92rem;
+  background:var(--cf-gris);
+  outline:none;
+  transition:border-color .15s, box-shadow .15s;
+}
+.input-icon input:focus{
+  border-color:var(--cf-naranja);
+  box-shadow:0 0 0 3px rgba(249,115,22,0.15);
+  background:var(--cf-blanco);
+}
+.toggle-pass{
+  position:absolute;
+  right:14px; top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  color:#A6AFC2;
+  background:none;border:none;padding:0;
+}
+
+.form-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:20px;
+  font-size:0.85rem;
+}
+.form-row .remember{ display:flex; align-items:center; gap:6px; }
+.form-row a{ color:var(--cf-naranja); text-decoration:none; font-weight:600; }
+.form-row a:hover{ text-decoration:underline; }
+
+.btn-login{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:var(--cf-naranja);
+  color:#fff;
+  font-weight:600;
+  font-size:0.95rem;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  cursor:pointer;
+  transition:filter .15s, transform .1s;
+}
+.btn-login:hover{ filter:brightness(1.06); }
+.btn-login:active{ transform:translateY(1px); }
+.btn-login[disabled]{ opacity:0.7; cursor:not-allowed; }
+
+.divider{
+  display:flex; align-items:center; gap:12px;
+  margin:22px 0;
+  color:#B7C0D1; font-size:0.8rem;
+}
+.divider::before, .divider::after{ content:''; flex:1; height:1px; background:#E7EBF2; }
+
+.help-row{ display:flex; justify-content:center; gap:34px; }
+.help-row a{
+  display:flex; align-items:center; gap:6px;
+  color:var(--cf-azul);
+  text-decoration:none;
+  font-size:0.85rem;
+  font-weight:500;
+}
+.help-row a:hover{ color:var(--cf-naranja); }
+
+.field-error{ color:#DC2626; font-size:0.78rem; margin-top:5px; display:none; }
+.input-icon.has-error input{ border-color:#DC2626; }
+.input-icon.has-error + .field-error{ display:block; }
+
+/* ===================== Responsive ===================== */
+
+/* Tablet: se oculta la foto diagonal, panel izq se reduce */
+@media (max-width: 991px){
+  .login-photo{ display:none; }
+  .login-left{ flex:0 0 320px; }
+  .login-panel{ flex:1 1 auto; }
+}
+
+/* Smartphone: solo formulario */
+@media (max-width: 767px){
+  .login-wrap{ flex-direction:column; min-height:auto; }
+  .login-left{
+    flex:0 0 auto;
+    padding:24px 24px 16px;
+  }
+  .left-desc, .dev-by, .left-spacer, .benefit-list{ display:none; }
+  .left-footer{ margin-top:16px; }
+  .login-panel{ padding:24px 20px 40px; min-width:0; }
+}

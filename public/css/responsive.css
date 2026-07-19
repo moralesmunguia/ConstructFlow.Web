@@ -1,0 +1,47 @@
+/**
+ * responsive.css
+ * Ref: DEF-WEB-000 sec. 14 y DEF-WEB-001 sec. 13
+ * Breakpoints: Desktop >=1400 | Laptop 992-1399 | Tablet 768-991 | Phone <768
+ */
+
+/* Tablet y menor: colapsar menú horizontal en un toggle */
+@media (max-width: 991px) {
+    .cf-topbar {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px 16px;
+    }
+
+    .cf-topbar-toggle {
+        display: block;
+    }
+
+    .cf-topbar-nav {
+        flex-basis: 100%;
+        order: 3;
+        display: none;
+        overflow-x: visible;
+    }
+
+    .cf-topbar-nav.cf-topbar-nav-open {
+        display: block;
+    }
+
+    .cf-topbar-nav ul {
+        flex-direction: column;
+        align-items: stretch;
+        white-space: normal;
+        padding: 8px 0;
+    }
+
+    .cf-topbar-right {
+        order: 2;
+        margin-left: auto;
+    }
+}
+
+/* Smartphone: solo contenido, ajustar paddings */
+@media (max-width: 767px) {
+    .cf-app-content { padding: 14px 14px 30px; }
+    .cf-breadcrumb { padding: 10px 14px 0; }
+}

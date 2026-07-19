@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="230" height="46" viewBox="0 0 230 46">
+  <g>
+    <path d="M4 40 L4 16 L16 4 L28 16 L28 40 Z" fill="none" stroke="#F97316" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="10" y="22" width="4" height="6" fill="#0B1F47"/>
+    <rect x="18" y="22" width="4" height="6" fill="#0B1F47"/>
+    <rect x="10" y="31" width="4" height="6" fill="#0B1F47"/>
+    <rect x="18" y="31" width="4" height="6" fill="#0B1F47"/>
+  </g>
+  <text x="40" y="22" font-family="Poppins, Inter, sans-serif" font-size="19" font-weight="700" fill="#0B1F47">CONSTRUCT<tspan fill="#F97316">FLOW</tspan></text>
+  <text x="40" y="35" font-family="Inter, sans-serif" font-size="7" letter-spacing="2" fill="#5B6B85">ERP PARA CONSTRUCCIÓN</text>
+</svg>

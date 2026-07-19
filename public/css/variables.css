@@ -1,0 +1,36 @@
+/**
+ * variables.css
+ * Tokens de diseño de ConstructFlow. Ref: DEF-WEB-000 sección 10.
+ * Prefijo --cf- según convención (DEF-WEB-000 sección 9).
+ */
+:root {
+    /* Paleta principal */
+    --cf-azul: #0B1F47;
+    --cf-azul-oscuro: #08162F;
+    --cf-naranja: #F97316;
+    --cf-verde: #10B981;
+    --cf-amarillo: #F59E0B;
+    --cf-rojo: #EF4444;
+    --cf-gris: #F5F7FA;
+    --cf-blanco: #FFFFFF;
+
+    /* Texto */
+    --cf-texto-principal: #1A2332;
+    --cf-texto-secundario: #6B7280;
+    --cf-texto-invertido: #FFFFFF;
+
+    /* Bordes / superficies */
+    --cf-borde: #E5E7EB;
+    --cf-superficie: #FFFFFF;
+    --cf-superficie-hover: #F3F4F6;
+
+    /* Tipografía */
+    --cf-font-base: 'Inter', sans-serif;
+    --cf-font-heading: 'Poppins', sans-serif;
+
+    /* Layout */
+    --cf-sidebar-width: 260px;
+    --cf-navbar-height: 64px;
+    --cf-radius: 10px;
+    --cf-shadow: 0 1px 3px rgba(11, 31, 71, 0.08);
+}
