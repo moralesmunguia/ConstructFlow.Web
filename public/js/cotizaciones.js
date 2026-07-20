@@ -216,6 +216,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ---- Formato único de cotización (Ver e Imprimir comparten esta plantilla) ----
+    let empresasPorID = {};
+
+    async function obtenerEmpresa(empresaID) {
+        if (empresasPorID[empresaID]) return empresasPorID[empresaID];
+
+        try {
+            const resp = await axios.get(`${CF_API_BASE_URL}/empresas/${empresaID}`);
+            if (resp.data.success) {
+                empresasPorID[empresaID] = resp.data.data;
+                return resp.data.data;
+            }
+        } catch (_) { /* ignorar, se usa fallback */ }
+
+        return {};
+    }
+
     async function obtenerCotizacionCompleta(cotizacionID) {
         const resp = await axios.get(`${CF_API_BASE_URL}/cotizaciones/persist/${cotizacionID}`);
 
@@ -226,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return resp.data.data; // { metadata, cotizacion, detalle, actividades }
     }
 
-    function construirHtmlCotizacion(datos) {
+    function construirHtmlCotizacion(datos, empresa) {
         const c = datos.cotizacion;
         const cliente = clientesPorID[c.ClienteID];
         const estado = estadosPorID[c.EstadoCotizacionID];
@@ -235,6 +251,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // (SubtotalVenta se guarda ANTES del descuento).
         const subtotalConDescuento = Number(c.SubtotalVenta || 0) - Number(c.Descuento || 0);
         const tieneDescuento = Number(c.Descuento || 0) > 0;
+
+        const partesContacto = [];
+        if (empresa?.Contacto) partesContacto.push(escapeHtml(empresa.Contacto));
+        if (empresa?.Telefono) partesContacto.push(`Tel. ${escapeHtml(empresa.Telefono)}`);
+        if (empresa?.Correo) partesContacto.push(escapeHtml(empresa.Correo));
+        const lineaContacto = partesContacto.join(' &nbsp;|&nbsp; ');
 
         const filasDetalle = (datos.detalle || []).map((d, i) => `
             <tr>
@@ -248,57 +270,52 @@ document.addEventListener('DOMContentLoaded', () => {
             </tr>
         `).join('');
 
+        const sitioWeb = (empresa?.SitioWeb || '').trim();
+
         return `
             <div class="cf-cot-doc">
-                <table class="cf-cot-header">
-                    <tr>
-                        <td class="cf-cot-logo" rowspan="3">
-                            ${logoEmpresaHtml(c.EmpresaID)}
-                        </td>
-                        <td class="cf-cot-label">Atención:</td>
-                        <td class="cf-cot-valor">${escapeHtml(c.Atencion || '—')}</td>
-                        <td class="cf-cot-folio" rowspan="3">
-                            <div class="cf-cot-folio-label">Número de Cotización</div>
-                            <div class="cf-cot-folio-valor">${escapeHtml(c.Folio || '')}</div>
-                            <div class="cf-cot-folio-estado" style="color:${estado?.ColorHex || '#6C757D'}">${escapeHtml(estado?.NombreEstado || '')}</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="cf-cot-label">Cliente:</td>
-                        <td class="cf-cot-valor">${escapeHtml(cliente?.NombreCliente || `#${c.ClienteID}`)}</td>
-                    </tr>
-                    <tr>
-                        <td class="cf-cot-label">Fecha / Vigencia:</td>
-                        <td class="cf-cot-valor">${escapeHtml(formatearFechaSimple(c.Fecha))} &nbsp;&ndash;&nbsp; ${escapeHtml(formatearFechaSimple(c.FechaVigencia))}</td>
-                    </tr>
-                    <tr>
-                        <td class="cf-cot-label">Forma de Pago:</td>
-                        <td class="cf-cot-valor" colspan="2">${escapeHtml(c.FormaPago || 'Establecido')}</td>
-                        <td class="cf-cot-label">Tiempo de Entrega:</td>
-                    </tr>
-                </table>
+                <div class="cf-cot-header">
+                    <table class="cf-cot-header-tabla">
+                        <tr>
+                            <td class="cf-cot-logo">${logoEmpresaHtml(empresa)}</td>
+                            <td class="cf-cot-info">
+                                <div><strong>Cliente:</strong> ${escapeHtml(cliente?.NombreCliente || `#${c.ClienteID}`)} &nbsp;&nbsp; <strong>Atención:</strong> ${escapeHtml(c.Atencion || '—')}</div>
+                                <div><strong>Fecha:</strong> ${escapeHtml(formatearFechaSimple(c.Fecha))} &ndash; <strong>Vigencia:</strong> ${escapeHtml(formatearFechaSimple(c.FechaVigencia))}</div>
+                                <div><strong>Forma de Pago:</strong> ${escapeHtml(c.FormaPago || 'Establecido')} &nbsp;&nbsp; <strong>Tiempo de Entrega:</strong> ${escapeHtml(c.TiempoEntregaDias ? `${c.TiempoEntregaDias} días` : '—')}</div>
+                                <div class="cf-cot-separador"></div>
+                                <div class="cf-cot-empresa-nombre">${escapeHtml(empresa?.NombreEmpresa || '')}</div>
+                                ${lineaContacto ? `<div class="cf-cot-empresa-contacto">${lineaContacto}</div>` : ''}
+                            </td>
+                            <td class="cf-cot-folio">
+                                <div class="cf-cot-folio-label">Número de Cotización</div>
+                                <div class="cf-cot-folio-valor">${escapeHtml(c.Folio || '')}</div>
+                                <div class="cf-cot-folio-estado" style="color:${estado?.ColorHex || '#6C757D'}">${escapeHtml(estado?.NombreEstado || '')}</div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
 
                 <div class="cf-cot-desc"><strong>DESCRIPCIÓN DEL TRABAJO:</strong> ${escapeHtml(c.NombreProyecto || '—')}</div>
 
                 <table class="cf-cot-tabla">
                     <colgroup>
                         <col style="width:4%">
-                        <col style="width:29%">
-                        <col style="width:10%">
-                        <col style="width:8%">
-                        <col style="width:11%">
-                        <col style="width:12%">
                         <col style="width:26%">
+                        <col style="width:7%">
+                        <col style="width:7%">
+                        <col style="width:11%">
+                        <col style="width:9%">
+                        <col style="width:36%">
                     </colgroup>
                     <thead>
                         <tr>
-                            <th>No.</th>
-                            <th>Descripción</th>
-                            <th>Unidad</th>
-                            <th class="text-end">Cantidad</th>
-                            <th class="text-end">P.U.</th>
-                            <th class="text-end">Importe</th>
-                            <th>Comentarios</th>
+                            <th class="text-center">No.</th>
+                            <th class="text-center">Descripción</th>
+                            <th class="text-center">Unidad</th>
+                            <th class="text-center">Cantidad</th>
+                            <th class="text-center">P.U.</th>
+                            <th class="text-center">Importe</th>
+                            <th class="text-center">Comentarios</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -308,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <div class="cf-cot-footer">
                     <div class="cf-cot-nota">
-                        Nota: Precios no incluyen impuestos.<br>
+                        Nota: Los precios no incluyen impuestos.<br>
                         Importes expresados en ${escapeHtml(c.Moneda || 'MXN')}.
                     </div>
                     <table class="cf-cot-totales">
@@ -316,13 +333,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr class="cf-cot-total-final"><td>SUBTOTAL</td><td class="text-end">${quitarHtml(formatearMoneda(subtotalConDescuento, c.Moneda))}</td></tr>
                     </table>
                 </div>
+
+                ${sitioWeb ? `<div class="cf-cot-pie-pagina">${escapeHtml(sitioWeb)}</div>` : ''}
             </div>
         `;
     }
 
-    function logoEmpresaHtml(empresaID) {
-        // Empresa 1 = ROM: usa el logo real subido a public/img/logo_ROM.jpg
-        if (Number(empresaID) === 1) {
+    function logoEmpresaHtml(empresa) {
+        const url = (empresa?.LogoURL || '').trim();
+
+        if (/^https?:\/\//i.test(url)) {
+            return `<img src="${url}" alt="Logo" class="cf-cot-logo-img">`;
+        }
+
+        if (url) {
+            return `<img src="${CF_BASE_URL}/public/${url.replace(/^\//, '')}" alt="Logo" class="cf-cot-logo-img">`;
+        }
+
+        // Fallback mientras LogoURL no esté lleno para otras empresas
+        if (Number(empresa?.EmpresaID) === 1) {
             return `<img src="${CF_BASE_URL}/public/img/logo_ROM.jpg" alt="ROM" class="cf-cot-logo-img">`;
         }
         return `<div class="cf-cot-logo-box">LOGO</div>`;
@@ -330,14 +359,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const CF_COT_ESTILOS = `
         .cf-cot-doc { font-family: Arial, sans-serif; color: #1A2332; font-size: 0.85rem; }
-        .cf-cot-header { width: 100%; border-collapse: collapse; border: 2px solid #0B1F47; margin-bottom: 14px; }
-        .cf-cot-header td { border: 1px solid #0B1F47; padding: 6px 10px; vertical-align: middle; }
+        .cf-cot-header { border: 2px solid #0B1F47; padding: 8px 12px; margin-bottom: 14px; }
+        .cf-cot-header-tabla { width: 100%; border-collapse: collapse; }
+        .cf-cot-header-tabla td { border: none; padding: 3px 10px; vertical-align: middle; }
         .cf-cot-logo { width: 110px; text-align: center; }
         .cf-cot-logo-img { max-width: 100px; max-height: 70px; object-fit: contain; }
         .cf-cot-logo-box { font-family: Poppins, Arial, sans-serif; font-weight: 800; font-size: 1.6rem; color: #F97316; letter-spacing: 1px; }
-        .cf-cot-label { font-weight: 700; color: #0B1F47; width: 110px; font-size: 0.75rem; text-transform: uppercase; }
-        .cf-cot-valor { font-size: 0.85rem; }
-        .cf-cot-folio { width: 220px; text-align: center; background: #F5F7FA; }
+        .cf-cot-empresa-nombre { font-size: 1.15rem; font-weight: 800; color: #0B1F47; }
+        .cf-cot-empresa-contacto { font-size: 0.72rem; color: #6B7280; margin-top: 1px; }
+        .cf-cot-separador { border-top: 1px solid #E5E7EB; margin: 6px 0; }
+        .cf-cot-info div { font-size: 0.8rem; margin-top: 2px; }
+        .cf-cot-folio { width: 220px; text-align: center; }
         .cf-cot-folio-label { font-size: 0.7rem; text-transform: uppercase; color: #6B7280; }
         .cf-cot-folio-valor { font-size: 1.1rem; font-weight: 800; color: #0B1F47; }
         .cf-cot-folio-estado { font-size: 0.75rem; font-weight: 700; margin-top: 2px; }
@@ -354,12 +386,14 @@ document.addEventListener('DOMContentLoaded', () => {
         .cf-cot-totales { border-collapse: collapse; min-width: 260px; }
         .cf-cot-totales td { padding: 3px 8px; font-size: 0.85rem; }
         .cf-cot-total-final td { font-size: 1.05rem; font-weight: 800; border-top: 2px solid #0B1F47; color: #0B1F47; }
+        .cf-cot-pie-pagina { text-align: center; font-size: 0.78rem; color: #0B1F47; font-weight: 700; margin-top: 24px; padding-top: 8px; border-top: 1px solid #E5E7EB; }
     `;
 
     // ---- Ver ----
     async function verCotizacion(cotizacionID) {
         try {
             const datos = await obtenerCotizacionCompleta(cotizacionID);
+            const empresa = await obtenerEmpresa(datos.cotizacion.EmpresaID);
 
             Swal.fire({
                 title: false,
@@ -369,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 confirmButtonText: '<i class="bi bi-printer"></i> Imprimir',
                 showCancelButton: true,
                 cancelButtonText: 'Cerrar',
-                html: `<style>${CF_COT_ESTILOS}</style>${construirHtmlCotizacion(datos)}`
+                html: `<style>${CF_COT_ESTILOS}</style>${construirHtmlCotizacion(datos, empresa)}`
             }).then((resultado) => {
                 if (resultado.isConfirmed) imprimirCotizacion(cotizacionID);
             });
@@ -629,7 +663,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!valor) return '—';
         const fecha = new Date(valor);
         if (isNaN(fecha.getTime())) return valor;
-        return fecha.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: '2-digit' });
+
+        const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+            'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+        return `${String(fecha.getDate()).padStart(2, '0')} de ${meses[fecha.getMonth()]} de ${fecha.getFullYear()}`;
     }
 
     function badgeEstado(nombre, colorHex) {
