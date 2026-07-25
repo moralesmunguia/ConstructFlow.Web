@@ -115,3 +115,10 @@ div.dataTables_wrapper div.dataTables_paginate .paginate_button.current {
 .cf-page-subtitle { margin: 2px 0 0; color: var(--cf-texto-secundario); font-size: 0.9rem; }
 
 .cf-row-actions .btn { padding: 3px 7px; }
+
+/* ---------- Formulario de captura (Cotizaciones) ---------- */
+.cf-form-titulo { font-size: 1.2rem; font-weight: 700; color: var(--cf-azul); margin: 0; }
+.cf-form-seccion { font-size: 0.95rem; font-weight: 700; color: var(--cf-azul); border-bottom: 2px solid var(--cf-gris); padding-bottom: 6px; }
+#cfTablaDetalle td, #cfTablaActividades td { padding: 4px 6px; vertical-align: middle; }
+#cfTablaDetalle input, #cfTablaDetalle select,
+#cfTablaActividades input { font-size: 0.78rem; }

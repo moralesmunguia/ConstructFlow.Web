@@ -21,16 +21,30 @@ document.addEventListener('DOMContentLoaded', () => {
     let dataTable = null;
     let ultimasCotizaciones = [];
 
-    cargarCotizaciones();
+    const permisosCotizaciones = CF_PERMISOS['cotizaciones'] || {
+        PuedeCrear: false, PuedeConsultar: false, PuedeActualizar: false, PuedeEliminar: false
+    };
+
+    if (!permisosCotizaciones.PuedeCrear) {
+        document.getElementById('btnNuevaCotizacion')?.remove();
+    }
+
+    cargarCotizaciones().then(() => {
+        const parametros = new URLSearchParams(window.location.search);
+        const cotizacionEditarID = parametros.get('editar');
+
+        if (cotizacionEditarID) {
+            mostrarFormulario(cotizacionEditarID);
+
+            // Limpia el query param para que un refresh no reabra el modal
+            const url = new URL(window.location.href);
+            url.searchParams.delete('editar');
+            window.history.replaceState({}, '', url);
+        }
+    });
 
     document.getElementById('btnNuevaCotizacion')?.addEventListener('click', () => {
-        // La captura (encabezado / detalles / actividades) se implementa
-        // en una siguiente iteración, ver flujo funcional DEF-WEB-002 sección 3.
-        Swal.fire({
-            icon: 'info',
-            title: 'Próximamente',
-            text: 'La captura de nuevas cotizaciones está en desarrollo.'
-        });
+        mostrarFormulario(null);
     });
 
     // ---- Delegación de eventos para los botones de Acciones (filas dinámicas) ----
@@ -51,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btnCorreo) return enviarCorreoCotizacion(btnCorreo.dataset.correo);
 
         const btnEditar = e.target.closest('[data-editar]');
-        if (btnEditar) return modificarCotizacion(btnEditar.dataset.editar);
+        if (btnEditar) return mostrarFormulario(btnEditar.dataset.editar);
     });
 
     async function cargarCotizaciones() {
@@ -172,47 +186,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function construirAcciones(cotizacionID, esProyecto) {
-        if (esProyecto) {
-            return `
-                <div class="cf-row-actions text-end">
-                    <button type="button" class="btn btn-cf-secondary btn-sm" title="Ver JSON maestro" data-ver="${cotizacionID}">
-                        <i class="bi bi-eye"></i>
-                    </button>
-                    <button type="button" class="btn btn-cf-secondary btn-sm" title="Imprimir" data-imprimir="${cotizacionID}">
-                        <i class="bi bi-printer"></i>
-                    </button>
-                    <button type="button" class="btn btn-cf-secondary btn-sm" title="Enviar por correo" data-correo="${cotizacionID}">
-                        <i class="bi bi-envelope"></i>
-                    </button>
-                    <button type="button" class="btn btn-cf-secondary btn-sm" title="Ya es un proyecto: no se puede modificar la cotización" disabled>
-                        <i class="bi bi-lock"></i>
-                    </button>
-                </div>
-            `;
+        const botones = [];
+
+        if (permisosCotizaciones.PuedeConsultar) {
+            botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Ver" data-ver="${cotizacionID}"><i class="bi bi-eye"></i></button>`);
+            botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Imprimir" data-imprimir="${cotizacionID}"><i class="bi bi-printer"></i></button>`);
+            botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Enviar por correo" data-correo="${cotizacionID}"><i class="bi bi-envelope"></i></button>`);
         }
 
-        return `
-            <div class="cf-row-actions text-end">
-                <button type="button" class="btn btn-cf-secondary btn-sm" title="Ver JSON maestro" data-ver="${cotizacionID}">
-                    <i class="bi bi-eye"></i>
-                </button>
-                <button type="button" class="btn btn-cf-secondary btn-sm" title="Imprimir" data-imprimir="${cotizacionID}">
-                    <i class="bi bi-printer"></i>
-                </button>
-                <button type="button" class="btn btn-cf-secondary btn-sm" title="Enviar por correo" data-correo="${cotizacionID}">
-                    <i class="bi bi-envelope"></i>
-                </button>
-                <button type="button" class="btn btn-cf-secondary btn-sm" title="Modificar" data-editar="${cotizacionID}">
-                    <i class="bi bi-pencil"></i>
-                </button>
-                <button type="button" class="btn btn-cf-secondary btn-sm" title="Cambiar estado" data-cambiar-estado="${cotizacionID}">
-                    <i class="bi bi-arrow-repeat"></i>
-                </button>
-                <button type="button" class="btn btn-cf-secondary btn-sm text-danger" title="Eliminar" data-eliminar="${cotizacionID}">
-                    <i class="bi bi-trash"></i>
-                </button>
-            </div>
-        `;
+        if (permisosCotizaciones.PuedeActualizar) {
+            if (esProyecto) {
+                botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Ya es un proyecto: no se puede modificar la cotización" disabled><i class="bi bi-lock"></i></button>`);
+            } else {
+                botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Modificar" data-editar="${cotizacionID}"><i class="bi bi-pencil"></i></button>`);
+                botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Cambiar estado" data-cambiar-estado="${cotizacionID}"><i class="bi bi-arrow-repeat"></i></button>`);
+            }
+        }
+
+        if (permisosCotizaciones.PuedeEliminar && !esProyecto) {
+            botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm text-danger" title="Eliminar" data-eliminar="${cotizacionID}"><i class="bi bi-trash"></i></button>`);
+        }
+
+        return `<div class="cf-row-actions text-end">${botones.join('')}</div>`;
     }
 
     // ---- Formato único de cotización (Ver e Imprimir comparten esta plantilla) ----
@@ -256,6 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (empresa?.Contacto) partesContacto.push(escapeHtml(empresa.Contacto));
         if (empresa?.Telefono) partesContacto.push(`Tel. ${escapeHtml(empresa.Telefono)}`);
         if (empresa?.Correo) partesContacto.push(escapeHtml(empresa.Correo));
+        if (empresa?.SitioWeb) partesContacto.push(escapeHtml(empresa.SitioWeb));
         const lineaContacto = partesContacto.join(' &nbsp;|&nbsp; ');
 
         const filasDetalle = (datos.detalle || []).map((d, i) => `
@@ -265,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td class="text-center">${escapeHtml(d.Unidad || '')}</td>
                 <td class="text-end">${Number(d.Cantidad ?? 0).toLocaleString('es-MX')}</td>
                 <td class="text-end">${quitarHtml(formatearMoneda(d.PrecioUnitario, c.Moneda))}</td>
-                <td class="text-end">${quitarHtml(formatearMoneda(d.TotalVenta, c.Moneda))}</td>
+                <td class="text-end">${quitarHtml(formatearMoneda(d.ImporteVenta, c.Moneda))}</td>
                 <td>${escapeHtml(d.Comentarios || '')}</td>
             </tr>
         `).join('');
@@ -493,74 +489,424 @@ document.addEventListener('DOMContentLoaded', () => {
         return fila?.ClienteID;
     }
 
-    // ---- Modificar (edición rápida de encabezado) ----
-    async function modificarCotizacion(cotizacionID) {
+    // ---- Formulario completo (Nueva Cotización / Modificar) vía JSON Maestro ----
+    // POST {CF_API_BASE_URL}/cotizaciones/persist -> CotizacionPersistenciaService::persist()
+    //   metadata.Operacion = 'INSERT' si cotizacion.CotizacionID viene vacío/0, 'UPDATE' si no.
+
+    let cotizacionEnEdicionID = null;
+    let selectsFormularioListos = false;
+
+    function poblarSelectsFormulario() {
+        if (selectsFormularioListos) return;
+
+        const selCliente = document.getElementById('cfClienteID');
+        selCliente.innerHTML = '<option value="">Selecciona un cliente</option>' +
+            Object.values(clientesPorID).map((c) => `<option value="${c.ClienteID}">${escapeHtml(c.NombreCliente)}</option>`).join('');
+
+        const selEstado = document.getElementById('cfEstadoCotizacionID');
+        selEstado.innerHTML = estadosLista
+            .filter((e) => e.Codigo !== 'CONVERTIDA_PROYECTO')
+            .map((e) => `<option value="${e.EstadoCotizacionID}">${escapeHtml(e.NombreEstado)}</option>`).join('');
+
+        selectsFormularioListos = true;
+    }
+
+    document.getElementById('btnCancelarFormulario')?.addEventListener('click', ocultarFormulario);
+    document.getElementById('btnGuardarCotizacion')?.addEventListener('click', guardarCotizacion);
+    document.getElementById('btnAgregarPartida')?.addEventListener('click', () => agregarFilaDetalle());
+    document.getElementById('btnAgregarActividad')?.addEventListener('click', () => agregarFilaActividad());
+
+    // Delegación para borrar filas de las tablas dinámicas del formulario
+    document.getElementById('cfTablaDetalle')?.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-quitar-fila]');
+        if (btn) btn.closest('tr').remove();
+    });
+    document.getElementById('cfTablaActividades')?.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-quitar-fila]');
+        if (btn) btn.closest('tr').remove();
+    });
+
+    // Tope dinámico del Descuento según Cantidad/P.U./Tipo de Descuento de esa misma fila
+    document.getElementById('cfTablaDetalle')?.addEventListener('input', (e) => {
+        const tr = e.target.closest('tr');
+        if (!tr) return;
+        if (!e.target.matches('.cf-det-cantidad, .cf-det-precio, .cf-det-tipo-descuento, .cf-det-descuento')) return;
+        actualizarTopeDescuento(tr);
+    });
+
+    function actualizarTopeDescuento(tr) {
+        const cantidad = Number(tr.querySelector('.cf-det-cantidad').value) || 0;
+        const precio = Number(tr.querySelector('.cf-det-precio').value) || 0;
+        const tipo = tr.querySelector('.cf-det-tipo-descuento').value;
+        const inputDescuento = tr.querySelector('.cf-det-descuento');
+        const ayuda = tr.querySelector('.cf-det-descuento-ayuda');
+
+        const importeBase = cantidad * precio;
+        const tope = tipo === 'PORCENTAJE' ? 100 : importeBase;
+
+        inputDescuento.max = tope;
+        ayuda.textContent = tipo === 'PORCENTAJE'
+            ? 'Máx. 100%'
+            : `Máx. ${importeBase.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}`;
+    }
+
+    const CF_UNIDADES = ['PZA', 'SERVICIO', 'LOTE', 'GLOBAL', 'M2', 'M3', 'ML', 'KG', 'TON', 'HRS', 'JGO', 'PAR', 'LTS'];
+
+    // ---- Cliente -> Atención: sugerencias de contactos guardados de ese cliente ----
+    document.getElementById('cfClienteID')?.addEventListener('change', async (e) => {
+        const inputAtencion = document.getElementById('cfAtencion');
+        const datalist = document.getElementById('cfListaContactos');
+        inputAtencion.value = '';
+        datalist.innerHTML = '';
+
+        const clienteID = e.target.value;
+        if (!clienteID) return;
+
         try {
-            const resp = await axios.get(`${CF_API_BASE_URL}/cotizaciones/${cotizacionID}`);
+            const resp = await axios.get(`${CF_API_BASE_URL}/clientes/${clienteID}/contactos`);
+            const contactos = resp.data?.data || [];
+
+            datalist.innerHTML = contactos.map((ct) =>
+                `<option value="${escapeAttr(ct.Nombre || '')}">${escapeHtml(ct.Puesto || ct.Correo || '')}</option>`
+            ).join('');
+
+            const principal = contactos.find((ct) => ct.Principal == 1) || contactos[0];
+            if (principal) inputAtencion.value = principal.Nombre || '';
+
+        } catch (_) {
+            // sin contactos registrados para ese cliente; se deja vacío
+        }
+    });
+
+    // ---- Fecha -> Vigencia automática (1 mes después), solo en captura nueva ----
+    document.getElementById('cfFecha')?.addEventListener('change', (e) => {
+        if (cotizacionEnEdicionID) return; // en edición no se pisa la vigencia ya guardada
+
+        const valor = e.target.value;
+        if (!valor) return;
+
+        const fecha = new Date(`${valor}T00:00:00`);
+        fecha.setMonth(fecha.getMonth() + 1);
+
+        document.getElementById('cfFechaVigencia').value = fecha.toISOString().substring(0, 10);
+    });
+
+    async function mostrarFormulario(cotizacionID) {
+        poblarSelectsFormulario();
+
+        document.getElementById('cfCardListado').style.display = 'none';
+        document.getElementById('cfCardFormulario').style.display = '';
+
+        document.querySelector('#cfTablaDetalle tbody').innerHTML = '';
+        document.querySelector('#cfTablaActividades tbody').innerHTML = '';
+
+        if (!cotizacionID) {
+            // ---- Nueva cotización: formulario en blanco ----
+            cotizacionEnEdicionID = null;
+            document.getElementById('cfFormTitulo').textContent = 'Nueva Cotización';
+
+            document.getElementById('cfClienteID').value = '';
+            document.getElementById('cfAtencion').value = '';
+
+            const selEstado = document.getElementById('cfEstadoCotizacionID');
+            selEstado.value = estadosLista.find((e) => e.Codigo === 'BORRADOR')?.EstadoCotizacionID || '';
+            selEstado.disabled = true;
+            document.getElementById('cfEstadoNota').style.display = '';
+
+            document.getElementById('cfNombreProyecto').value = '';
+            document.getElementById('cfFormaPago').value = 'Crédito 30 días';
+            document.getElementById('cfFecha').value = new Date().toISOString().substring(0, 10);
+            document.getElementById('cfFechaVigencia').value = '';
+            document.getElementById('cfTiempoEntrega').value = '';
+            document.getElementById('cfIncluyeIVA').checked = true;
+            document.getElementById('cfProbabilidadCierre').value = '50';
+            document.getElementById('cfOrigenProspecto').value = '';
+            document.getElementById('cfObservaciones').value = '';
+
+            agregarFilaDetalle();
+            return;
+        }
+
+        // ---- Modificar: cargar JSON maestro existente ----
+        try {
+            const resp = await axios.get(`${CF_API_BASE_URL}/cotizaciones/persist/${cotizacionID}`);
 
             if (!resp.data.success) {
+                ocultarFormulario();
                 return Swal.fire({ icon: 'error', title: 'No encontrada', text: resp.data.message || '' });
             }
 
-            const c = resp.data.data; // fila completa de vs_CF_Cotizacion, tal cual la tabla
+            const { cotizacion: c, detalle, actividades } = resp.data.data;
 
-            const { value: formValues } = await Swal.fire({
-                title: `Modificar ${c.Folio}`,
-                width: 560,
-                html: `
-                    <div class="text-start" style="font-size:0.85rem">
-                        <label class="form-label mb-1">Atención</label>
-                        <input id="swalAtencion" class="form-control mb-2" value="${escapeAttr(c.Atencion || '')}">
+            cotizacionEnEdicionID = c.CotizacionID;
+            document.getElementById('cfFormTitulo').textContent = `Modificar ${c.Folio}`;
 
-                        <label class="form-label mb-1">Descripción del trabajo</label>
-                        <textarea id="swalDescripcion" class="form-control mb-2" rows="2">${escapeHtml(c.DescripcionTrabajo || '')}</textarea>
+            document.getElementById('cfClienteID').value = c.ClienteID;
+            document.getElementById('cfAtencion').value = c.Atencion || '';
 
-                        <div class="row g-2 mb-2">
-                            <div class="col-6">
-                                <label class="form-label mb-1">Vigencia</label>
-                                <input id="swalVigencia" type="date" class="form-control" value="${(c.FechaVigencia || '').substring(0, 10)}">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label mb-1">Tiempo de entrega (días)</label>
-                                <input id="swalTiempoEntrega" type="number" min="0" class="form-control" value="${c.TiempoEntregaDias ?? ''}">
-                            </div>
-                        </div>
+            const selEstado = document.getElementById('cfEstadoCotizacionID');
+            selEstado.value = c.EstadoCotizacionID;
+            selEstado.disabled = false;
+            document.getElementById('cfEstadoNota').style.display = 'none';
 
-                        <label class="form-label mb-1">Forma de pago</label>
-                        <input id="swalFormaPago" class="form-control" value="${escapeAttr(c.FormaPago || '')}">
-                    </div>
-                `,
-                focusConfirm: false,
-                showCancelButton: true,
-                confirmButtonText: 'Guardar cambios',
-                cancelButtonText: 'Cancelar',
-                preConfirm: () => ({
-                    Atencion: document.getElementById('swalAtencion').value,
-                    DescripcionTrabajo: document.getElementById('swalDescripcion').value,
-                    FechaVigencia: document.getElementById('swalVigencia').value,
-                    TiempoEntregaDias: document.getElementById('swalTiempoEntrega').value || null,
-                    FormaPago: document.getElementById('swalFormaPago').value
-                })
-            });
+            document.getElementById('cfNombreProyecto').value = c.NombreProyecto || '';
+            document.getElementById('cfFormaPago').value = c.FormaPago || '';
+            document.getElementById('cfFecha').value = (c.Fecha || '').substring(0, 10);
+            document.getElementById('cfFechaVigencia').value = (c.FechaVigencia || '').substring(0, 10);
+            document.getElementById('cfTiempoEntrega').value = c.TiempoEntregaDias || '';
+            document.getElementById('cfIncluyeIVA').checked = !!Number(c.IncluyeIVA ?? 1);
+            document.getElementById('cfProbabilidadCierre').value = c.ProbabilidadCierre ?? 50;
+            document.getElementById('cfOrigenProspecto').value = c.OrigenProspecto || '';
+            document.getElementById('cfObservaciones').value = c.Observaciones || '';
 
-            if (!formValues) return; // canceló
+            (detalle || []).forEach((d) => agregarFilaDetalle(d));
+            if (!detalle || !detalle.length) agregarFilaDetalle();
 
-            // Se manda la fila completa (así vino de la API) con los campos editados
-            // encima, porque CotizacionService::update() espera el objeto completo.
-            const payload = { ...c, ...formValues };
-
-            const respUpdate = await axios.put(`${CF_API_BASE_URL}/cotizaciones/${cotizacionID}`, payload);
-
-            if (!respUpdate.data.success) {
-                return Swal.fire({ icon: 'error', title: 'No se pudo guardar', text: respUpdate.data.message || '' });
-            }
-
-            await Swal.fire({ icon: 'success', title: 'Cotización actualizada', timer: 1200, showConfirmButton: false });
-            recargar();
+            (actividades || []).forEach((a) => agregarFilaActividad(a));
 
         } catch (error) {
-            Swal.fire({ icon: 'error', title: 'Error', text: error.response?.data?.message || 'No fue posible modificar la cotización.' });
+            ocultarFormulario();
+            Swal.fire({ icon: 'error', title: 'Error', text: error.response?.data?.message || 'No fue posible cargar la cotización.' });
         }
+    }
+
+    function ocultarFormulario() {
+        document.getElementById('cfCardFormulario').style.display = 'none';
+        document.getElementById('cfCardListado').style.display = '';
+    }
+
+    function agregarFilaDetalle(d = {}) {
+        const tbody = document.querySelector('#cfTablaDetalle tbody');
+        const tr = document.createElement('tr');
+        tr.dataset.detalleId = d.CotizacionDetalleID || 0;
+
+        const tipoDescuento = (d.TipoDescuento === '%' || d.TipoDescuento === 'PORCENTAJE') ? 'PORCENTAJE' : 'IMPORTE';
+        const unidadActual = (d.Unidad || '').toUpperCase();
+        const opcionesUnidad = CF_UNIDADES.map((u) =>
+            `<option value="${u}" ${u === unidadActual ? 'selected' : ''}>${u}</option>`
+        ).join('');
+        // Si la unidad guardada no está en el catálogo (dato histórico), se agrega como opción extra para no perderla
+        const opcionExtra = (unidadActual && !CF_UNIDADES.includes(unidadActual))
+            ? `<option value="${escapeAttr(unidadActual)}" selected>${escapeHtml(unidadActual)}</option>`
+            : '';
+
+        tr.innerHTML = `
+            <td><input class="form-control form-control-sm cf-det-descripcion" value="${escapeAttr(d.Descripcion || '')}"></td>
+            <td>
+                <select class="form-select form-select-sm cf-det-unidad">
+                    <option value="">Selecciona...</option>
+                    ${opcionExtra}
+                    ${opcionesUnidad}
+                </select>
+            </td>
+            <td><input type="number" min="0" step="0.01" class="form-control form-control-sm cf-det-cantidad" value="${d.Cantidad ?? 1}"></td>
+            <td><input type="number" min="0" step="0.01" class="form-control form-control-sm cf-det-precio" value="${d.PrecioUnitario ?? 0}"></td>
+            <td><input type="number" min="0" step="0.01" class="form-control form-control-sm cf-det-costo" value="${d.CostoEstimado ?? 0}"></td>
+            <td>
+                <select class="form-select form-select-sm cf-det-tipo-descuento">
+                    <option value="IMPORTE" ${tipoDescuento === 'IMPORTE' ? 'selected' : ''}>$</option>
+                    <option value="PORCENTAJE" ${tipoDescuento === 'PORCENTAJE' ? 'selected' : ''}>%</option>
+                </select>
+            </td>
+            <td>
+                <input type="number" min="0" step="0.01" class="form-control form-control-sm cf-det-descuento" value="${d.Descuento ?? 0}">
+                <div class="form-text cf-det-descuento-ayuda" style="font-size:0.68rem"></div>
+            </td>
+            <td><input class="form-control form-control-sm cf-det-comentarios" value="${escapeAttr(d.Comentarios || '')}"></td>
+            <td class="text-center"><button type="button" class="btn btn-sm text-danger" data-quitar-fila><i class="bi bi-x-lg"></i></button></td>
+        `;
+
+        tbody.appendChild(tr);
+        actualizarTopeDescuento(tr);
+    }
+
+    function agregarFilaActividad(a = {}) {
+        const tbody = document.querySelector('#cfTablaActividades tbody');
+        const tr = document.createElement('tr');
+        tr.dataset.actividadId = a.CotizacionActividadID || 0;
+        tr.dataset.codigoWbs = a.CodigoWBS || '';
+
+        tr.innerHTML = `
+            <td><input class="form-control form-control-sm cf-act-nombre" value="${escapeAttr(a.NombreActividad || '')}"></td>
+            <td><input class="form-control form-control-sm cf-act-descripcion" value="${escapeAttr(a.Descripcion || '')}"></td>
+            <td><input type="date" class="form-control form-control-sm cf-act-inicio" value="${(a.InicioPlan || '').substring(0, 10)}"></td>
+            <td><input type="date" class="form-control form-control-sm cf-act-fin" value="${(a.FinPlan || '').substring(0, 10)}"></td>
+            <td><input type="number" min="0" class="form-control form-control-sm cf-act-duracion" value="${a.DuracionPlan ?? 1}"></td>
+            <td><input type="number" min="0" class="form-control form-control-sm cf-act-horas" value="${a.HorasPlaneadas ?? ''}"></td>
+            <td class="text-center"><button type="button" class="btn btn-sm text-danger" data-quitar-fila><i class="bi bi-x-lg"></i></button></td>
+        `;
+
+        tbody.appendChild(tr);
+    }
+
+    function recolectarDetalle() {
+        return Array.from(document.querySelectorAll('#cfTablaDetalle tbody tr')).map((tr, i) => ({
+            CotizacionDetalleID: Number(tr.dataset.detalleId) || 0,
+            ConceptoID: null,
+            NumeroPartida: i + 1,
+            Descripcion: tr.querySelector('.cf-det-descripcion').value.trim(),
+            Unidad: tr.querySelector('.cf-det-unidad').value.trim(),
+            Cantidad: Number(tr.querySelector('.cf-det-cantidad').value) || 0,
+            PrecioUnitario: Number(tr.querySelector('.cf-det-precio').value) || 0,
+            CostoEstimado: Number(tr.querySelector('.cf-det-costo').value) || 0,
+            TipoDescuento: tr.querySelector('.cf-det-tipo-descuento').value,
+            Descuento: Number(tr.querySelector('.cf-det-descuento').value) || 0,
+            Comentarios: tr.querySelector('.cf-det-comentarios').value.trim()
+        }));
+    }
+
+    function recolectarActividades() {
+        return Array.from(document.querySelectorAll('#cfTablaActividades tbody tr')).map((tr, i) => ({
+            CotizacionActividadID: Number(tr.dataset.actividadId) || 0,
+            NumeroActividad: i + 1,
+            CodigoWBS: tr.dataset.codigoWbs || '',
+            NombreActividad: tr.querySelector('.cf-act-nombre').value.trim(),
+            Descripcion: tr.querySelector('.cf-act-descripcion').value.trim(),
+            InicioPlan: tr.querySelector('.cf-act-inicio').value || null,
+            FinPlan: tr.querySelector('.cf-act-fin').value || null,
+            DuracionPlan: Number(tr.querySelector('.cf-act-duracion').value) || 0,
+            HorasPlaneadas: Number(tr.querySelector('.cf-act-horas').value) || 0,
+            Estado: 'PLANEADA',
+            OrdenVisual: i + 1
+        }));
+    }
+
+    async function guardarCotizacion() {
+        limpiarErroresFormulario();
+
+        const clienteID = document.getElementById('cfClienteID').value;
+        const nombreProyecto = document.getElementById('cfNombreProyecto').value.trim();
+        const fecha = document.getElementById('cfFecha').value;
+        const fechaVigencia = document.getElementById('cfFechaVigencia').value;
+        const detalle = recolectarDetalle();
+
+        const errores = [];
+
+        if (!clienteID) {
+            marcarInvalido('cfClienteID');
+            errores.push('Selecciona un Cliente.');
+        }
+        if (!nombreProyecto) {
+            marcarInvalido('cfNombreProyecto');
+            errores.push('Captura el Nombre / Descripción del trabajo.');
+        }
+        if (!fecha) {
+            marcarInvalido('cfFecha');
+            errores.push('Captura la Fecha.');
+        }
+        if (!fechaVigencia) {
+            marcarInvalido('cfFechaVigencia');
+            errores.push('Captura la Vigencia.');
+        }
+
+        if (!detalle.length) {
+            errores.push('Agrega al menos una partida.');
+        } else {
+            const filasDetalle = document.querySelectorAll('#cfTablaDetalle tbody tr');
+            detalle.forEach((d, i) => {
+                const tr = filasDetalle[i];
+                if (!d.Descripcion) {
+                    tr.querySelector('.cf-det-descripcion').classList.add('is-invalid');
+                    errores.push(`Partida ${i + 1}: falta la Descripción.`);
+                }
+                if (!d.Unidad) {
+                    tr.querySelector('.cf-det-unidad').classList.add('is-invalid');
+                    errores.push(`Partida ${i + 1}: falta la Unidad.`);
+                }
+                if (!d.Cantidad || d.Cantidad <= 0) {
+                    tr.querySelector('.cf-det-cantidad').classList.add('is-invalid');
+                    errores.push(`Partida ${i + 1}: la Cantidad debe ser mayor a cero.`);
+                }
+
+                const importeBase = d.Cantidad * d.PrecioUnitario;
+
+                if (d.TipoDescuento === 'PORCENTAJE' && d.Descuento > 100) {
+                    tr.querySelector('.cf-det-descuento').classList.add('is-invalid');
+                    errores.push(`Partida ${i + 1}: el Descuento en % no puede ser mayor a 100%.`);
+                }
+
+                if (d.TipoDescuento === 'IMPORTE' && d.Descuento > importeBase) {
+                    tr.querySelector('.cf-det-descuento').classList.add('is-invalid');
+                    errores.push(`Partida ${i + 1}: el Descuento en monto (${d.Descuento.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}) no puede ser mayor al importe de la partida (${importeBase.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}).`);
+                }
+            });
+        }
+
+        if (errores.length) {
+            return Swal.fire({
+                icon: 'warning',
+                title: 'Revisa el formulario',
+                html: `<ul style="text-align:left">${errores.map((e) => `<li>${escapeHtml(e)}</li>`).join('')}</ul>`
+            });
+        }
+
+        const incluyeIVA = document.getElementById('cfIncluyeIVA').checked;
+
+        const payload = {
+            metadata: {
+                Operacion: cotizacionEnEdicionID ? 'UPDATE' : 'INSERT',
+                Origen: 'WEB',
+                UsuarioID: CF_USUARIO_ID || 1,
+                Usuario: CF_USUARIO_NOMBRE || 'web',
+                VersionCliente: '1.0',
+                Fecha: new Date().toISOString().slice(0, 19).replace('T', ' '),
+                RequestId: (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`),
+                GenerarVersion: true
+            },
+            cotizacion: {
+                CotizacionID: cotizacionEnEdicionID || 0,
+                EmpresaID: CF_EMPRESA_ID || 1,
+                SucursalID: 1,
+                ClienteID: Number(clienteID),
+                ClienteContactoID: null,
+                TipoCotizacionID: 1,
+                Folio: null,
+                NombreProyecto: nombreProyecto,
+                DescripcionTrabajo: nombreProyecto,
+                Atencion: document.getElementById('cfAtencion').value.trim(),
+                Fecha: fecha,
+                FechaVigencia: fechaVigencia,
+                MonedaID: 1,
+                TipoCambio: 1,
+                FormaPago: document.getElementById('cfFormaPago').value.trim(),
+                IncluyeIVA: incluyeIVA,
+                PorcentajeIVA: incluyeIVA ? 16 : 0,
+                TiempoEntregaDias: Number(document.getElementById('cfTiempoEntrega').value) || null,
+                ProbabilidadCierre: Number(document.getElementById('cfProbabilidadCierre').value) || 0,
+                OrigenProspecto: document.getElementById('cfOrigenProspecto').value.trim() || null,
+                EstadoCotizacionID: Number(document.getElementById('cfEstadoCotizacionID').value),
+                MotivoRechazo: '',
+                Observaciones: document.getElementById('cfObservaciones').value.trim()
+            },
+            detalle: detalle,
+            actividades: recolectarActividades()
+        };
+
+        try {
+            const resp = await axios.post(`${CF_API_BASE_URL}/cotizaciones/persist`, payload);
+
+            if (!resp.data.success) {
+                return Swal.fire({ icon: 'error', title: 'No se pudo guardar', text: resp.data.message || '' });
+            }
+
+            await Swal.fire({ icon: 'success', title: 'Cotización guardada', timer: 1300, showConfirmButton: false });
+            ocultarFormulario();
+            recargar();
+
+            const cotizacionGuardadaID = resp.data.data?.CotizacionID || cotizacionEnEdicionID;
+            if (cotizacionGuardadaID) imprimirCotizacion(cotizacionGuardadaID);
+
+        } catch (error) {
+            Swal.fire({ icon: 'error', title: 'Error', text: error.response?.data?.message || 'No fue posible guardar la cotización.' });
+        }
+    }
+
+    function marcarInvalido(id) {
+        document.getElementById(id)?.classList.add('is-invalid');
+    }
+
+    function limpiarErroresFormulario() {
+        document.querySelectorAll('#cfCardFormulario .is-invalid').forEach((el) => el.classList.remove('is-invalid'));
     }
 
     function escapeAttr(texto) {

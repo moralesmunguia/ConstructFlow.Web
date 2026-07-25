@@ -29,6 +29,26 @@
         // Constantes globales para los módulos (Ref: DEF-WEB-000 sección 21).
         const CF_BASE_URL     = "<?= BASE_URL ?>";
         const CF_API_BASE_URL = "<?= API_BASE_URL ?>";
+        const CF_USUARIO_ID   = <?= (int)($_SESSION['Usuario']['UsuarioID'] ?? 0) ?>;
+        const CF_USUARIO_NOMBRE = "<?= htmlspecialchars($_SESSION['Usuario']['Nombre'] ?? '', ENT_QUOTES) ?>";
+        const CF_EMPRESA_ID   = <?= (int)($_SESSION['EmpresaID'] ?? 1) ?>;
+
+        // Permisos del rol actual por módulo (cf_permisosmatriz), indexados por ModuloCodigo.
+        // Uso: CF_PERMISOS['cotizaciones']?.PuedeCrear
+        const CF_PERMISOS = <?php
+            $permisosPorModulo = [];
+            foreach (($_SESSION['Permisos'] ?? []) as $p) {
+                if (!empty($p['ModuloCodigo'])) {
+                    $permisosPorModulo[$p['ModuloCodigo']] = [
+                        'PuedeCrear' => (bool)($p['PuedeCrear'] ?? false),
+                        'PuedeConsultar' => (bool)($p['PuedeConsultar'] ?? false),
+                        'PuedeActualizar' => (bool)($p['PuedeActualizar'] ?? false),
+                        'PuedeEliminar' => (bool)($p['PuedeEliminar'] ?? false),
+                    ];
+                }
+            }
+            echo json_encode($permisosPorModulo);
+        ?>;
     </script>
 </head>
 <body class="cf-app-body">
