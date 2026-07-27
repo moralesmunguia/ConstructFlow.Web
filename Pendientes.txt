@@ -1,0 +1,95 @@
+Proyectos tiene error al momento guadar el proyecto:										
+										
+
+	No se pudo guardar
+	Todo proyecto debe tener al menos una fase.
+	
+** Falta la captura de Fases del proyecto ( Revisar gantt)
+
+Cambiar el tamaño del gantt se desfaso en la pantalla, mostra en scroll inferior en la parte superior.
+
+Mostrar en la parte superior,
+** Días festivos en este rango:
+15 sep 2026 — Independencia de México 15 nov 2026 — Revolución Mexicana
+
+Proyectos:
+Descargar DEF-WEB-003 – Proyectos 20260724 v2.1.md
+DEF-WEB-002 – Cotizaciones y Conversión a Proyecto 20260724.md
+DEF-WEB-004 – Actividades 20260724.md
+
+En actividades
+	Las actividades
+	Los Hitos
+	Los WBS
+	Las fases.
+	
+***************************************
+que funcione con la ip o localhost
+http://192.168.100.96:8081/ConstructFlow.Web/app/views/auth/login.php
+
+***************************************
+
+En el diagrama de gannt tomando encuenta la fecha vs la fecha de la activada tiene que indicar que ya esta vencida, remarcar la actividad que se note vencida
+
+
+
+Como un requerimiento adicional en el gantt para la configuración, solo tengo días festivos
+INSTRUCCIONES										
+										
+Establezca la fecha que se mostrará en el diagrama de Gantt según los formatos de fecha estándar de Excel										
+Por ejemplo: dd / mm / aaaa => 01/01/2025										
+	mm aa => 20 de enero 2025									
+										
+										
+										
+Formato de fecha para el encabezado semanal			dd-mm-yy							
+										
+										
+Formato de fecha para el encabezado diario			dd-mm							
+										
+										
+										
+										
+¿Los sábados son parte de la semana laboral?			Si							
+										
+¿Los domingos forman parte de la semana laboral?			No							
+										
+************										
+Hay que reviar el resto de funcionalidades del proyecto y las actividades
+
+	
+En el grid CÓDIGO
+ROM01-PRO-000005 Cambiar el folio  000005
+
+No se puede inciar ninguna actividad si no se ha captura la OC del cliente - que corresponde al Folio del 
+proyecto en el campo NumeroContrato
+Revisar la api
+Mostrar NumeroContrato en el grid. ( Si no tiene NumeroContracto --- Generar el estado en espera del NumeroContracto
+	
+
+
+DEF-WEB-004_API_Actividades.md
+
+
+**************************************
+
+Elegir un responsable del proyecto
+
+http://localhost:8081/ConstructFlow.Web/cotizaciones?editar=44
+Not Found
+The requested URL was not found on this server.
+
+Implementacion de proyectos
+C:\AppServ\www\ConstructFlow.Web\PR's\DEF-WEB-003_API_Proyectos.md
+
+Nueva opcion en el menu de 
+
+
+Crear CRUD para cf_calendariofestivo
+
+Pantalla de convertir a proyecto.
+
+Al momento de convertir de cotizacion a proyecto, debe de solictar la fecha de inicio del proyecto y de esa fecha para adelante se debe de conciderar la entrega y las actividades cambiarian tomando de reverencia esta fecha de entrega ( concidera los dias festigos como no laborables y aumenta la fecha)
+
+La opcion de modificar cotizacion.
+Un formato de impresion para el proyecto.

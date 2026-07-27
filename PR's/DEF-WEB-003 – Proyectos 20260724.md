@@ -259,25 +259,28 @@ Web.
 
   ID        Requerimiento                Estado
   --------- ---------------------------- -------------------------
-  PRO-001   Folio `000005`               MODIFICAR WEB
-  PRO-002   `NumeroContrato`             MODIFICAR / REVISAR API
-  PRO-003   `EN ESPERA DE OC`            NUEVO / REVISAR ESTADOS
-  PRO-004   Bloqueo inicio sin OC        NUEVO / REVISAR API
-  PRO-005   Eliminar Presupuesto         MODIFICAR WEB
-  PRO-006   Fecha Fin Estimada en grid   MODIFICAR WEB
-  PRO-007   Responsable                  IMPLEMENTADO / REVISAR
-  PRO-008   Encargados                   REVISAR
-  PRO-009   Fases                        REVISAR
-  PRO-010   WBS/EDT                      PARCIAL / REVISAR
-  PRO-011   Actividades                  IMPLEMENTADO PARCIAL
-  PRO-012   Hitos                        REVISAR MODELO/API
-  PRO-013   Dependencias                 REVISAR
-  PRO-014   Gantt                        REVISAR
-  PRO-015   Avance Proyecto              REVISAR CÁLCULO
-  PRO-016   Dashboard                    REVISAR
-  PRO-017   Indicadores                  REVISAR
-  PRO-018   Conversión Cotización        VALIDAR
-  PRO-019   Seguridad EmpresaID          OBLIGATORIO
+  PRO-001   Folio `000005`               RESUELTO (Web: folio corto en grid, código interno intacto)
+  PRO-002   `NumeroContrato`             RESUELTO (campo en alta/edición, no obligatorio al crear, acción "Registrar Contrato")
+  PRO-003   `EN ESPERA DE OC`            RESUELTO (condición calculada, NO estado nuevo en BD -- `ProyectoService::aplicarCondicionOperativa()`, campo `CondicionOperativa`)
+  PRO-004   Bloqueo inicio sin OC        RESUELTO EN API (`ActividadService::validarProyectoConOrdenCompra()`, en `registrarAvance()` y `actualizar()`, mensaje exacto del doc)
+  PRO-005   Eliminar Presupuesto         RESUELTO (grid y formulario ya no lo muestran ni lo capturan)
+  PRO-006   Fecha Fin Estimada en grid   RESUELTO
+  PRO-007   Responsable                  RESUELTO (bug corregido: editar cabecera ya no reasignaba el responsable al creador original ni borraba/reinsertaba el encargado principal en cada edición)
+  PRO-008   Encargados                   PARCIAL -- solo se gestiona el encargado principal; no existe endpoint para encargados secundarios (Director/Gerente/Residente/etc. adicionales). Pendiente confirmar que `TipoEncargadoID=2` (GERENTE) sea el default correcto
+  PRO-009   Fases                        RESUELTO (creación automática al convertir, filtros por ProyectoID/EmpresaID/activos ya existían)
+  PRO-010   WBS/EDT                      RESUELTO (API genera `CodigoWBS` automático por Fase si se deja vacío; valida formato numérico jerárquico si se captura manual; ya no es texto libre). Pendiente menor: la conversión Cotización->Proyecto inserta actividades sin pasar por esta validación (bypass vía `ProyectoRepository::insertActividad()` directo)
+  PRO-011   Actividades                  IMPLEMENTADO (alta/edición de actividades agregada al formulario de Proyecto)
+  PRO-012   Hitos                        RESUELTO (`EsHito` en `CF_Actividad`, ya conectado en API y Web -- checkbox "Hito" en la tabla de actividades, se refleja en el Gantt)
+  PRO-013   Dependencias                 RESUELTO (CRUD completo con detección de ciclos ya existía en API; conectado al Gantt en Web)
+  PRO-014   Gantt                        RESUELTO (`ActividadService::obtenerGantt()` con ruta crítica real -- CPM/orden topológico -- ya existía en API; Web agrega vista con Frappe Gantt, días festivos, y marcado de actividades vencidas)
+  PRO-015   Avance Proyecto              RESUELTO (cálculo vive en backend: `recalcularAvanceFase()`/`recalcularAvanceProyecto()` en `ActividadService`, Web solo lo pinta)
+  PRO-016   Dashboard                    RESUELTO (ya no expone Presupuesto; ahora TotalVenta/CostoEstimado/CostoReal/Margen)
+  PRO-017   Indicadores                  RESUELTO (fórmula real: Margen = TotalVenta - CostoEstimado - CostoReal por categoría, usando `CostoRepository` existente)
+  PRO-018   Conversión Cotización        VALIDADO -- confirma que NumeroContrato correctamente NO se transfiere (nace "EN ESPERA DE OC"); corregido `EstadoProyectoID` que quedaba NULL; pendiente sin resolver: bypass de validaciones WBS (ver PRO-010) y herencia de PresupuestoOriginal/Actual desde TotalVenta de la cotización (decisión de negocio pendiente)
+  PRO-019   Seguridad EmpresaID          OBLIGATORIO (sin cambios, ya se validaba en todos los endpoints revisados)
+  PRO-020   Calendario laboral           NUEVO, RESUELTO -- Sábado/Domingo laborables configurables por Empresa (`CF_Empresa.SabadoLaboral`/`DomingoLaboral`), reemplaza el `>=6` hardcodeado que existía en dos lugares distintos (`CalendarioLaboralService` y `CotizacionService`). Pendiente: no hay pantalla Web de Configuración para prender/apagar estos flags (se cambian por UPDATE directo a BD)
+  PRO-021   Días festivos en Gantt       NUEVO, RESUELTO -- endpoint `GET /dias-festivos` (no existía) + sombreado best-effort en el diagrama + lista de chips como respaldo
+  PRO-022   Actividades vencidas         NUEVO, RESUELTO -- el Gantt marca en rojo oscuro (`bar-vencida`) cualquier actividad cuya FinPlan ya pasó sin estar completada/cancelada
 
 ## 20. Criterios de aceptación
 
@@ -298,3 +301,12 @@ Web.
 elimina Presupuesto y se incorporan Fecha Fin Estimada,
 OC/NumeroContrato, bloqueo de ejecución sin OC e integración formal con
 Fases, WBS, Actividades, Hitos y Gantt.
+
+**v2.1 (2026-07-26):** confrontación completa Web -> API -> Service ->
+Repository -> BD de toda la matriz de la v2.0. Resueltos: PRO-001 a
+PRO-007, PRO-009, PRO-010, PRO-012 a PRO-018. PRO-008 queda parcial
+(solo encargado principal). Se agregan tres requerimientos nuevos no
+contemplados en v2.0: PRO-020 (calendario laboral configurable por
+empresa), PRO-021 (días festivos visibles en el Gantt) y PRO-022
+(marcado visual de actividades vencidas en el Gantt). Pendientes
+abiertos documentados en cada renglon de la matriz (sección 19).

@@ -174,14 +174,15 @@
         <table class="table cf-table" id="cfTablaActividadesProyecto">
             <thead>
                 <tr>
-                    <th style="width:9%">WBS</th>
-                    <th style="width:18%">Nombre *</th>
-                    <th style="width:18%">Descripción</th>
-                    <th style="width:14%">Responsable</th>
-                    <th style="width:10%">Inicio</th>
-                    <th style="width:10%">Fin</th>
-                    <th style="width:11%">Estado</th>
-                    <th style="width:10%" class="text-end">Acciones</th>
+                    <th style="width:8%">WBS</th>
+                    <th style="width:16%">Nombre *</th>
+                    <th style="width:15%">Descripción</th>
+                    <th style="width:12%">Responsable</th>
+                    <th style="width:9%">Inicio</th>
+                    <th style="width:9%">Fin</th>
+                    <th style="width:10%">Estado</th>
+                    <th style="width:6%" class="text-center">Hito</th>
+                    <th style="width:15%" class="text-end">Acciones</th>
                 </tr>
             </thead>
             <tbody><!-- filas dinámicas --></tbody>
@@ -189,11 +190,58 @@
     </div>
 </div>
 
+<!-- ============================================================ -->
+<!-- GANTT (solo lectura) -->
+<!-- ============================================================ -->
+<div class="cf-card" id="cfCardGantt" style="display:none">
+    <div class="cf-page-header">
+        <h2 class="cf-form-titulo" id="cfGanttTitulo">Gantt</h2>
+        <div class="cf-page-actions">
+            <select id="cfGanttModoVista" class="form-select form-select-sm" style="width:auto">
+                <option value="Day" selected>Día</option>
+                <option value="Week">Semana</option>
+                <option value="Month">Mes</option>
+            </select>
+            <button type="button" class="btn btn-cf-secondary" id="btnCerrarGantt">Cerrar</button>
+        </div>
+    </div>
+    <div class="cf-gantt-leyenda mb-2">
+        <span class="cf-gantt-chip" style="background:#0B1F47"></span> Planeado
+        <span class="cf-gantt-chip" style="background:#10B981"></span> Avance
+        <span class="cf-gantt-chip" style="background:#EF4444"></span> Ruta crítica
+        <span class="cf-gantt-chip" style="background:#F59E0B"></span> Hito
+        <span class="cf-gantt-chip" style="background:#B91C1C"></span> Vencida
+    </div>
+    <div id="cfGanttContenedor"></div>
+    <div id="cfGanttFestivosLista" class="mt-3"></div>
+</div>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datatables.net-bs5@1.13.11/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/datatable.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt@1/dist/frappe-gantt.css">
+<style>
+    .cf-gantt-leyenda { font-size: 0.78rem; color: #6B7280; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .cf-gantt-chip { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-left: 10px; }
+    .cf-gantt-chip:first-child { margin-left: 0; }
+    #cfGanttContenedor .bar-critica .bar { fill: #EF4444 !important; }
+    #cfGanttContenedor .bar-hito .bar { fill: #F59E0B !important; }
+    #cfGanttContenedor .bar-vencida .bar { fill: #B91C1C !important; stroke: #7F1D1D !important; stroke-width: 2px; }
+    #cfGanttContenedor .bar-vencida .bar-label { fill: #fff !important; font-weight: 700; }
+    #cfGanttContenedor .bar-progress { fill: #10B981 !important; }
+    /* La libreria trae su propio contenedor con scroll interno
+       (.gantt-container). No se le fuerza una altura fija aqui -- eso era
+       lo que desfasaba el scroll de la pagina (dos areas de scroll
+       forzadas al mismo tamano, una encima de otra). Se deja crecer segun
+       su contenido, con un tope maximo y scroll propio si el proyecto
+       tiene muchas actividades. */
+    #cfGanttContenedor .gantt-container { max-height: 78vh; overflow-y: auto; }
+    #cfCardGantt { padding: 1rem 1.25rem; }
+    #cfCardGantt .cf-page-subtitle { display: none; }
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/datatables.net@1.13.11/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/datatables.net-bs5@1.13.11/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/frappe-gantt@1/dist/frappe-gantt.umd.js"></script>
 <script src="<?= BASE_URL ?>/public/js/datatable.js"></script>
 <script src="<?= BASE_URL ?>/public/js/proyectos.js"></script>

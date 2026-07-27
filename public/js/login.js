@@ -11,8 +11,11 @@
  *  5. Redirect a index.php (dashboard).
  */
 
-const API_BASE_URL = 'http://localhost:8081/ConstructFlow.Api/public'; // URL real confirmada en Postman
+//const API_BASE_URL = 'http://localhost:8081/ConstructFlow.Api/public'; // URL real confirmada en Postman
 //const API_BASE_URL = 'http://192.168.100.96:8081/ConstructFlow.Api/public';
+const API_BASE_URL =
+    `${window.location.protocol}//${window.location.host}/ConstructFlow.Api/public`;
+    
 const BRIDGE_URL    = '../../../auth-bridge.php';                      // endpoint puente en ConstructFlow.Web
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -51,6 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let dataTable = null;
     let ultimosProyectos = [];
     let proyectoEnEdicionID = null;
+    let ganttInstancia = null;
+    let proyectoGanttActualID = null;
+    let modoBotonPrincipal = 'proyecto';
+    let tareasGanttActuales = [];
+    let ultimoClicTareaID = null;
+    let ultimoClicTimestamp = 0;
 
     const permisos = CF_PERMISOS['proyectos'] || {
         PuedeCrear: false, PuedeConsultar: false, PuedeActualizar: false, PuedeEliminar: false
@@ -64,10 +70,32 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarCatalogos().then(cargarProyectos);
 
     document.getElementById('btnFiltrar')?.addEventListener('click', cargarProyectos);
-    document.getElementById('btnNuevoProyecto')?.addEventListener('click', () => mostrarFormulario(null));
+    document.getElementById('btnNuevoProyecto')?.addEventListener('click', () => {
+        if (modoBotonPrincipal === 'actividad') return abrirNuevaActividadDesdeGantt();
+        mostrarFormulario(null);
+    });
     document.getElementById('btnCancelarFormularioProyecto')?.addEventListener('click', ocultarFormulario);
     document.getElementById('btnGuardarProyecto')?.addEventListener('click', guardarProyecto);
     document.getElementById('btnAgregarActividadProyecto')?.addEventListener('click', () => agregarFilaActividadProyecto());
+    document.getElementById('btnCerrarGantt')?.addEventListener('click', ocultarGantt);
+    document.getElementById('cfGanttModoVista')?.addEventListener('change', (e) => {
+        if (ganttInstancia) ganttInstancia.change_view_mode(e.target.value);
+    });
+
+    // Reportar avance con clic derecho sobre la barra (best-effort: depende
+    // de que Frappe Gantt siga usando ".bar-wrapper" con "data-id" en su SVG
+    // interno; si la libreria cambia esa estructura, dejaria de funcionar
+    // solo este atajo -- el doble clic no depende de esto).
+    document.getElementById('cfGanttContenedor')?.addEventListener('contextmenu', (e) => {
+        const wrapper = e.target.closest('.bar-wrapper');
+        if (!wrapper || !proyectoGanttActualID) return;
+
+        e.preventDefault();
+
+        const taskID = wrapper.dataset.id || wrapper.getAttribute('data-id');
+        const task = tareasGanttActuales.find((t) => String(t.id) === String(taskID));
+        if (task) reportarAvanceDesdeGantt(task, proyectoGanttActualID);
+    });
 
     document.getElementById('cfTablaActividadesProyecto')?.addEventListener('click', (e) => {
         const btnGuardarFila = e.target.closest('[data-guardar-actividad]');
@@ -80,6 +108,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('tblProyectos')?.addEventListener('click', (e) => {
         const btnVer = e.target.closest('[data-ver]');
         if (btnVer) return verProyecto(btnVer.dataset.ver);
+
+        const btnGantt = e.target.closest('[data-gantt]');
+        if (btnGantt) return verGantt(btnGantt.dataset.gantt);
 
         const btnEditar = e.target.closest('[data-editar]');
         if (btnEditar) return mostrarFormulario(btnEditar.dataset.editar);
@@ -238,6 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (permisos.PuedeConsultar) {
             botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Ver detalle" data-ver="${p.ProyectoID}"><i class="bi bi-eye"></i></button>`);
+            botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Gantt" data-gantt="${p.ProyectoID}"><i class="bi bi-bar-chart-steps"></i></button>`);
             botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Imprimir" data-imprimir="${p.ProyectoID}"><i class="bi bi-printer"></i></button>`);
         }
 
@@ -458,6 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <td><input type="date" class="form-control form-control-sm" data-campo="InicioPlan" value="${(a.InicioPlan || '').substring(0, 10)}"></td>
             <td><input type="date" class="form-control form-control-sm" data-campo="FinPlan" value="${(a.FinPlan || '').substring(0, 10)}"></td>
             <td><select class="form-select form-select-sm" data-campo="Estado">${opcionesEstado}</select></td>
+            <td class="text-center"><input type="checkbox" class="form-check-input" data-campo="EsHito" ${Number(a.EsHito) === 1 ? 'checked' : ''} title="Marcar como hito (fecha única, sin duración)"></td>
             <td class="text-end">
                 <button type="button" class="btn btn-cf-secondary btn-sm" title="Guardar actividad" data-guardar-actividad><i class="bi bi-check-lg"></i></button>
                 <button type="button" class="btn btn-cf-secondary btn-sm text-danger" title="Eliminar" data-eliminar-actividad><i class="bi bi-trash"></i></button>
@@ -472,6 +505,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!proyectoEnEdicionID) return;
 
         const leer = (campo) => tr.querySelector(`[data-campo="${campo}"]`)?.value || '';
+        const leerChecked = (campo) => tr.querySelector(`[data-campo="${campo}"]`)?.checked || false;
 
         const nombreActividad = leer('NombreActividad').trim();
         const responsableID = leer('ResponsableID');
@@ -491,7 +525,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ResponsableID: Number(responsableID),
             InicioPlan: leer('InicioPlan') || null,
             FinPlan: leer('FinPlan') || null,
-            Estado: leer('Estado') || 'PENDIENTE'
+            Estado: leer('Estado') || 'PENDIENTE',
+            EsHito: leerChecked('EsHito') ? 1 : 0
         };
 
         const actividadID = Number(tr.dataset.actividadId) || 0;
@@ -688,6 +723,404 @@ document.addEventListener('DOMContentLoaded', () => {
                 } catch (_) { /* ignorar */ }
             }
             Swal.fire({ icon: 'error', title: 'Error', text: mensaje });
+        }
+    }
+
+    // ---- Gantt (PRO-012/013/014: Hitos, Dependencias, ruta critica) ----
+    // Consume GET /proyectos/{id}/gantt, que ya regresa Actividades con
+    // InicioPlan/FinPlan/Avance/EsHito/RutaCriticaCalculada y Dependencias
+    // (ActividadOrigenID -> ActividadDestinoID) -- el calculo de ruta
+    // critica vive en ActividadService::calcularRutaCritica(), Web solo
+    // lo pinta.
+    async function verGantt(proyectoID) {
+        document.getElementById('cfCardListado').style.display = 'none';
+        document.getElementById('cfCardGantt').style.display = '';
+        document.getElementById('cfGanttContenedor').innerHTML = '';
+        document.getElementById('cfGanttFestivosLista').innerHTML = '';
+
+        const proyecto = ultimosProyectos.find((p) => String(p.ProyectoID) === String(proyectoID));
+        document.getElementById('cfGanttTitulo').textContent = 'Gantt' + (proyecto ? ' — ' + escapeHtml(proyecto.NombreProyecto || '') : '');
+        proyectoGanttActualID = proyectoID;
+
+        modoBotonPrincipal = 'actividad';
+        const btnPrincipal = document.getElementById('btnNuevoProyecto');
+        if (btnPrincipal) btnPrincipal.innerHTML = '<i class="bi bi-plus-lg"></i> Nueva Actividad';
+
+        try {
+            const resp = await axios.get(CF_API_BASE_URL + '/proyectos/' + proyectoID + '/gantt');
+
+            if (!resp.data.success) {
+                ocultarGantt();
+                return Swal.fire({ icon: 'error', title: 'No se pudo cargar el Gantt', text: resp.data.message || '' });
+            }
+
+            const actividades = resp.data.data.Actividades || [];
+            const dependencias = resp.data.data.Dependencias || [];
+
+            if (!actividades.length) {
+                document.getElementById('cfGanttContenedor').innerHTML = '<p class="text-muted">Este proyecto todavia no tiene actividades con fechas para graficar.</p>';
+                return;
+            }
+
+            const hoy = new Date().toISOString().substring(0, 10);
+
+            const tareas = actividades
+                .filter((a) => a.InicioPlan && a.FinPlan)
+                .map((a) => {
+                    const esHito = Number(a.EsHito) === 1;
+                    const esCritica = Number(a.RutaCriticaCalculada) === 1;
+                    const estadoActividad = String(a.Estado || '').toUpperCase();
+                    const finPlan = String(a.FinPlan).substring(0, 10);
+
+                    // Vencida: la fecha fin planeada ya paso y la actividad no
+                    // esta terminada (ni cancelada). No aplica a hitos con
+                    // fecha futura obviamente, pero un hito tambien puede vencer.
+                    const esVencida =
+                        finPlan < hoy &&
+                        !['COMPLETADA', 'CANCELADA'].includes(estadoActividad) &&
+                        Number(a.Avance || 0) < 100;
+
+                    const clase = esVencida ? 'bar-vencida' : (esHito ? 'bar-hito' : (esCritica ? 'bar-critica' : ''));
+
+                    const dependenciasTarea = dependencias
+                        .filter((d) => String(d.ActividadDestinoID) === String(a.ActividadID))
+                        .map((d) => String(d.ActividadOrigenID))
+                        .join(',');
+
+                    const nombreTarea = (a.CodigoWBS ? a.CodigoWBS + ' - ' : '') + (a.NombreActividad || '');
+
+                    return {
+                        id: String(a.ActividadID),
+                        name: esVencida ? ('⚠ ' + nombreTarea) : nombreTarea,
+                        start: String(a.InicioPlan).substring(0, 10),
+                        // Frappe Gantt no soporta duracion 0 (hito): se fuerza el mismo dia visual.
+                        end: esHito ? String(a.InicioPlan).substring(0, 10) : finPlan,
+                        progress: Number(a.Avance || 0),
+                        dependencies: dependenciasTarea,
+                        custom_class: clase
+                    };
+                });
+
+            if (!tareas.length) {
+                document.getElementById('cfGanttContenedor').innerHTML = '<p class="text-muted">Las actividades de este proyecto todavia no tienen Inicio/Fin planeados.</p>';
+                return;
+            }
+
+            tareasGanttActuales = tareas;
+
+            const modoVista = document.getElementById('cfGanttModoVista').value || 'Week';
+
+            // Dias festivos en el rango cubierto por las tareas (Configuracion
+            // del cliente ya los tiene capturados en CF_CalendarioFestivo;
+            // aqui solo se consultan para el rango visible del Gantt).
+            const fechasInicio = tareas.map((t) => t.start).sort();
+            const fechasFin = tareas.map((t) => t.end).sort();
+            const desde = fechasInicio[0];
+            const hasta = fechasFin[fechasFin.length - 1];
+
+            let festivos = [];
+            try {
+                const respFestivos = await axios.get(`${CF_API_BASE_URL}/dias-festivos`, { params: { desde, hasta } });
+                if (respFestivos.data.success) festivos = respFestivos.data.data || [];
+            } catch (errorFestivos) {
+                console.warn('No fue posible cargar dias festivos para el Gantt:', errorFestivos);
+            }
+
+            // Configuracion real de calendario laboral (Sabado/Domingo
+            // laborables) capturada en CF_Empresa -- ya no se asume que
+            // sabado/domingo siempre sean no laborables.
+            let configCalendario = { SabadoLaboral: false, DomingoLaboral: false };
+            try {
+                const respConfig = await axios.get(`${CF_API_BASE_URL}/calendario-laboral`);
+                if (respConfig.data.success) configCalendario = respConfig.data.data;
+            } catch (errorConfig) {
+                console.warn('No fue posible cargar la configuracion de calendario laboral:', errorConfig);
+            }
+
+            const esFinDeSemanaNoLaborable = (fecha) => {
+                const dia = fecha.getDay(); // 0=Domingo, 6=Sabado
+                if (dia === 6 && configCalendario.SabadoLaboral) return false;
+                if (dia === 0 && configCalendario.DomingoLaboral) return false;
+                return dia === 0 || dia === 6;
+            };
+
+            ganttInstancia = new Gantt('#cfGanttContenedor', tareas, {
+                view_mode: modoVista,
+                language: 'es',
+                // Requerimiento: mostrar mas renglones de actividades sin
+                // scrollear tanto -- barras y separacion mas compactas.
+                bar_height: 22,
+                padding: 12,
+                // Requerimiento: reportar avance con DOBLE CLIC (no un solo clic,
+                // que ya lo usa la libreria para abrir su popup nativo de info).
+                // Se detecta comparando el ultimo clic sobre la misma tarea
+                // dentro de una ventana corta de tiempo, usando el evento oficial
+                // on_click de Frappe Gantt (no depende de estructura interna).
+                on_click: (task) => {
+                    const ahora = Date.now();
+                    if (ultimoClicTareaID === task.id && (ahora - ultimoClicTimestamp) < 450) {
+                        ultimoClicTareaID = null;
+                        reportarAvanceDesdeGantt(task, proyectoID);
+                    } else {
+                        ultimoClicTareaID = task.id;
+                        ultimoClicTimestamp = ahora;
+                    }
+                },
+                // Requerimiento: al arrastrar una actividad a otra fecha, pedir
+                // confirmacion antes de guardar el cambio (si cancela o falla,
+                // se recarga el Gantt para revertir el arrastre visual).
+                on_date_change: (task, start, end) => reprogramarActividadDesdeGantt(task, start, end, proyectoID),
+                // Requerimiento: sabado/domingo solo se pintan como no laborables
+                // si la Configuracion de la empresa asi lo indica -- antes la
+                // libreria los marcaba siempre, sin importar la config real.
+                is_weekend: esFinDeSemanaNoLaborable,
+                holidays: {
+                    '#9CA3AF33': 'weekend',
+                    '#F59E0B33': festivos.map((f) => f.Fecha)
+                },
+                custom_popup_html: (task) => {
+                    const original = actividades.find((a) => String(a.ActividadID) === task.id);
+                    let extra = '';
+                    const finPlan = original ? String(original.FinPlan).substring(0, 10) : null;
+                    const estadoActividad = original ? String(original.Estado || '').toUpperCase() : '';
+                    const esVencida =
+                        original &&
+                        finPlan < hoy &&
+                        !['COMPLETADA', 'CANCELADA'].includes(estadoActividad) &&
+                        Number(original.Avance || 0) < 100;
+
+                    if (esVencida) extra += '<br><strong style="color:#B91C1C">⚠ VENCIDA — debía terminar el ' + finPlan + '</strong>';
+                    if (original && Number(original.RutaCriticaCalculada) === 1) extra += '<br><span style="color:#EF4444">Ruta critica</span>';
+                    if (original && Number(original.EsHito) === 1) extra += '<br><span style="color:#F59E0B">Hito</span>';
+                    return '<div class="details-container" style="padding:6px 4px"><strong>' + escapeHtml(task.name) + '</strong><br>' + task.start + ' → ' + task.end + '<br>Avance: ' + task.progress + '%' + extra + '</div>';
+                }
+            });
+
+            pintarListaFestivos(festivos);
+
+        } catch (error) {
+            ocultarGantt();
+            Swal.fire({ icon: 'error', title: 'Error', text: error.response?.data?.message || 'No fue posible cargar el Gantt.' });
+        }
+    }
+
+    // ---- Reprogramar (arrastrar barra) con confirmacion ----
+    // PUT /api/v1/actividades/{id}/reprogramar -> ActividadController::reprogramar()
+    // (valida en backend que la nueva fecha no rompa dependencias FS/SS/FF/SF).
+    // No se manda DuracionPlan: ActividadService::reprogramar() la recalcula
+    // sola en dias habiles a partir de InicioPlan/FinPlan.
+    async function reprogramarActividadDesdeGantt(task, start, end, proyectoID) {
+        const nuevoInicio = formatearFechaISO(start);
+        const nuevoFin = formatearFechaISO(end);
+
+        const confirmacion = await Swal.fire({
+            icon: 'question',
+            title: 'Confirmar reprogramacion',
+            html: `Mover <strong>${escapeHtml(task.name)}</strong> a<br>${nuevoInicio} → ${nuevoFin}?`,
+            showCancelButton: true,
+            confirmButtonText: 'Guardar cambio',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (!confirmacion.isConfirmed) {
+            // Revertir el arrastre visual (Frappe Gantt ya movio la barra).
+            return verGantt(proyectoID);
+        }
+
+        try {
+            const resp = await axios.put(`${CF_API_BASE_URL}/actividades/${task.id}/reprogramar`, {
+                InicioPlan: nuevoInicio,
+                FinPlan: nuevoFin
+            });
+
+            if (!resp.data.success) {
+                await Swal.fire({ icon: 'error', title: 'No se pudo reprogramar', text: resp.data.message || '' });
+                return verGantt(proyectoID);
+            }
+
+            await Swal.fire({ icon: 'success', title: 'Fecha actualizada', timer: 1200, showConfirmButton: false });
+            verGantt(proyectoID);
+
+        } catch (error) {
+            await Swal.fire({ icon: 'error', title: 'Error', text: error.response?.data?.message || 'No fue posible reprogramar la actividad.' });
+            verGantt(proyectoID);
+        }
+    }
+
+    function formatearFechaISO(fecha) {
+        const d = fecha instanceof Date ? fecha : new Date(fecha);
+        const anio = d.getFullYear();
+        const mes = String(d.getMonth() + 1).padStart(2, '0');
+        const dia = String(d.getDate()).padStart(2, '0');
+        return `${anio}-${mes}-${dia}`;
+    }
+
+    // ---- Reportar avance desde la barra del Gantt ----
+    // PUT /api/v1/actividades/{id}/avance -> ActividadController::registrarAvance()
+    // (mismo endpoint que ya aplica el bloqueo PRO-004 si el proyecto no tiene
+    // OC/Contrato y recalcula Avance de Fase/Proyecto en backend).
+    async function reportarAvanceDesdeGantt(task, proyectoID) {
+        const { value: formValues } = await Swal.fire({
+            title: 'Reportar avance',
+            html: `
+                <div class="text-start">
+                    <div class="mb-2" style="font-size:0.85rem"><strong>${escapeHtml(task.name)}</strong></div>
+                    <label class="form-label mb-1" style="font-size:0.85rem">Avance (%)</label>
+                    <input id="swalAvance" type="number" min="0" max="100" class="form-control mb-2" value="${task.progress}">
+                    <label class="form-label mb-1" style="font-size:0.85rem">Horas trabajadas</label>
+                    <input id="swalHorasTrabajadas" type="number" min="0" step="0.5" class="form-control mb-2" value="0">
+                    <label class="form-label mb-1" style="font-size:0.85rem">Comentario</label>
+                    <textarea id="swalComentarioAvance" class="form-control" rows="2"></textarea>
+                </div>
+            `,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Guardar avance',
+            cancelButtonText: 'Cancelar',
+            preConfirm: () => {
+                const avance = Number(document.getElementById('swalAvance').value);
+                if (isNaN(avance) || avance < 0 || avance > 100) {
+                    Swal.showValidationMessage('El avance debe ser un número entre 0 y 100.');
+                    return false;
+                }
+                return {
+                    Avance: avance,
+                    HorasTrabajadas: Number(document.getElementById('swalHorasTrabajadas').value) || 0,
+                    Comentario: document.getElementById('swalComentarioAvance').value.trim() || null
+                };
+            }
+        });
+
+        if (!formValues) return;
+
+        try {
+            const resp = await axios.put(`${CF_API_BASE_URL}/actividades/${task.id}/avance`, formValues);
+
+            if (!resp.data.success) {
+                return Swal.fire({ icon: 'error', title: 'No se pudo reportar el avance', text: resp.data.message || '' });
+            }
+
+            await Swal.fire({ icon: 'success', title: 'Avance registrado', timer: 1200, showConfirmButton: false });
+
+            // Recarga el Gantt para reflejar el nuevo avance/estado (y que ya no
+            // se marque como vencida si llego al 100%).
+            verGantt(proyectoID);
+
+        } catch (error) {
+            Swal.fire({ icon: 'error', title: 'Error', text: error.response?.data?.message || 'No fue posible reportar el avance.' });
+        }
+    }
+
+    // Respaldo en texto ademas del sombreado nativo del Gantt -- por si la
+    // libreria cambia de version en el futuro, el dato de Configuracion >
+    // Dias Festivos nunca se pierde visualmente. Usa un slot fijo del HTML
+    // (no se inserta junto al contenedor del Gantt) para que nunca se mezcle
+    // ni reemplace visualmente el titulo del Gantt.
+    function pintarListaFestivos(festivos) {
+        const slot = document.getElementById('cfGanttFestivosLista');
+        if (!festivos.length) {
+            slot.innerHTML = '';
+            return;
+        }
+
+        const chips = festivos
+            .map((f) => `<span class="cf-badge" style="background:#F59E0B22;color:#F59E0B;margin:2px">${escapeHtml(formatearFecha(f.Fecha))} — ${escapeHtml(f.Nombre || 'Festivo')}</span>`)
+            .join(' ');
+
+        slot.innerHTML = `<div class="form-text mb-1">Días festivos en este rango:</div>${chips}`;
+    }
+
+    function ocultarGantt() {
+        document.getElementById('cfCardGantt').style.display = 'none';
+        document.getElementById('cfCardListado').style.display = '';
+        ganttInstancia = null;
+
+        modoBotonPrincipal = 'proyecto';
+        const btnPrincipal = document.getElementById('btnNuevoProyecto');
+        if (btnPrincipal) btnPrincipal.innerHTML = '<i class="bi bi-plus-lg"></i> Nuevo Proyecto';
+    }
+
+    // ---- Nueva Actividad directo desde el Gantt (para el proyecto abierto) ----
+    async function abrirNuevaActividadDesdeGantt() {
+        if (!proyectoGanttActualID) return;
+
+        const opcionesResponsable = Object.values(usuariosPorID)
+            .map((u) => `<option value="${u.UsuarioID}">${escapeHtml(u.Nombre || `Usuario #${u.UsuarioID}`)}</option>`)
+            .join('');
+
+        const { value: formValues } = await Swal.fire({
+            title: 'Nueva Actividad',
+            width: 500,
+            html: `
+                <div class="text-start">
+                    <label class="form-label mb-1" style="font-size:0.85rem">Nombre *</label>
+                    <input id="swalNombreActividad" type="text" class="form-control mb-2">
+
+                    <label class="form-label mb-1" style="font-size:0.85rem">Responsable *</label>
+                    <select id="swalResponsableActividad" class="form-select mb-2">
+                        <option value="">Selecciona un responsable</option>
+                        ${opcionesResponsable}
+                    </select>
+
+                    <div class="row g-2 mb-2">
+                        <div class="col-6">
+                            <label class="form-label mb-1" style="font-size:0.85rem">Inicio</label>
+                            <input id="swalInicioPlanActividad" type="date" class="form-control">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label mb-1" style="font-size:0.85rem">Fin</label>
+                            <input id="swalFinPlanActividad" type="date" class="form-control">
+                        </div>
+                    </div>
+
+                    <label class="form-label mb-1" style="font-size:0.85rem">Descripción</label>
+                    <textarea id="swalDescripcionActividad" class="form-control mb-2" rows="2"></textarea>
+
+                    <div class="form-check">
+                        <input id="swalEsHitoActividad" type="checkbox" class="form-check-input">
+                        <label class="form-check-label" for="swalEsHitoActividad" style="font-size:0.85rem">Es un Hito (fecha única)</label>
+                    </div>
+                </div>
+            `,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Crear actividad',
+            cancelButtonText: 'Cancelar',
+            preConfirm: () => {
+                const nombre = document.getElementById('swalNombreActividad').value.trim();
+                const responsableID = document.getElementById('swalResponsableActividad').value;
+
+                if (!nombre || !responsableID) {
+                    Swal.showValidationMessage('Nombre y Responsable son obligatorios.');
+                    return false;
+                }
+
+                return {
+                    NombreActividad: nombre,
+                    ResponsableID: Number(responsableID),
+                    InicioPlan: document.getElementById('swalInicioPlanActividad').value || null,
+                    FinPlan: document.getElementById('swalFinPlanActividad').value || null,
+                    Descripcion: document.getElementById('swalDescripcionActividad').value.trim() || null,
+                    EsHito: document.getElementById('swalEsHitoActividad').checked ? 1 : 0,
+                    Estado: 'PENDIENTE'
+                };
+            }
+        });
+
+        if (!formValues) return;
+
+        try {
+            const resp = await axios.post(`${CF_API_BASE_URL}/proyectos/${proyectoGanttActualID}/actividades`, formValues);
+
+            if (!resp.data.success) {
+                return Swal.fire({ icon: 'error', title: 'No se pudo crear la actividad', text: resp.data.message || '' });
+            }
+
+            await Swal.fire({ icon: 'success', title: 'Actividad creada', timer: 1200, showConfirmButton: false });
+            verGantt(proyectoGanttActualID);
+
+        } catch (error) {
+            Swal.fire({ icon: 'error', title: 'Error', text: error.response?.data?.message || 'No fue posible crear la actividad.' });
         }
     }
 
