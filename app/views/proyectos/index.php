@@ -229,14 +229,17 @@
     #cfGanttContenedor .bar-vencida .bar-label { fill: #fff !important; font-weight: 700; }
     #cfGanttContenedor .bar-progress { fill: #10B981 !important; }
     /* La libreria trae su propio contenedor con scroll interno
-       (.gantt-container). No se le fuerza una altura fija aqui -- eso era
-       lo que desfasaba el scroll de la pagina (dos areas de scroll
-       forzadas al mismo tamano, una encima de otra). Se deja crecer segun
-       su contenido, con un tope maximo y scroll propio si el proyecto
-       tiene muchas actividades. */
+       (.gantt-container). Antes solo se limitaba con max-height, por lo
+       que con pocas actividades el Gantt se veia chico y dejaba una zona
+       enorme de la pagina sin usar debajo. Ahora tambien se le da un
+       min-height calculado por JS (verGantt) segun el espacio disponible
+       del viewport, para que siempre ocupe el area visible aunque tenga
+       pocas filas -- max-height sigue like tope con scroll propio cuando
+       si hay muchas actividades. */
     #cfGanttContenedor .gantt-container { max-height: 78vh; overflow-y: auto; }
-    #cfCardGantt { padding: 1rem 1.25rem; }
+    #cfCardGantt { padding: 1rem 1.25rem; display: flex; flex-direction: column; }
     #cfCardGantt .cf-page-subtitle { display: none; }
+    #cfGanttContenedor { flex: 1; }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>

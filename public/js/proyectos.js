@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let tareasGanttActuales = [];
     let ultimoClicTareaID = null;
     let ultimoClicTimestamp = 0;
+    let guardandoProyecto = false;
 
     const permisos = CF_PERMISOS['proyectos'] || {
         PuedeCrear: false, PuedeConsultar: false, PuedeActualizar: false, PuedeEliminar: false
@@ -75,7 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
         mostrarFormulario(null);
     });
     document.getElementById('btnCancelarFormularioProyecto')?.addEventListener('click', ocultarFormulario);
-    document.getElementById('btnGuardarProyecto')?.addEventListener('click', guardarProyecto);
+    document.getElementById('btnGuardarProyecto')?.addEventListener('click', () => {
+        if (guardandoProyecto) return;
+        guardarProyecto();
+    });
     document.getElementById('btnAgregarActividadProyecto')?.addEventListener('click', () => agregarFilaActividadProyecto());
     document.getElementById('btnCerrarGantt')?.addEventListener('click', ocultarGantt);
     document.getElementById('cfGanttModoVista')?.addEventListener('change', (e) => {
@@ -99,7 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('cfTablaActividadesProyecto')?.addEventListener('click', (e) => {
         const btnGuardarFila = e.target.closest('[data-guardar-actividad]');
-        if (btnGuardarFila) return guardarActividadFila(btnGuardarFila.closest('tr'));
+        if (btnGuardarFila) {
+            if (btnGuardarFila.disabled) return;
+            return guardarActividadFila(btnGuardarFila.closest('tr'), btnGuardarFila);
+        }
 
         const btnEliminarFila = e.target.closest('[data-eliminar-actividad]');
         if (btnEliminarFila) return eliminarActividadFila(btnEliminarFila.closest('tr'));
@@ -356,6 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const clienteID = document.getElementById('cfClienteID').value;
         const nombreProyecto = document.getElementById('cfNombreProyecto').value.trim();
+        const responsableIDValidacion = document.getElementById('cfResponsableID').value;
 
         const errores = [];
 
@@ -366,6 +374,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!nombreProyecto) {
             marcarInvalido('cfNombreProyecto');
             errores.push('Captura el Nombre del Proyecto.');
+        }
+        if (!responsableIDValidacion) {
+            marcarInvalido('cfResponsableID');
+            errores.push('Selecciona un Responsable.');
         }
 
         if (errores.length) {
@@ -421,7 +433,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            await Swal.fire({ icon: 'success', title: 'Proyecto guardado', timer: 1300, showConfirmButton: false });
+            // Guarda tambien todas las filas de Actividades -- antes el
+            // boton "Guardar" solo mandaba la cabecera y los cambios hechos
+            // directo en la tabla se perdian si no se presionaba el check
+            // de cada fila por separado.
+            const erroresActividades = await guardarTodasLasActividadesProyecto();
+
+            if (erroresActividades.length) {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Proyecto guardado, revisa las actividades',
+                    html: `El proyecto se guardó, pero estas actividades no se pudieron guardar:<ul style="text-align:left">${erroresActividades.map((e) => `<li>${escapeHtml(e)}</li>`).join('')}</ul>`
+                });
+            } else {
+                await Swal.fire({ icon: 'success', title: 'Proyecto y actividades guardados', timer: 1300, showConfirmButton: false });
+            }
+
             ocultarFormulario();
             cargarProyectos();
 
@@ -504,6 +531,19 @@ document.addEventListener('DOMContentLoaded', () => {
     async function guardarActividadFila(tr) {
         if (!proyectoEnEdicionID) return;
 
+        const resultado = await guardarFilaActividadCore(tr);
+
+        if (!resultado.ok) {
+            return Swal.fire({ icon: 'warning', title: 'Revisa la actividad', text: resultado.error });
+        }
+
+        Swal.fire({ icon: 'success', title: 'Actividad guardada', timer: 1000, showConfirmButton: false });
+    }
+
+    // Logica compartida de guardado de una fila de actividad, sin Swal propio,
+    // para poder reutilizarla tanto en el boton individual (check) como en el
+    // guardado masivo que dispara el boton principal "Guardar" del proyecto.
+    async function guardarFilaActividadCore(tr) {
         const leer = (campo) => tr.querySelector(`[data-campo="${campo}"]`)?.value || '';
         const leerChecked = (campo) => tr.querySelector(`[data-campo="${campo}"]`)?.checked || false;
 
@@ -511,11 +551,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const responsableID = leer('ResponsableID');
 
         if (!nombreActividad || !responsableID) {
-            return Swal.fire({
-                icon: 'warning',
-                title: 'Revisa la actividad',
-                text: 'Nombre y Responsable son obligatorios para guardar la actividad.'
-            });
+            return { ok: false, error: 'Nombre y Responsable son obligatorios para guardar la actividad.' };
         }
 
         const payload = {
@@ -537,18 +573,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 : await axios.post(`${CF_API_BASE_URL}/proyectos/${proyectoEnEdicionID}/actividades`, payload);
 
             if (!resp.data.success) {
-                return Swal.fire({ icon: 'error', title: 'No se pudo guardar la actividad', text: resp.data.message || '' });
+                return { ok: false, error: resp.data.message || 'No se pudo guardar la actividad.' };
             }
 
             if (!actividadID && resp.data.data?.ActividadID) {
                 tr.dataset.actividadId = resp.data.data.ActividadID;
             }
 
-            Swal.fire({ icon: 'success', title: 'Actividad guardada', timer: 1000, showConfirmButton: false });
+            return { ok: true };
 
         } catch (error) {
-            Swal.fire({ icon: 'error', title: 'Error', text: error.response?.data?.message || 'No fue posible guardar la actividad.' });
+            return { ok: false, error: error.response?.data?.message || 'No fue posible guardar la actividad.' };
         }
+    }
+
+    // Guarda todas las filas de Actividades de una sola vez (llamado por el
+    // boton principal "Guardar" del proyecto). Antes solo el boton check por
+    // fila guardaba actividades -- guardar la cabecera no las tocaba, por lo
+    // que los cambios en la tabla se perdian si el usuario solo usaba el
+    // boton "Guardar" de arriba.
+    async function guardarTodasLasActividadesProyecto() {
+        const filas = Array.from(document.querySelectorAll('#cfTablaActividadesProyecto tbody tr'));
+        const errores = [];
+
+        for (const tr of filas) {
+            const resultado = await guardarFilaActividadCore(tr);
+            if (!resultado.ok) {
+                const nombre = tr.querySelector('[data-campo="NombreActividad"]')?.value || `fila ${filas.indexOf(tr) + 1}`;
+                errores.push(`${nombre}: ${resultado.error}`);
+            }
+        }
+
+        return errores;
     }
 
     async function eliminarActividadFila(tr) {
