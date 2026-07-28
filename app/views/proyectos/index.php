@@ -175,14 +175,15 @@
             <thead>
                 <tr>
                     <th style="width:8%">WBS</th>
-                    <th style="width:16%">Nombre *</th>
-                    <th style="width:15%">Descripción</th>
-                    <th style="width:12%">Responsable</th>
-                    <th style="width:9%">Inicio</th>
-                    <th style="width:9%">Fin</th>
-                    <th style="width:10%">Estado</th>
-                    <th style="width:6%" class="text-center">Hito</th>
-                    <th style="width:15%" class="text-end">Acciones</th>
+                    <th style="width:14%">Nombre *</th>
+                    <th style="width:12%">Descripción</th>
+                    <th style="width:12%">Fase</th>
+                    <th style="width:11%">Responsable</th>
+                    <th style="width:8%">Inicio</th>
+                    <th style="width:8%">Fin</th>
+                    <th style="width:9%">Estado</th>
+                    <th style="width:5%" class="text-center">Hito</th>
+                    <th style="width:13%" class="text-end">Acciones</th>
                 </tr>
             </thead>
             <tbody><!-- filas dinámicas --></tbody>
@@ -205,15 +206,68 @@
             <button type="button" class="btn btn-cf-secondary" id="btnCerrarGantt">Cerrar</button>
         </div>
     </div>
-    <div class="cf-gantt-leyenda mb-2">
-        <span class="cf-gantt-chip" style="background:#0B1F47"></span> Planeado
-        <span class="cf-gantt-chip" style="background:#10B981"></span> Avance
-        <span class="cf-gantt-chip" style="background:#EF4444"></span> Ruta crítica
-        <span class="cf-gantt-chip" style="background:#F59E0B"></span> Hito
-        <span class="cf-gantt-chip" style="background:#B91C1C"></span> Vencida
+
+    <ul class="nav nav-tabs cf-proy-tabs mb-3" id="cfGanttTabs">
+        <li class="nav-item">
+            <button type="button" class="nav-link active" id="cfTabBtnGantt" data-tab="gantt">
+                <i class="bi bi-bar-chart-steps"></i> Gantt
+            </button>
+        </li>
+        <li class="nav-item">
+            <button type="button" class="nav-link" id="cfTabBtnDashboard" data-tab="dashboard">
+                <i class="bi bi-pie-chart"></i> Dashboard
+            </button>
+        </li>
+    </ul>
+
+    <div id="cfGanttTabPane">
+        <div class="cf-gantt-leyenda mb-2">
+            <span class="cf-gantt-chip" style="background:#0B1F47"></span> Planeado
+            <span class="cf-gantt-chip" style="background:#10B981"></span> Avance
+            <span class="cf-gantt-chip" style="background:#EF4444"></span> Ruta crítica
+            <span class="cf-gantt-chip" style="background:#F59E0B"></span> Hito
+            <span class="cf-gantt-chip" style="background:#B91C1C"></span> Vencida
+        </div>
+        <!-- Antes vivia despues de #cfGanttContenedor, hasta abajo de la
+             pagina, escondida tras la barra de scroll horizontal del Gantt.
+             Se movio junto a la leyenda para que siempre sea visible. -->
+        <div id="cfGanttFestivosLista" class="mb-2"></div>
+        <div id="cfGanttContenedor"></div>
     </div>
-    <div id="cfGanttContenedor"></div>
-    <div id="cfGanttFestivosLista" class="mt-3"></div>
+
+    <!-- Pestaña Dashboard: mismo estilo del reporte tipo Excel del cliente
+         (% finalización total, días completos vs total, tareas por estado),
+         pero por proyecto individual dentro del Gantt. -->
+    <div id="cfProyDashboardTabPane" style="display:none">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="cf-dash-box text-center cf-dash-box-donut">
+                    <div class="cf-dash-box-titulo">% FINALIZACIÓN TOTAL DEL PROYECTO</div>
+                    <div class="cf-dash-donut-centro">
+                        <div class="cf-dash-donut-wrap">
+                            <canvas id="cfChartAvanceProyecto"></canvas>
+                        </div>
+                        <div id="cfChartAvanceProyectoLabel" class="cf-dash-donut-label"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="cf-dash-box">
+                    <div class="cf-dash-box-titulo text-center">DÍAS COMPLETOS VS TOTAL</div>
+                    <div class="text-center mt-2 mb-1" style="font-size:0.8rem">Días concluidos</div>
+                    <div class="cf-dash-kpi cf-dash-kpi-verde" id="cfDashDiasConcluidos">—</div>
+                    <div class="text-center mt-3 mb-1" style="font-size:0.8rem">Total número días programados</div>
+                    <div class="cf-dash-kpi cf-dash-kpi-oscuro" id="cfDashDiasTotal">—</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="cf-dash-box">
+                    <div class="cf-dash-box-titulo text-center">TAREAS POR ESTADO</div>
+                    <canvas id="cfChartTareasEstado" height="220"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datatables.net-bs5@1.13.11/css/dataTables.bootstrap5.min.css">
@@ -228,6 +282,10 @@
     #cfGanttContenedor .bar-vencida .bar { fill: #B91C1C !important; stroke: #7F1D1D !important; stroke-width: 2px; }
     #cfGanttContenedor .bar-vencida .bar-label { fill: #fff !important; font-weight: 700; }
     #cfGanttContenedor .bar-progress { fill: #10B981 !important; }
+    /* Filas mas compactas (bar_height/padding reducidos en JS) -- se achica
+       tambien el texto de las barras para que siga viendose limpio con
+       renglones mas angostos. */
+    #cfGanttContenedor .bar-label, #cfGanttContenedor .bar-label.big { font-size: 10px; }
     /* La libreria trae su propio contenedor con scroll interno
        (.gantt-container). Antes solo se limitaba con max-height, por lo
        que con pocas actividades el Gantt se veia chico y dejaba una zona
@@ -240,11 +298,32 @@
     #cfCardGantt { padding: 1rem 1.25rem; display: flex; flex-direction: column; }
     #cfCardGantt .cf-page-subtitle { display: none; }
     #cfGanttContenedor { flex: 1; }
+    /* Tabs Gantt/Dashboard dentro de la tarjeta */
+    .cf-proy-tabs .nav-link { border: 1px solid transparent; border-bottom: none; color: #6B7280; font-weight: 600; font-size: 0.85rem; background: transparent; padding: 8px 16px; }
+    .cf-proy-tabs .nav-link.active { color: #0B1F47; border-color: #DEE2E6; border-bottom: 2px solid #fff; background: #fff; }
+    /* Cajas del Dashboard por proyecto (mismo estilo del reporte Excel del cliente) */
+    .cf-dash-box { background: #F5F7FA; border: 1px solid #E5E7EB; border-radius: 10px; padding: 16px; height: 100%; }
+    .cf-dash-box-titulo { font-size: 0.72rem; font-weight: 800; color: #374151; text-transform: uppercase; letter-spacing: .3px; margin-bottom: 8px; }
+    /* La caja de la dona centra su contenido vertical y horizontalmente
+       para llenar el alto de la fila (antes quedaba pegado arriba con un
+       area vacia grande abajo). La dona tambien se agrando. */
+    /* La caja de la dona: titulo fijo arriba, y el bloque de la dona
+       (cf-dash-donut-centro) se centra vertical y horizontalmente en el
+       espacio restante de la caja (antes quedaba pegado arriba con una
+       zona vacia grande abajo). La dona tambien se agrando. */
+    .cf-dash-box-donut { display: flex; flex-direction: column; height: 100%; }
+    .cf-dash-donut-centro { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .cf-dash-donut-wrap { width: 260px; height: 260px; margin: 0 auto; position: relative; }
+    .cf-dash-donut-label { margin-top: -161px; margin-bottom: 128px; font-size: 2.2rem; font-weight: 800; color: #1A2332; }
+    .cf-dash-kpi { border-radius: 8px; padding: 14px; text-align: center; font-size: 1.8rem; font-weight: 800; }
+    .cf-dash-kpi-verde { background: #10B981; color: #fff; }
+    .cf-dash-kpi-oscuro { background: #0B1F47; color: #fff; }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/datatables.net@1.13.11/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/datatables.net-bs5@1.13.11/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/frappe-gantt@1/dist/frappe-gantt.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="<?= BASE_URL ?>/public/js/datatable.js"></script>
 <script src="<?= BASE_URL ?>/public/js/proyectos.js"></script>

@@ -1,20 +1,8 @@
-Proyectos tiene error al momento guadar el proyecto:										
-										
-
-	No se pudo guardar
-	Todo proyecto debe tener al menos una fase.
-	
-** Falta la captura de Fases del proyecto ( Revisar gantt)
-
 Cambiar el tamaño del gantt se desfaso en la pantalla, mostra en scroll inferior en la parte superior.
 
-Mostrar en la parte superior,
-** Días festivos en este rango:
-15 sep 2026 — Independencia de México 15 nov 2026 — Revolución Mexicana
-
 Proyectos:
-Descargar DEF-WEB-003 – Proyectos 20260724 v2.1.md
 DEF-WEB-002 – Cotizaciones y Conversión a Proyecto 20260724.md
+Descargar DEF-WEB-003 – Proyectos 20260724 v2.1.md
 DEF-WEB-004 – Actividades 20260724.md
 
 En actividades
@@ -23,6 +11,36 @@ En actividades
 	Los WBS
 	Las fases.
 	
+Si una actividad esta en proceso y esta no ha sido  termina a la fecha planeada esta vencida...	
+	
+***************************************	
+Las nuevas actividades no guardan en el campo faseID:
+
+			FaseID
+            SELECT *
+            FROM CF_actividad
+			where 
+			ProyectoID = 13	
+** Falta la captura de Fases del proyecto ( Revisar gantt)
+Todo proyecto debe tener al menos una fase.
+******************************************
+
+Mostrar en la parte superior,
+** Días festivos en este rango:
+15 sep 2026 — Independencia de México 15 nov 2026 — Revolución Mexicana
+*******************************************
+Proyectos tiene error al momento guadar/modificar el proyecto:																				
+	No se pudo guardar ( agregando una nueva actividad)
+	
+***************************************
+Convertir a cotizacion a proyecto 
+
+C:\AppServ\www\ConstructFlow.Web\PR's\DEF-WEB-002 – Cotizaciones y Conversión a Proyecto 20260724.md
+
+No se pudo convertir
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'SabadoLaboral' in 'field lis
+
+
 ***************************************
 que funcione con la ip o localhost
 http://192.168.100.96:8081/ConstructFlow.Web/app/views/auth/login.php

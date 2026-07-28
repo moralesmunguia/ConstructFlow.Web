@@ -58,6 +58,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let ultimoClicTareaID = null;
     let ultimoClicTimestamp = 0;
     let guardandoProyecto = false;
+    let reprogramacionPendiente = null;
+    let actividadesGanttActuales = [];
+    let chartAvanceProyecto = null;
+    let chartTareasEstado = null;
+    let fasesProyectoActual = [];
+
+    function esActividadVencida(a, hoyISO = new Date().toISOString().substring(0, 10)) {
+        if (!a || !a.FinPlan) return false;
+
+        const estadoActividad = String(a.Estado || '').toUpperCase();
+        const finPlan = String(a.FinPlan).substring(0, 10);
+
+        return (
+            finPlan < hoyISO &&
+            !['COMPLETADA', 'CANCELADA'].includes(estadoActividad) &&
+            Number(a.Avance || 0) < 100
+        );
+    }
 
     const permisos = CF_PERMISOS['proyectos'] || {
         PuedeCrear: false, PuedeConsultar: false, PuedeActualizar: false, PuedeEliminar: false
@@ -84,6 +102,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btnCerrarGantt')?.addEventListener('click', ocultarGantt);
     document.getElementById('cfGanttModoVista')?.addEventListener('change', (e) => {
         if (ganttInstancia) ganttInstancia.change_view_mode(e.target.value);
+    });
+
+    // Tabs Gantt / Dashboard dentro de la vista del Gantt del proyecto.
+    document.getElementById('cfGanttTabs')?.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-tab]');
+        if (!btn) return;
+        cambiarTabGantt(btn.dataset.tab);
     });
 
     // Reportar avance con clic derecho sobre la barra (best-effort: depende
@@ -133,6 +158,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const btnEliminar = e.target.closest('[data-eliminar]');
         if (btnEliminar) return eliminarProyecto(btnEliminar.dataset.eliminar);
+    });
+
+    // Escucha el soltar real del mouse/touch en TODO el documento, en fase
+    // de CAPTURA (tercer argumento `true`). Frappe Gantt dispara on_date_change
+    // en cada dia que se cruza mientras se arrastra (no solo al soltar) y su
+    // propio manejador interno de mouseup puede detener la propagacion del
+    // evento -- escuchar en captura garantiza que este listener se ejecute
+    // ANTES que cualquier stopPropagation() interno de la libreria, por lo
+    // que siempre detecta el soltar real del mouse/dedo, sin importar cuanto
+    // tiempo se haya quedado pausado a medio arrastre (con bubbling normal
+    // se disparaba tarde o de forma indirecta).
+    ['mouseup', 'touchend'].forEach((evento) => {
+        document.addEventListener(evento, () => {
+            if (!reprogramacionPendiente) return;
+            const { task, start, end, proyectoID } = reprogramacionPendiente;
+            reprogramacionPendiente = null;
+            confirmarYGuardarReprogramacion(task, start, end, proyectoID);
+        }, true);
     });
 
     function poblarFiltroEstados() {
@@ -345,6 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('cfObservacionesProyecto').value = p.Observaciones || '';
 
             configurarSeccionActividades(true);
+            await cargarFasesProyecto(proyectoEnEdicionID);
             await cargarActividadesProyecto(proyectoEnEdicionID);
 
         } catch (error) {
@@ -420,6 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 proyectoEnEdicionID = resp.data.data?.ProyectoID || null;
                 document.getElementById('cfFormTitulo').textContent = `Editar ${resp.data.data?.CodigoProyecto || ''}`;
                 configurarSeccionActividades(true);
+                await cargarFasesProyecto(proyectoEnEdicionID);
                 await cargarActividadesProyecto(proyectoEnEdicionID);
                 cargarProyectos();
 
@@ -478,6 +523,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // ACT-002/ACT-011: la tabla de Actividades no tenia selector de Fase --
+    // toda actividad nueva creada desde este formulario quedaba con FaseID
+    // NULL (o caia en la primera fase por defecto que asigna el backend, ver
+    // ActividadService::obtenerFaseIDPorDefecto()). Se carga el catalogo de
+    // Fases del proyecto para poblar el select de cada fila.
+    async function cargarFasesProyecto(proyectoID) {
+        fasesProyectoActual = [];
+
+        try {
+            const resp = await axios.get(`${CF_API_BASE_URL}/proyectos/${proyectoID}/fases`);
+            if (resp.data.success) fasesProyectoActual = resp.data.data || [];
+        } catch (error) {
+            console.error('Error al cargar fases del proyecto:', error);
+        }
+    }
+
     async function cargarActividadesProyecto(proyectoID) {
         const tbody = document.querySelector('#cfTablaActividadesProyecto tbody');
         tbody.innerHTML = '';
@@ -503,6 +564,12 @@ document.addEventListener('DOMContentLoaded', () => {
             </option>
         `).join('');
 
+        const opcionesFase = fasesProyectoActual.map((f) => `
+            <option value="${f.FaseID}" ${Number(a.FaseID) === Number(f.FaseID) ? 'selected' : ''}>
+                ${escapeHtml(f.NombreFase || `Fase #${f.FaseID}`)}
+            </option>
+        `).join('');
+
         const opcionesEstado = CF_ESTADOS_ACTIVIDAD.map((codigo) => `
             <option value="${codigo}" ${(a.Estado || 'PENDIENTE') === codigo ? 'selected' : ''}>${escapeHtml(codigo)}</option>
         `).join('');
@@ -513,6 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <td><input type="text" class="form-control form-control-sm" data-campo="CodigoWBS" value="${escapeAtributo(a.CodigoWBS)}" placeholder="Auto" title="Se genera automáticamente si se deja vacío"></td>
             <td><input type="text" class="form-control form-control-sm" data-campo="NombreActividad" value="${escapeAtributo(a.NombreActividad)}"></td>
             <td><input type="text" class="form-control form-control-sm" data-campo="Descripcion" value="${escapeAtributo(a.Descripcion)}"></td>
+            <td><select class="form-select form-select-sm" data-campo="FaseID"><option value="">Sin fase</option>${opcionesFase}</select></td>
             <td><select class="form-select form-select-sm" data-campo="ResponsableID"><option value="">--</option>${opcionesResponsable}</select></td>
             <td><input type="date" class="form-control form-control-sm" data-campo="InicioPlan" value="${(a.InicioPlan || '').substring(0, 10)}"></td>
             <td><input type="date" class="form-control form-control-sm" data-campo="FinPlan" value="${(a.FinPlan || '').substring(0, 10)}"></td>
@@ -558,6 +626,7 @@ document.addEventListener('DOMContentLoaded', () => {
             CodigoWBS: leer('CodigoWBS').trim() || null,
             NombreActividad: nombreActividad,
             Descripcion: leer('Descripcion').trim() || null,
+            FaseID: leer('FaseID') ? Number(leer('FaseID')) : null,
             ResponsableID: Number(responsableID),
             InicioPlan: leer('InicioPlan') || null,
             FinPlan: leer('FinPlan') || null,
@@ -793,6 +862,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('cfCardGantt').style.display = '';
         document.getElementById('cfGanttContenedor').innerHTML = '';
         document.getElementById('cfGanttFestivosLista').innerHTML = '';
+        cambiarTabGantt('gantt');
 
         const proyecto = ultimosProyectos.find((p) => String(p.ProyectoID) === String(proyectoID));
         document.getElementById('cfGanttTitulo').textContent = 'Gantt' + (proyecto ? ' — ' + escapeHtml(proyecto.NombreProyecto || '') : '');
@@ -812,6 +882,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const actividades = resp.data.data.Actividades || [];
             const dependencias = resp.data.data.Dependencias || [];
+            actividadesGanttActuales = actividades;
 
             if (!actividades.length) {
                 document.getElementById('cfGanttContenedor').innerHTML = '<p class="text-muted">Este proyecto todavia no tiene actividades con fechas para graficar.</p>';
@@ -825,16 +896,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 .map((a) => {
                     const esHito = Number(a.EsHito) === 1;
                     const esCritica = Number(a.RutaCriticaCalculada) === 1;
-                    const estadoActividad = String(a.Estado || '').toUpperCase();
                     const finPlan = String(a.FinPlan).substring(0, 10);
 
                     // Vencida: la fecha fin planeada ya paso y la actividad no
                     // esta terminada (ni cancelada). No aplica a hitos con
                     // fecha futura obviamente, pero un hito tambien puede vencer.
-                    const esVencida =
-                        finPlan < hoy &&
-                        !['COMPLETADA', 'CANCELADA'].includes(estadoActividad) &&
-                        Number(a.Avance || 0) < 100;
+                    const esVencida = esActividadVencida(a, hoy);
 
                     const clase = esVencida ? 'bar-vencida' : (esHito ? 'bar-hito' : (esCritica ? 'bar-critica' : ''));
 
@@ -904,9 +971,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 view_mode: modoVista,
                 language: 'es',
                 // Requerimiento: mostrar mas renglones de actividades sin
-                // scrollear tanto -- barras y separacion mas compactas.
-                bar_height: 22,
-                padding: 12,
+                // scrollear tanto -- barras y separacion mas compactas
+                // (reducido de 22/12 a 16/6 para caber mas filas por pantalla).
+                bar_height: 16,
+                padding: 6,
+                header_height: 45,
                 // Requerimiento: reportar avance con DOBLE CLIC (no un solo clic,
                 // que ya lo usa la libreria para abrir su popup nativo de info).
                 // Se detecta comparando el ultimo clic sobre la misma tarea
@@ -938,12 +1007,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const original = actividades.find((a) => String(a.ActividadID) === task.id);
                     let extra = '';
                     const finPlan = original ? String(original.FinPlan).substring(0, 10) : null;
-                    const estadoActividad = original ? String(original.Estado || '').toUpperCase() : '';
-                    const esVencida =
-                        original &&
-                        finPlan < hoy &&
-                        !['COMPLETADA', 'CANCELADA'].includes(estadoActividad) &&
-                        Number(original.Avance || 0) < 100;
+                    const esVencida = esActividadVencida(original, hoy);
 
                     if (esVencida) extra += '<br><strong style="color:#B91C1C">⚠ VENCIDA — debía terminar el ' + finPlan + '</strong>';
                     if (original && Number(original.RutaCriticaCalculada) === 1) extra += '<br><span style="color:#EF4444">Ruta critica</span>';
@@ -953,6 +1017,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             pintarListaFestivos(festivos);
+            ajustarAlturaGantt();
 
         } catch (error) {
             ocultarGantt();
@@ -960,12 +1025,214 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Antes el contenedor del Gantt (".gantt-container" de Frappe) solo
+    // tenia un max-height fijo (78vh), asi que con pocas actividades se veia
+    // chico y dejaba una franja enorme de la pagina sin usar debajo. Ahora se
+    // calcula el alto disponible real del viewport (desde donde empieza el
+    // contenedor hasta el fondo de la pantalla, con un margen para el pie de
+    // pagina) y se aplica como min-height Y max-height: siempre ocupa el
+    // espacio visible, y solo hace scroll interno si de verdad hay demasiadas
+    // filas para caber.
+    function ajustarAlturaGantt() {
+        const contenedor = document.querySelector('#cfGanttContenedor .gantt-container');
+        if (!contenedor) return;
+
+        const calcular = () => {
+            const top = contenedor.getBoundingClientRect().top;
+            const margenInferior = 90; // deja lugar para la lista de dias festivos + footer
+            const alturaDisponible = Math.max(300, window.innerHeight - top - margenInferior);
+            contenedor.style.minHeight = `${alturaDisponible}px`;
+            contenedor.style.maxHeight = `${alturaDisponible}px`;
+        };
+
+        calcular();
+
+        if (!window.__cfGanttResizeListener) {
+            window.__cfGanttResizeListener = true;
+            window.addEventListener('resize', () => {
+                if (document.getElementById('cfCardGantt').style.display !== 'none') calcular();
+            });
+        }
+    }
+
+    // ---- Tabs Gantt / Dashboard ----
+    function cambiarTabGantt(tab) {
+        const esDashboard = tab === 'dashboard';
+
+        document.getElementById('cfTabBtnGantt')?.classList.toggle('active', !esDashboard);
+        document.getElementById('cfTabBtnDashboard')?.classList.toggle('active', esDashboard);
+        document.getElementById('cfGanttTabPane').style.display = esDashboard ? 'none' : '';
+        document.getElementById('cfProyDashboardTabPane').style.display = esDashboard ? '' : 'none';
+
+        if (esDashboard) verDashboardProyecto(proyectoGanttActualID);
+    }
+
+    // Dashboard por proyecto (dentro del Gantt): mismo formato del reporte
+    // Excel del cliente -- % finalizacion total (dona), dias completos vs
+    // total (KPIs) y tareas por estado (barras). Reutiliza GET
+    // /proyectos/{id}/dashboard (ya consumido en verProyecto()) para
+    // PorcentajeAvance/FechaInicio/FechaFin, y las Actividades ya cargadas
+    // por el Gantt (actividadesGanttActuales) para contar por Estado.
+    async function verDashboardProyecto(proyectoID) {
+        if (!proyectoID) return;
+
+        try {
+            const resp = await axios.get(`${CF_API_BASE_URL}/proyectos/${proyectoID}/dashboard`);
+            if (!resp.data.success) return;
+
+            const dash = resp.data.data;
+            const avance = Number(dash.PorcentajeAvance ?? 0);
+
+            pintarDonutAvanceProyecto(avance);
+            pintarDiasProyecto(dash.FechaInicio, dash.FechaFin);
+            pintarTareasPorEstado(actividadesGanttActuales);
+
+        } catch (error) {
+            console.error('Error al cargar el dashboard del proyecto:', error);
+        }
+    }
+
+    function pintarDonutAvanceProyecto(avance) {
+        const ctx = document.getElementById('cfChartAvanceProyecto');
+        if (!ctx) return;
+
+        if (chartAvanceProyecto) chartAvanceProyecto.destroy();
+
+        chartAvanceProyecto = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [avance, Math.max(0, 100 - avance)],
+                    backgroundColor: ['#10B981', '#E5E7EB'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                cutout: '75%',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { enabled: false } }
+            }
+        });
+
+        document.getElementById('cfChartAvanceProyectoLabel').textContent = `${avance.toFixed(2)}%`;
+    }
+
+    // "Dias completos vs total": dias transcurridos desde FechaInicio hasta
+    // hoy (topado a FechaFin) vs total de dias programados del proyecto
+    // (FechaFin - FechaInicio). Mismo criterio que el reporte Excel del
+    // cliente ("Dias concluidos" / "Total numero dias programados").
+    function pintarDiasProyecto(fechaInicio, fechaFin) {
+        const elConcluidos = document.getElementById('cfDashDiasConcluidos');
+        const elTotal = document.getElementById('cfDashDiasTotal');
+        if (!elConcluidos || !elTotal) return;
+
+        if (!fechaInicio || !fechaFin) {
+            elConcluidos.textContent = '—';
+            elTotal.textContent = '—';
+            return;
+        }
+
+        const msPorDia = 1000 * 60 * 60 * 24;
+        const inicio = new Date(String(fechaInicio).substring(0, 10));
+        const fin = new Date(String(fechaFin).substring(0, 10));
+        const hoy = new Date(new Date().toISOString().substring(0, 10));
+
+        const totalDias = Math.max(0, Math.round((fin - inicio) / msPorDia));
+        const diasConcluidos = Math.min(totalDias, Math.max(0, Math.round((hoy - inicio) / msPorDia)));
+
+        elConcluidos.textContent = diasConcluidos;
+        elTotal.textContent = totalDias;
+    }
+
+    function pintarTareasPorEstado(actividades) {
+        const ctx = document.getElementById('cfChartTareasEstado');
+        if (!ctx) return;
+
+        if (chartTareasEstado) chartTareasEstado.destroy();
+
+        const hoy = new Date().toISOString().substring(0, 10);
+
+        // Mismas 5 categorias del reporte Excel del cliente. "No iniciada -
+        // Vencida" agrupa cualquier actividad no terminada ni cancelada cuya
+        // FinPlan ya paso, incluyendo actividades EN_PROCESO.
+        const conteos = { 'Planificado': 0, 'No iniciada - Vencida': 0, 'Comenzó - En proceso': 0, 'En proceso': 0, 'Completo': 0 };
+
+        (actividades || []).forEach((a) => {
+            const estado = String(a.Estado || '').toUpperCase();
+
+            if (estado === 'COMPLETADA') {
+                conteos['Completo']++;
+            } else if (esActividadVencida(a, hoy)) {
+                conteos['No iniciada - Vencida']++;
+            } else if (estado === 'EN_PROCESO') {
+                conteos['En proceso']++;
+            } else if (estado === 'PENDIENTE') {
+                conteos['Planificado']++;
+            }
+        });
+
+        chartTareasEstado = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(conteos),
+                datasets: [{
+                    data: Object.values(conteos),
+                    backgroundColor: '#3DDC97',
+                    borderRadius: 4,
+                    maxBarThickness: 40
+                }]
+            },
+            options: {
+                responsive: true,
+                // Espacio arriba para que el numero de la barra mas alta
+                // (dibujado por el plugin cfEtiquetasBarra, encima de la
+                // barra) no se recorte contra el borde del canvas.
+                layout: { padding: { top: 24 } },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: true },
+                    datalabels: false
+                },
+                scales: {
+                    y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#E5E7EB' } },
+                    x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                }
+            },
+            plugins: [{
+                id: 'cfEtiquetasBarra',
+                afterDatasetsDraw(chart) {
+                    const { ctx } = chart;
+                    chart.getDatasetMeta(0).data.forEach((bar, i) => {
+                        const valor = chart.data.datasets[0].data[i];
+                        ctx.save();
+                        ctx.fillStyle = '#1A2332';
+                        ctx.font = '600 11px Inter, Arial, sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(valor, bar.x, bar.y - 6);
+                        ctx.restore();
+                    });
+                }
+            }]
+        });
+    }
+
     // ---- Reprogramar (arrastrar barra) con confirmacion ----
     // PUT /api/v1/actividades/{id}/reprogramar -> ActividadController::reprogramar()
     // (valida en backend que la nueva fecha no rompa dependencias FS/SS/FF/SF).
     // No se manda DuracionPlan: ActividadService::reprogramar() la recalcula
     // sola en dias habiles a partir de InicioPlan/FinPlan.
-    async function reprogramarActividadDesdeGantt(task, start, end, proyectoID) {
+    //
+    // Frappe Gantt dispara on_date_change en CADA dia que se cruza mientras
+    // se arrastra la barra, no solo cuando se suelta. Aqui solo se guarda la
+    // posicion mas reciente (reprogramacionPendiente); la confirmacion real
+    // se dispara desde el listener global de mouseup/touchend de arriba,
+    // que es el momento real en que se suelta la actividad.
+    function reprogramarActividadDesdeGantt(task, start, end, proyectoID) {
+        reprogramacionPendiente = { task, start, end, proyectoID };
+    }
+
+    async function confirmarYGuardarReprogramacion(task, start, end, proyectoID) {
         const nuevoInicio = formatearFechaISO(start);
         const nuevoFin = formatearFechaISO(end);
 
@@ -1090,6 +1357,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('cfCardGantt').style.display = 'none';
         document.getElementById('cfCardListado').style.display = '';
         ganttInstancia = null;
+
+        if (chartAvanceProyecto) { chartAvanceProyecto.destroy(); chartAvanceProyecto = null; }
+        if (chartTareasEstado) { chartTareasEstado.destroy(); chartTareasEstado = null; }
 
         modoBotonPrincipal = 'proyecto';
         const btnPrincipal = document.getElementById('btnNuevoProyecto');

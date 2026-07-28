@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const estado = estadosPorID[c.EstadoCotizacionID];
         const nombreEstado = estado?.NombreEstado || `Estado ${c.EstadoCotizacionID}`;
         const colorEstado = estado?.ColorHex || '#6C757D';
-        const esProyecto = estado?.Codigo === 'CONVERTIDA_PROYECTO';
+        const reglas = reglasEstadoCotizacion(estado);
 
         return [
             `<strong title="${escapeHtml(c.Folio || '')}">${escapeHtml(formatearFolioCorto(c.Folio))}</strong>`,
@@ -181,11 +181,20 @@ document.addEventListener('DOMContentLoaded', () => {
             formatearMoneda(c.Descuento, c.Moneda),
             formatearMoneda(c.TotalVenta, c.Moneda),
             badgeEstado(nombreEstado, colorEstado),
-            construirAcciones(c.CotizacionID, esProyecto)
+            construirAcciones(c.CotizacionID, reglas)
         ];
     }
 
-    function construirAcciones(cotizacionID, esProyecto) {
+    function reglasEstadoCotizacion(estado) {
+        const codigo = String(estado?.Codigo || '').toUpperCase();
+        return {
+            editable: ['BORRADOR', 'EN_REVISION', 'EN_REVISIÓN'].includes(codigo),
+            eliminable: codigo === 'BORRADOR',
+            cambioEstadoManual: codigo !== 'CONVERTIDA_PROYECTO'
+        };
+    }
+
+    function construirAcciones(cotizacionID, reglas) {
         const botones = [];
 
         if (permisosCotizaciones.PuedeConsultar) {
@@ -195,15 +204,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (permisosCotizaciones.PuedeActualizar) {
-            if (esProyecto) {
-                botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Ya es un proyecto: no se puede modificar la cotización" disabled><i class="bi bi-lock"></i></button>`);
+            if (!reglas.editable) {
+                botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Estado protegido: no se puede modificar libremente" disabled><i class="bi bi-lock"></i></button>`);
             } else {
                 botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Modificar" data-editar="${cotizacionID}"><i class="bi bi-pencil"></i></button>`);
+            }
+
+            if (reglas.cambioEstadoManual) {
                 botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Cambiar estado" data-cambiar-estado="${cotizacionID}"><i class="bi bi-arrow-repeat"></i></button>`);
             }
         }
 
-        if (permisosCotizaciones.PuedeEliminar && !esProyecto) {
+        if (permisosCotizaciones.PuedeEliminar && reglas.eliminable) {
             botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm text-danger" title="Eliminar" data-eliminar="${cotizacionID}"><i class="bi bi-trash"></i></button>`);
         }
 
@@ -637,6 +649,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const { cotizacion: c, detalle, actividades } = resp.data.data;
+            const reglas = reglasEstadoCotizacion(estadosPorID[c.EstadoCotizacionID]);
+
+            if (!reglas.editable) {
+                ocultarFormulario();
+                return Swal.fire({
+                    icon: 'info',
+                    title: 'Cotización protegida',
+                    text: 'Solo las cotizaciones en Borrador o En Revisión pueden modificarse desde esta pantalla.'
+                });
+            }
 
             cotizacionEnEdicionID = c.CotizacionID;
             document.getElementById('cfFormTitulo').textContent = `Modificar ${c.Folio}`;
@@ -972,6 +994,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ---- Eliminar ----
     async function eliminarCotizacion(cotizacionID) {
+        const fila = (ultimasCotizaciones || []).find((c) => String(c.CotizacionID) === String(cotizacionID));
+        const reglas = reglasEstadoCotizacion(estadosPorID[fila?.EstadoCotizacionID]);
+
+        if (!reglas.eliminable) {
+            return Swal.fire({
+                icon: 'info',
+                title: 'No eliminable',
+                text: 'Solo las cotizaciones en Borrador pueden eliminarse desde esta pantalla.'
+            });
+        }
+
         const confirmacion = await Swal.fire({
             icon: 'warning',
             title: '¿Eliminar cotización?',

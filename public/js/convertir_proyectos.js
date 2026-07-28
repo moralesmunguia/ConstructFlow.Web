@@ -130,7 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
             badgeEstado(estado?.NombreEstado || '', estado?.ColorHex || '#6C757D'),
             proyecto
                 ? `<strong class="text-success">${escapeHtml(proyecto.CodigoProyecto || proyecto.NombreProyecto || ('#' + proyecto.ProyectoID))}</strong>`
-                : '<span class="text-muted">—</span>',
+                : (esConvertida
+                    ? '<span class="cf-badge" style="background:#EF444422;color:#EF4444">Sin Proyecto</span>'
+                    : '<span class="text-muted">—</span>'),
             construirAcciones(c.CotizacionID, esConvertida, c.ProyectoID)
         ];
     }
@@ -147,9 +149,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        if (permisos.PuedeActualizar && !esConvertida) {
+        if (permisos.PuedeActualizar && !esConvertida && !proyectoID) {
             botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Modificar Cotización" data-modificar="${cotizacionID}"><i class="bi bi-pencil"></i></button>`);
             botones.push(`<button type="button" class="btn btn-cf-primary btn-sm" title="Convertir a Proyecto" data-convertir="${cotizacionID}"><i class="bi bi-arrow-repeat"></i> Convertir</button>`);
+        } else if (permisos.PuedeActualizar && (esConvertida || proyectoID)) {
+            botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Cotización ya convertida: no se permite segunda conversión" disabled><i class="bi bi-lock"></i></button>`);
         }
 
         return `<div class="cf-row-actions text-end">${botones.join('')}</div>`;
