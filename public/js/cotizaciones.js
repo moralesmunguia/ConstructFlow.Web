@@ -64,6 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const btnCorreo = e.target.closest('[data-correo]');
         if (btnCorreo) return enviarCorreoCotizacion(btnCorreo.dataset.correo);
 
+        const btnDuplicar = e.target.closest('[data-duplicar]');
+        if (btnDuplicar) return duplicarCotizacion(btnDuplicar.dataset.duplicar);
+
         const btnEditar = e.target.closest('[data-editar]');
         if (btnEditar) return mostrarFormulario(btnEditar.dataset.editar);
     });
@@ -201,6 +204,14 @@ document.addEventListener('DOMContentLoaded', () => {
             botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Ver" data-ver="${cotizacionID}"><i class="bi bi-eye"></i></button>`);
             botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Imprimir" data-imprimir="${cotizacionID}"><i class="bi bi-printer"></i></button>`);
             botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Enviar por correo" data-correo="${cotizacionID}"><i class="bi bi-envelope"></i></button>`);
+        }
+
+        // COT-039: Duplicar -- disponible para cualquier estado (sirve para
+        // usar una cotizacion existente, sin importar su estado, como punto
+        // de partida de una nueva). Requiere PuedeCrear porque genera una
+        // cotizacion nueva.
+        if (permisosCotizaciones.PuedeCrear) {
+            botones.push(`<button type="button" class="btn btn-cf-secondary btn-sm" title="Duplicar" data-duplicar="${cotizacionID}"><i class="bi bi-copy"></i></button>`);
         }
 
         if (permisosCotizaciones.PuedeActualizar) {
@@ -1033,6 +1044,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+
+    // ---- Duplicar (COT-039) ----
+    async function duplicarCotizacion(cotizacionID) {
+        const confirmacion = await Swal.fire({
+            icon: 'question',
+            title: '¿Duplicar cotización?',
+            text: 'Se creará una nueva cotización en Borrador con las mismas partidas y actividades.',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, duplicar',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (!confirmacion.isConfirmed) return;
+
+        try {
+            const resp = await axios.post(`${CF_API_BASE_URL}/cotizaciones/${cotizacionID}/duplicar`);
+
+            if (!resp.data.success) {
+                return Swal.fire({ icon: 'error', title: 'No se pudo duplicar', text: resp.data.message || '' });
+            }
+
+            const nuevaID = resp.data.data?.CotizacionIDNueva;
+            const folio = resp.data.data?.Folio;
+
+            await Swal.fire({
+                icon: 'success',
+                title: 'Cotización duplicada',
+                text: folio ? `Se creó ${folio} como Borrador.` : 'Se creó la nueva cotización como Borrador.',
+                timer: 1800,
+                showConfirmButton: false
+            });
+
+            await recargar();
+
+            if (nuevaID) mostrarFormulario(nuevaID);
+
+        } catch (error) {
+            Swal.fire({ icon: 'error', title: 'Error', text: error.response?.data?.message || 'No fue posible duplicar la cotización.' });
+        }
+    }
 
     function quitarHtml(html) {
         return html.replace(/<[^>]+>/g, '');

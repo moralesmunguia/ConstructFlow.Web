@@ -1,3 +1,14 @@
+*****************
+3. Alcance
+
+Incluye consulta, alta, modificación, conversión desde cotización, folio, cliente, OC/Contrato (NumeroContrato), responsable, encargados, tipo, ubicación, descripción, observaciones, fecha inicio, fecha fin estimada, estado, avance físico, fases, WBS/EDT, actividades, hitos, dependencias, Gantt, seguimiento, indicadores, dashboard y seguridad multiempresa.
+
+
+dependencias
+
+******************
+
+
 Cambiar el tamaño del gantt se desfaso en la pantalla, mostra en scroll inferior en la parte superior.
 
 Proyectos:
