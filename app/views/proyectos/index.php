@@ -203,6 +203,9 @@
                 <option value="Week">Semana</option>
                 <option value="Month">Mes</option>
             </select>
+            <button type="button" class="btn btn-cf-secondary" id="btnGestionarDependencias">
+                <i class="bi bi-diagram-3"></i> Dependencias
+            </button>
             <button type="button" class="btn btn-cf-secondary" id="btnCerrarGantt">Cerrar</button>
         </div>
     </div>
@@ -227,6 +230,7 @@
             <span class="cf-gantt-chip" style="background:#EF4444"></span> Ruta crítica
             <span class="cf-gantt-chip" style="background:#F59E0B"></span> Hito
             <span class="cf-gantt-chip" style="background:#B91C1C"></span> Vencida
+        <span class="cf-gantt-chip" style="background:#B45309"></span> Terminada fuera de tiempo
         </div>
         <!-- Antes vivia despues de #cfGanttContenedor, hasta abajo de la
              pagina, escondida tras la barra de scroll horizontal del Gantt.
@@ -281,6 +285,8 @@
     #cfGanttContenedor .bar-hito .bar { fill: #F59E0B !important; }
     #cfGanttContenedor .bar-vencida .bar { fill: #B91C1C !important; stroke: #7F1D1D !important; stroke-width: 2px; }
     #cfGanttContenedor .bar-vencida .bar-label { fill: #fff !important; font-weight: 700; }
+    #cfGanttContenedor .bar-terminada-vencida .bar { fill: #B45309 !important; stroke: #78350F !important; stroke-width: 2px; }
+    #cfGanttContenedor .bar-terminada-vencida .bar-label { fill: #fff !important; font-weight: 700; }
     #cfGanttContenedor .bar-progress { fill: #10B981 !important; }
     /* Filas mas compactas (bar_height/padding reducidos en JS) -- se achica
        tambien el texto de las barras para que siga viendose limpio con

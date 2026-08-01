@@ -77,6 +77,27 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 
+    // Nuevo criterio: actividad que SI se completo (Avance 100 / COMPLETADA)
+    // pero se termino DESPUES de su fecha planeada -- antes esto se perdia
+    // por completo: en cuanto Avance llegaba a 100 la actividad dejaba de
+    // evaluarse contra la fecha, sin importar si se cumplio a tiempo o no.
+    // Usa FinReal (fecha real de termino, la llena el Api en
+    // ActividadService::registrarAvance() cuando Avance>=100) contra
+    // FinPlan -- no "hoy", para que quede fijo aunque pasen los dias.
+    function esActividadTerminadaVencida(a) {
+        if (!a || !a.FinPlan || !a.FinReal) return false;
+
+        const estadoActividad = String(a.Estado || '').toUpperCase();
+        const completada = estadoActividad === 'COMPLETADA' || Number(a.Avance || 0) >= 100;
+
+        if (!completada) return false;
+
+        const finPlan = String(a.FinPlan).substring(0, 10);
+        const finReal = String(a.FinReal).substring(0, 10);
+
+        return finReal > finPlan;
+    }
+
     const permisos = CF_PERMISOS['proyectos'] || {
         PuedeCrear: false, PuedeConsultar: false, PuedeActualizar: false, PuedeEliminar: false
     };
@@ -100,6 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.getElementById('btnAgregarActividadProyecto')?.addEventListener('click', () => agregarFilaActividadProyecto());
     document.getElementById('btnCerrarGantt')?.addEventListener('click', ocultarGantt);
+    document.getElementById('btnGestionarDependencias')?.addEventListener('click', () => {
+        if (proyectoGanttActualID) gestionarDependencias(proyectoGanttActualID);
+    });
     document.getElementById('cfGanttModoVista')?.addEventListener('change', (e) => {
         if (ganttInstancia) ganttInstancia.change_view_mode(e.target.value);
     });
@@ -135,6 +159,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const btnEliminarFila = e.target.closest('[data-eliminar-actividad]');
         if (btnEliminarFila) return eliminarActividadFila(btnEliminarFila.closest('tr'));
+
+        const btnEvidenciasFila = e.target.closest('[data-evidencias-actividad]');
+        if (btnEvidenciasFila) return verEvidenciasActividadProyecto(btnEvidenciasFila.dataset.evidenciasActividad);
     });
 
     document.getElementById('tblProyectos')?.addEventListener('click', (e) => {
@@ -588,6 +615,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <td class="text-center"><input type="checkbox" class="form-check-input" data-campo="EsHito" ${Number(a.EsHito) === 1 ? 'checked' : ''} title="Marcar como hito (fecha única, sin duración)"></td>
             <td class="text-end">
                 <button type="button" class="btn btn-cf-secondary btn-sm" title="Guardar actividad" data-guardar-actividad><i class="bi bi-check-lg"></i></button>
+                ${a.ActividadID ? `<button type="button" class="btn btn-cf-secondary btn-sm" title="Evidencias" data-evidencias-actividad="${a.ActividadID}"><i class="bi bi-camera"></i></button>` : ''}
                 <button type="button" class="btn btn-cf-secondary btn-sm text-danger" title="Eliminar" data-eliminar-actividad><i class="bi bi-trash"></i></button>
             </td>
         `;
@@ -647,6 +675,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!actividadID && resp.data.data?.ActividadID) {
                 tr.dataset.actividadId = resp.data.data.ActividadID;
+
+                const celdaAcciones = tr.querySelector('td:last-child');
+                if (celdaAcciones && !celdaAcciones.querySelector('[data-evidencias-actividad]')) {
+                    celdaAcciones.insertAdjacentHTML('beforeend', `<button type="button" class="btn btn-cf-secondary btn-sm" title="Evidencias" data-evidencias-actividad="${resp.data.data.ActividadID}"><i class="bi bi-camera"></i></button>`);
+                }
             }
 
             return { ok: true };
@@ -903,7 +936,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     // fecha futura obviamente, pero un hito tambien puede vencer.
                     const esVencida = esActividadVencida(a, hoy);
 
-                    const clase = esVencida ? 'bar-vencida' : (esHito ? 'bar-hito' : (esCritica ? 'bar-critica' : ''));
+                    // Terminada Vencida: se completo pero fuera de tiempo
+                    // (FinReal > FinPlan). Distinto de "Vencida" -- esta ya
+                    // no esta pendiente, solo se entrego tarde.
+                    const esTerminadaVencida = !esVencida && esActividadTerminadaVencida(a);
+
+                    const clase = esVencida
+                        ? 'bar-vencida'
+                        : (esTerminadaVencida
+                            ? 'bar-terminada-vencida'
+                            : (esHito ? 'bar-hito' : (esCritica ? 'bar-critica' : '')));
 
                     const dependenciasTarea = dependencias
                         .filter((d) => String(d.ActividadDestinoID) === String(a.ActividadID))
@@ -914,7 +956,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     return {
                         id: String(a.ActividadID),
-                        name: esVencida ? ('⚠ ' + nombreTarea) : nombreTarea,
+                        name: esVencida ? ('⚠ ' + nombreTarea) : (esTerminadaVencida ? ('⏱ ' + nombreTarea) : nombreTarea),
                         start: String(a.InicioPlan).substring(0, 10),
                         // Frappe Gantt no soporta duracion 0 (hito): se fuerza el mismo dia visual.
                         end: esHito ? String(a.InicioPlan).substring(0, 10) : finPlan,
@@ -1008,8 +1050,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     let extra = '';
                     const finPlan = original ? String(original.FinPlan).substring(0, 10) : null;
                     const esVencida = esActividadVencida(original, hoy);
+                    const esTerminadaVencida = !esVencida && esActividadTerminadaVencida(original);
 
                     if (esVencida) extra += '<br><strong style="color:#B91C1C">⚠ VENCIDA — debía terminar el ' + finPlan + '</strong>';
+                    if (esTerminadaVencida) extra += '<br><strong style="color:#B45309">⏱ Terminada fuera de tiempo — planeada para el ' + finPlan + ', terminó el ' + String(original.FinReal).substring(0, 10) + '</strong>';
                     if (original && Number(original.RutaCriticaCalculada) === 1) extra += '<br><span style="color:#EF4444">Ruta critica</span>';
                     if (original && Number(original.EsHito) === 1) extra += '<br><span style="color:#F59E0B">Hito</span>';
                     return '<div class="details-container" style="padding:6px 4px"><strong>' + escapeHtml(task.name) + '</strong><br>' + task.start + ' → ' + task.end + '<br>Avance: ' + task.progress + '%' + extra + '</div>';
@@ -1153,16 +1197,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const hoy = new Date().toISOString().substring(0, 10);
 
-        // Mismas 5 categorias del reporte Excel del cliente. "No iniciada -
-        // Vencida" agrupa cualquier actividad no terminada ni cancelada cuya
-        // FinPlan ya paso, incluyendo actividades EN_PROCESO.
-        const conteos = { 'Planificado': 0, 'No iniciada - Vencida': 0, 'Comenzó - En proceso': 0, 'En proceso': 0, 'Completo': 0 };
+        // Mismas 5 categorias del reporte Excel del cliente, mas una nueva
+        // "Terminada Vencida" (se completo pero fuera de tiempo, FinReal >
+        // FinPlan) -- antes esas actividades se contaban igual que cualquier
+        // otra en "Completo", sin distinguir si se cumplieron a tiempo.
+        const conteos = { 'Planificado': 0, 'No iniciada - Vencida': 0, 'Comenzó - En proceso': 0, 'En proceso': 0, 'Completo': 0, 'Terminada Vencida': 0 };
 
         (actividades || []).forEach((a) => {
             const estado = String(a.Estado || '').toUpperCase();
 
             if (estado === 'COMPLETADA') {
-                conteos['Completo']++;
+                if (esActividadTerminadaVencida(a)) {
+                    conteos['Terminada Vencida']++;
+                } else {
+                    conteos['Completo']++;
+                }
             } else if (esActividadVencida(a, hoy)) {
                 conteos['No iniciada - Vencida']++;
             } else if (estado === 'EN_PROCESO') {
@@ -1229,6 +1278,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // se dispara desde el listener global de mouseup/touchend de arriba,
     // que es el momento real en que se suelta la actividad.
     function reprogramarActividadDesdeGantt(task, start, end, proyectoID) {
+        const original = actividadesGanttActuales.find((a) => String(a.ActividadID) === task.id);
+        const terminada = original && (String(original.Estado || '').toUpperCase() === 'COMPLETADA' || Number(original.Avance || 0) >= 100);
+
+        if (terminada) {
+            reprogramacionPendiente = null;
+            Swal.fire({
+                icon: 'warning',
+                title: 'Actividad ya terminada',
+                text: 'No se puede mover una actividad terminada. Si en realidad no está terminada, repórtalo desde "Reportar avance" (doble clic) bajando el avance por debajo de 100% para reabrirla.'
+            });
+            verGantt(proyectoID);
+            return;
+        }
+
         reprogramacionPendiente = { task, start, end, proyectoID };
     }
 
@@ -1545,6 +1608,251 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // ---- Dependencias (ACT-006), gestion desde el Gantt ----
+    // GET    {CF_API_BASE_URL}/proyectos/{id}/dependencias   -> ActividadController::dependencias()
+    // POST   {CF_API_BASE_URL}/actividades/dependencia       -> ActividadController::storeDependencia()
+    // PUT    {CF_API_BASE_URL}/actividades/dependencia/{id}  -> ActividadController::updateDependencia()
+    // DELETE {CF_API_BASE_URL}/actividades/dependencia/{id}  -> ActividadController::deleteDependencia()
+    // El backend (ActividadService::crearDependencia/generaCicloDependencias)
+    // ya valida mismo proyecto, ciclos y duplicados -- Web solo captura y
+    // refresca el Gantt despues de cada cambio para que las flechas se
+    // repinten con los datos reales.
+
+    const CF_TIPOS_DEPENDENCIA = { FS: 'Fin a Inicio (FS)', SS: 'Inicio a Inicio (SS)', FF: 'Fin a Fin (FF)', SF: 'Inicio a Fin (SF)' };
+
+    async function gestionarDependencias(proyectoID) {
+        const contenedorId = 'cfDependenciasLista';
+
+        const opcionesActividad = actividadesGanttActuales
+            .slice()
+            .sort((a, b) => String(a.CodigoWBS || '').localeCompare(String(b.CodigoWBS || ''), undefined, { numeric: true }))
+            .map((a) => `<option value="${a.ActividadID}">${escapeHtml((a.CodigoWBS ? a.CodigoWBS + ' - ' : '') + (a.NombreActividad || ''))}</option>`)
+            .join('');
+
+        await Swal.fire({
+            title: 'Dependencias entre actividades',
+            width: 680,
+            html: `
+                <div class="text-start">
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label mb-1" style="font-size:0.85rem">Origen (predecesora) *</label>
+                            <select id="swalDependenciaOrigen" class="form-select form-select-sm">
+                                <option value="">Selecciona...</option>
+                                ${opcionesActividad}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label mb-1" style="font-size:0.85rem">Destino (sucesora) *</label>
+                            <select id="swalDependenciaDestino" class="form-select form-select-sm">
+                                <option value="">Selecciona...</option>
+                                ${opcionesActividad}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label mb-1" style="font-size:0.85rem">Tipo</label>
+                            <select id="swalDependenciaTipo" class="form-select form-select-sm">
+                                ${Object.entries(CF_TIPOS_DEPENDENCIA).map(([codigo, label]) => `<option value="${codigo}">${escapeHtml(label)}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label mb-1" style="font-size:0.85rem">Desfase (días)</label>
+                            <input id="swalDependenciaDesfase" type="number" step="1" class="form-control form-control-sm" value="0">
+                        </div>
+                        <div class="col-12 text-end">
+                            <button type="button" id="btnAgregarDependencia" class="btn btn-cf-primary btn-sm mt-1"><i class="bi bi-plus-lg"></i> Agregar dependencia</button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div id="${contenedorId}" style="max-height:320px;overflow-y:auto">
+                        <p class="text-muted text-center mb-0">Cargando...</p>
+                    </div>
+                </div>
+            `,
+            showConfirmButton: false,
+            showCloseButton: true,
+            didOpen: () => {
+                cargarListaDependencias(proyectoID, contenedorId);
+
+                document.getElementById('btnAgregarDependencia').addEventListener('click', () => {
+                    agregarDependencia(proyectoID, contenedorId);
+                });
+            },
+            willClose: () => {
+                // Si se creo/elimino alguna dependencia, refresca el Gantt para
+                // que las flechas reflejen el estado real al cerrar el modal.
+                if (proyectoGanttActualID) verGantt(proyectoGanttActualID);
+            }
+        });
+    }
+
+    function nombreActividadPorID(actividadID) {
+        const actividad = actividadesGanttActuales.find((a) => String(a.ActividadID) === String(actividadID));
+        if (!actividad) return `Actividad #${actividadID}`;
+        return (actividad.CodigoWBS ? actividad.CodigoWBS + ' - ' : '') + (actividad.NombreActividad || `Actividad #${actividadID}`);
+    }
+
+    async function cargarListaDependencias(proyectoID, contenedorId) {
+        const contenedor = document.getElementById(contenedorId);
+        if (!contenedor) return;
+
+        try {
+            const resp = await axios.get(`${CF_API_BASE_URL}/proyectos/${proyectoID}/dependencias`);
+
+            if (!resp.data.success) {
+                contenedor.innerHTML = `<p class="text-danger text-center mb-0">${escapeHtml(resp.data.message || 'No se pudo cargar el listado.')}</p>`;
+                return;
+            }
+
+            const dependencias = resp.data.data || [];
+
+            if (dependencias.length === 0) {
+                contenedor.innerHTML = '<p class="text-muted text-center mb-0">Sin dependencias registradas.</p>';
+                return;
+            }
+
+            contenedor.innerHTML = dependencias.map((d) => `
+                <div class="d-flex align-items-center justify-content-between border-bottom py-2">
+                    <div style="min-width:0">
+                        <div class="text-truncate" style="max-width:480px">
+                            <strong>${escapeHtml(nombreActividadPorID(d.ActividadOrigenID))}</strong>
+                            <i class="bi bi-arrow-right mx-1"></i>
+                            <strong>${escapeHtml(nombreActividadPorID(d.ActividadDestinoID))}</strong>
+                        </div>
+                        <div class="text-muted" style="font-size:0.75rem">${escapeHtml(CF_TIPOS_DEPENDENCIA[d.TipoDependencia] || d.TipoDependencia)} · Desfase: ${Number(d.DiasDesfase || 0)} día(s)</div>
+                    </div>
+                    <button type="button" class="btn btn-cf-secondary btn-sm text-danger flex-shrink-0" title="Eliminar" data-eliminar-dependencia="${d.DependenciaID}"><i class="bi bi-trash"></i></button>
+                </div>
+            `).join('');
+
+            contenedor.querySelectorAll('[data-eliminar-dependencia]').forEach((btn) => {
+                btn.addEventListener('click', () => eliminarDependencia(btn.dataset.eliminarDependencia, proyectoID, contenedorId));
+            });
+
+        } catch (error) {
+            contenedor.innerHTML = `<p class="text-danger text-center mb-0">${escapeHtml(error.response?.data?.message || 'Error al conectar con el servidor.')}</p>`;
+        }
+    }
+
+    async function agregarDependencia(proyectoID, contenedorId) {
+        const origenID = document.getElementById('swalDependenciaOrigen').value;
+        const destinoID = document.getElementById('swalDependenciaDestino').value;
+        const tipo = document.getElementById('swalDependenciaTipo').value;
+        const desfase = Number(document.getElementById('swalDependenciaDesfase').value) || 0;
+
+        if (!origenID || !destinoID) {
+            return Swal.fire({ icon: 'warning', title: 'Faltan datos', text: 'Selecciona la actividad Origen y Destino.' });
+        }
+
+        if (origenID === destinoID) {
+            return Swal.fire({ icon: 'warning', title: 'Dependencia invalida', text: 'Una actividad no puede depender de si misma.' });
+        }
+
+        try {
+            const resp = await axios.post(`${CF_API_BASE_URL}/actividades/dependencia`, {
+                ActividadOrigenID: Number(origenID),
+                ActividadDestinoID: Number(destinoID),
+                TipoDependencia: tipo,
+                DiasDesfase: desfase
+            });
+
+            if (!resp.data.success) {
+                return Swal.fire({ icon: 'error', title: 'No se pudo crear la dependencia', text: resp.data.message || '' });
+            }
+
+            document.getElementById('swalDependenciaOrigen').value = '';
+            document.getElementById('swalDependenciaDestino').value = '';
+            document.getElementById('swalDependenciaDesfase').value = '0';
+
+            cargarListaDependencias(proyectoID, contenedorId);
+
+        } catch (error) {
+            Swal.fire({ icon: 'error', title: 'Error', text: error.response?.data?.message || 'No fue posible crear la dependencia.' });
+        }
+    }
+
+    async function eliminarDependencia(dependenciaID, proyectoID, contenedorId) {
+        const confirmacion = await Swal.fire({
+            icon: 'warning',
+            title: '¿Eliminar dependencia?',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#EF4444'
+        });
+
+        if (!confirmacion.isConfirmed) return;
+
+        try {
+            const resp = await axios.delete(`${CF_API_BASE_URL}/actividades/dependencia/${dependenciaID}`);
+
+            if (!resp.data.success) {
+                return Swal.fire({ icon: 'error', title: 'No se pudo eliminar', text: resp.data.message || '' });
+            }
+
+            cargarListaDependencias(proyectoID, contenedorId);
+
+        } catch (error) {
+            Swal.fire({ icon: 'error', title: 'Error', text: error.response?.data?.message || 'No fue posible eliminar la dependencia.' });
+        }
+    }
+
+    // ---- Evidencias por actividad (ACT-014), reutilizado desde la tabla
+    // embebida de Actividades del formulario de Proyecto ----
+    const CF_TIPOS_EVIDENCIA_PROY = ['FOTO', 'VIDEO', 'DOCUMENTO', 'OTRO'];
+    const CF_MOMENTOS_EVIDENCIA_PROY = ['ANTES', 'DURANTE', 'DESPUES'];
+
+    async function verEvidenciasActividadProyecto(actividadID) {
+        const contenedorId = 'cfEvidenciasListaProy';
+
+        await Swal.fire({
+            title: 'Evidencias de la actividad',
+            width: 620,
+            html: `
+                <div class="text-start">
+                    <div class="row g-2 mb-3">
+                        <div class="col-12">
+                            <label class="form-label mb-1" style="font-size:0.85rem">Archivo *</label>
+                            <input id="swalArchivoEvidenciaProy" type="file" class="form-control" accept="image/*,video/*,application/pdf,.docx,.xlsx">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label mb-1" style="font-size:0.85rem">Tipo</label>
+                            <select id="swalTipoEvidenciaProy" class="form-select">
+                                ${CF_TIPOS_EVIDENCIA_PROY.map((t) => `<option value="${t}">${t}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label mb-1" style="font-size:0.85rem">Momento</label>
+                            <select id="swalMomentoEvidenciaProy" class="form-select">
+                                ${CF_MOMENTOS_EVIDENCIA_PROY.map((m) => `<option value="${m}" ${m === 'DURANTE' ? 'selected' : ''}>${m}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label mb-1" style="font-size:0.85rem">Descripción *</label>
+                            <input id="swalDescripcionEvidenciaProy" type="text" class="form-control" placeholder="Ej. Vaciado de losa, avance visible">
+                        </div>
+                        <div class="col-12 text-end">
+                            <button type="button" id="btnSubirEvidenciaProy" class="btn btn-cf-primary btn-sm mt-1"><i class="bi bi-upload"></i> Subir evidencia</button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div id="${contenedorId}" style="max-height:320px;overflow-y:auto">
+                        <p class="text-muted text-center mb-0">Cargando...</p>
+                    </div>
+                </div>
+            `,
+            showConfirmButton: false,
+            showCloseButton: true,
+            didOpen: () => {
+                cargarGaleriaEvidenciasProyecto(actividadID, contenedorId);
+
+                document.getElementById('btnSubirEvidenciaProy').addEventListener('click', () => {
+                    subirEvidenciaProyecto(actividadID, contenedorId);
+                });
+            }
+        });
+    }
+
     // ---- Eliminar ----
     async function eliminarProyecto(proyectoID) {
         const confirmacion = await Swal.fire({
@@ -1571,6 +1879,155 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             Swal.fire({ icon: 'error', title: 'Error', text: error.response?.data?.message || 'No fue posible eliminar el proyecto.' });
+        }
+    }
+
+    async function cargarGaleriaEvidenciasProyecto(actividadID, contenedorId) {
+        const contenedor = document.getElementById(contenedorId);
+        if (!contenedor) return;
+
+        try {
+            const resp = await axios.get(`${CF_API_BASE_URL}/evidencias`, { params: { actividad_id: actividadID } });
+
+            if (!resp.data.success) {
+                contenedor.innerHTML = `<p class="text-danger text-center mb-0">${escapeHtml(resp.data.message || 'No se pudo cargar el listado.')}</p>`;
+                return;
+            }
+
+            const evidencias = resp.data.data || [];
+
+            if (evidencias.length === 0) {
+                contenedor.innerHTML = '<p class="text-muted text-center mb-0">Sin evidencias registradas.</p>';
+                return;
+            }
+
+            contenedor.innerHTML = evidencias.map((ev) => construirTarjetaEvidenciaProyecto(ev)).join('');
+
+            contenedor.querySelectorAll('[data-ver-evidencia-proy]').forEach((btn) => {
+                btn.addEventListener('click', () => verArchivoEvidenciaProyecto(btn.dataset.verEvidenciaProy, btn.dataset.mime, btn.dataset.nombre));
+            });
+
+            contenedor.querySelectorAll('[data-eliminar-evidencia-proy]').forEach((btn) => {
+                btn.addEventListener('click', () => eliminarEvidenciaProyecto(btn.dataset.eliminarEvidenciaProy, actividadID, contenedorId));
+            });
+
+        } catch (error) {
+            contenedor.innerHTML = `<p class="text-danger text-center mb-0">${escapeHtml(error.response?.data?.message || 'Error al conectar con el servidor.')}</p>`;
+        }
+    }
+
+    function construirTarjetaEvidenciaProyecto(ev) {
+        const esImagen = /^image\//.test(ev.MimeType || '');
+        const icono = esImagen ? 'bi-image' : (/^video\//.test(ev.MimeType || '') ? 'bi-camera-video' : 'bi-file-earmark-text');
+
+        return `
+            <div class="d-flex align-items-center justify-content-between border-bottom py-2">
+                <div class="d-flex align-items-center gap-2" style="min-width:0">
+                    <i class="bi ${icono} fs-4 text-secondary"></i>
+                    <div style="min-width:0">
+                        <div class="text-truncate" style="max-width:340px" title="${escapeAtributo(ev.NombreOriginal || '')}">${escapeHtml(ev.NombreOriginal || 'Sin nombre')}</div>
+                        <div class="text-muted" style="font-size:0.75rem">${escapeHtml(ev.TipoEvidencia || '')} · ${escapeHtml(ev.Momento || '')} · ${escapeHtml(ev.Usuario || '')} · ${formatearFecha(ev.FechaCaptura)}</div>
+                        ${ev.Descripcion ? `<div style="font-size:0.8rem">${escapeHtml(ev.Descripcion)}</div>` : ''}
+                    </div>
+                </div>
+                <div class="d-flex gap-1 flex-shrink-0">
+                    <button type="button" class="btn btn-cf-secondary btn-sm" title="Ver" data-ver-evidencia-proy="${ev.EvidenciaID}" data-mime="${escapeAtributo(ev.MimeType || '')}" data-nombre="${escapeAtributo(ev.NombreOriginal || '')}"><i class="bi bi-eye"></i></button>
+                    <button type="button" class="btn btn-cf-secondary btn-sm text-danger" title="Eliminar" data-eliminar-evidencia-proy="${ev.EvidenciaID}"><i class="bi bi-trash"></i></button>
+                </div>
+            </div>
+        `;
+    }
+
+    async function subirEvidenciaProyecto(actividadID, contenedorId) {
+        const archivo = document.getElementById('swalArchivoEvidenciaProy').files[0];
+        const descripcion = document.getElementById('swalDescripcionEvidenciaProy').value.trim();
+        const tipoEvidencia = document.getElementById('swalTipoEvidenciaProy').value;
+        const momento = document.getElementById('swalMomentoEvidenciaProy').value;
+
+        if (!archivo) {
+            return Swal.fire({ icon: 'warning', title: 'Falta el archivo', text: 'Selecciona un archivo para subir.' });
+        }
+
+        if (!descripcion) {
+            return Swal.fire({ icon: 'warning', title: 'Falta la descripción', text: 'La descripción es obligatoria.' });
+        }
+
+        const formData = new FormData();
+        formData.append('archivo', archivo);
+        formData.append('ProyectoID', proyectoEnEdicionID);
+        formData.append('ActividadID', actividadID);
+        formData.append('Descripcion', descripcion);
+        formData.append('TipoEvidencia', tipoEvidencia);
+        formData.append('Momento', momento);
+
+        try {
+            const resp = await axios.post(`${CF_API_BASE_URL}/evidencias`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+            if (!resp.data.success) {
+                return Swal.fire({ icon: 'error', title: 'No se pudo subir la evidencia', text: resp.data.message || '' });
+            }
+
+            document.getElementById('swalArchivoEvidenciaProy').value = '';
+            document.getElementById('swalDescripcionEvidenciaProy').value = '';
+
+            cargarGaleriaEvidenciasProyecto(actividadID, contenedorId);
+
+        } catch (error) {
+            Swal.fire({ icon: 'error', title: 'Error', text: error.response?.data?.message || 'No fue posible subir la evidencia.' });
+        }
+    }
+
+    async function verArchivoEvidenciaProyecto(evidenciaID, mimeType, nombreOriginal) {
+        try {
+            const resp = await axios.get(`${CF_API_BASE_URL}/evidencias/${evidenciaID}/descarga`, {
+                responseType: 'blob'
+            });
+
+            const blob = new Blob([resp.data], { type: mimeType || 'application/octet-stream' });
+            const url = URL.createObjectURL(blob);
+
+            const ventana = window.open(url, '_blank');
+
+            if (!ventana) {
+                const enlace = document.createElement('a');
+                enlace.href = url;
+                enlace.download = nombreOriginal || 'evidencia';
+                enlace.click();
+            }
+
+            setTimeout(() => URL.revokeObjectURL(url), 60000);
+
+        } catch (error) {
+            Swal.fire({ icon: 'error', title: 'No se pudo abrir el archivo', text: 'Verifica tu conexión e intenta de nuevo.' });
+        }
+    }
+
+    async function eliminarEvidenciaProyecto(evidenciaID, actividadID, contenedorId) {
+        const confirmacion = await Swal.fire({
+            icon: 'warning',
+            title: '¿Eliminar evidencia?',
+            text: 'Esta acción no se puede deshacer.',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#EF4444'
+        });
+
+        if (!confirmacion.isConfirmed) return;
+
+        try {
+            const resp = await axios.delete(`${CF_API_BASE_URL}/evidencias/${evidenciaID}`);
+
+            if (!resp.data.success) {
+                return Swal.fire({ icon: 'error', title: 'No se pudo eliminar', text: resp.data.message || '' });
+            }
+
+            cargarGaleriaEvidenciasProyecto(actividadID, contenedorId);
+
+        } catch (error) {
+            Swal.fire({ icon: 'error', title: 'Error', text: error.response?.data?.message || 'No fue posible eliminar la evidencia.' });
         }
     }
 
