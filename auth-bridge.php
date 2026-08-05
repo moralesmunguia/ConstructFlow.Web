@@ -27,6 +27,7 @@ if (!$input || empty($input['token']) || empty($input['usuario'])) {
 // ---- Guardar información de sesión (DEF-WEB-003 sección 6) ----
 $_SESSION['Usuario']       = $input['usuario'];
 $_SESSION['EmpresaID']     = $input['empresaId'] ?? null;
+$_SESSION['EmpresaNombre'] = $input['empresaNombre'] ?? null;
 $_SESSION['Roles']         = $input['roles'] ?? [];
 $_SESSION['Permisos']      = $input['permisos'] ?? [];
 $_SESSION['Menu']          = $input['menu'] ?? null; // si la API ya lo entrega armado

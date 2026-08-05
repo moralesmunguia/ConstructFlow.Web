@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // AuthService::getSesion() regresa todo plano en data (no anidado en "usuario")
             const {
-                UsuarioID, EmpresaID, Nombre, Correo, Perfil,
+                UsuarioID, EmpresaID, EmpresaNombre, Nombre, Correo, Perfil,
                 Roles, Permisos, Menu, Token
             } = body.data;
 
@@ -86,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 token: Token,
                 usuario: { UsuarioID, Nombre, Correo, Perfil },
                 empresaId: EmpresaID,
+                empresaNombre: EmpresaNombre,
                 roles: Roles,
                 permisos: Permisos,
                 menu: Menu,

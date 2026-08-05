@@ -219,10 +219,10 @@ function construirAcciones(row) {
         </a></li>`);
     }
 
-    // Dirección: requiere PuedeActualizar (o PuedeConsultar si solo es ver)
-    if (permisosClientes.PuedeActualizar) {
-        items.push(`<li><a class="dropdown-item" href="#" onclick="editarDireccionCliente(${row.ClienteID});return false;">
-            <i class="bi bi-geo-alt me-2" style="color:#F59E0B"></i>Dirección
+    // Direcciones: requiere PuedeConsultar (mismo patrón que Contactos)
+    if (permisosClientes.PuedeConsultar) {
+        items.push(`<li><a class="dropdown-item" href="#" onclick="verDirecciones(${row.ClienteID},'${escapeJsString(row.NombreCliente||'')}');return false;">
+            <i class="bi bi-geo-alt me-2" style="color:#F59E0B"></i>Direcciones
         </a></li>`);
     }
 
@@ -325,12 +325,10 @@ function actualizarResumen(data) {
     const total = data.length;
     const activos = data.filter((c) => c.IsActive == 1 || c.IsActive === true).length;
     const inactivos = total - activos;
-    const creditoTotal = data.reduce((sum, c) => sum + (parseFloat(c.LimiteCredito) || 0), 0);
 
     document.getElementById('cfTotalClientes').textContent = total.toLocaleString('es-MX');
     document.getElementById('cfClientesActivos').textContent = activos.toLocaleString('es-MX');
     document.getElementById('cfClientesInactivos').textContent = inactivos.toLocaleString('es-MX');
-    document.getElementById('cfCreditoTotal').textContent = '$' + creditoTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 });
 }
 
 /* ================================================================
@@ -573,7 +571,10 @@ function verContactos(clienteId, nombreCliente) {
             <div class="spinner-border text-primary" role="status" style="width:2.5rem;height:2.5rem"></div>
             <p class="text-muted mt-3">Cargando contactos...</p>
         </div>`;
-    new bootstrap.Modal(document.getElementById('modalContactos')).show();
+    const modalContactosEl = document.getElementById('modalContactos');
+    if (!modalContactosEl.classList.contains('show')) {
+        bootstrap.Modal.getOrCreateInstance(modalContactosEl).show();
+    }
 
     axios.get(`${API_CLIENTES}/${clienteId}/contactos`)
         .then(res => {
@@ -600,8 +601,8 @@ function verContactos(clienteId, nombreCliente) {
                     <div>
                         ${contactos.map(c => `
                             <div class="cf-contacto-item">
-                                <div style="display:flex;align-items:center;gap:12px">
-                                    <div class="cf-contacto-avatar ${c.Principal==1||c.Principal===true?'principal':'normal'}">
+                                <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0">
+                                <div class="cf-contacto-avatar ${c.Principal==1||c.Principal===true?'principal':'normal'}">
                                         ${c.Nombre ? c.Nombre.charAt(0).toUpperCase() : '?'}
                                     </div>
                                     <div class="cf-contacto-info">
@@ -642,7 +643,7 @@ function abrirModalContacto(clienteId) {
     document.getElementById('cfContactoCorreo').value = '';
     document.getElementById('cfContactoTelefono').value = '';
     document.getElementById('cfContactoCelular').value = '';
-    document.getElementById('cfContactoPrincipal').checked = false;
+    document.getElementById('cfContactoEsPrincipal').checked = false;
     document.getElementById('tituloContactoForm').textContent = 'Nuevo Contacto';
     new bootstrap.Modal(document.getElementById('modalContacto')).show();
 }
@@ -662,7 +663,7 @@ function editarContacto(contactoId) {
             document.getElementById('cfContactoCorreo').value     = c.Correo || '';
             document.getElementById('cfContactoTelefono').value    = c.Telefono || '';
             document.getElementById('cfContactoCelular').value     = c.Celular || '';
-            document.getElementById('cfContactoPrincipal').checked = (c.Principal == 1 || c.Principal === true);
+            document.getElementById('cfContactoEsPrincipal').checked = (c.Principal == 1 || c.Principal === true);
             document.getElementById('tituloContactoForm').textContent = 'Editar Contacto';
             new bootstrap.Modal(document.getElementById('modalContacto')).show();
         })
@@ -689,7 +690,7 @@ function guardarContacto() {
         Correo:     document.getElementById('cfContactoCorreo').value.trim() || null,
         Telefono:   document.getElementById('cfContactoTelefono').value.trim() || null,
         Celular:    document.getElementById('cfContactoCelular').value.trim() || null,
-        Principal:  document.getElementById('cfContactoPrincipal').checked ? 1 : 0,
+        Principal:  document.getElementById('cfContactoEsPrincipal').checked ? 1 : 0,
         RowVersion: parseInt(document.getElementById('cfContactoRowVersion').value) || 1
     };
 
@@ -760,7 +761,10 @@ function verDirecciones(clienteId, nombreCliente) {
             <div class="spinner-border text-primary" role="status" style="width:2.5rem;height:2.5rem"></div>
             <p class="text-muted mt-3">Cargando direcciones...</p>
         </div>`;
-    new bootstrap.Modal(document.getElementById('modalDirecciones')).show();
+    const modalDireccionesEl = document.getElementById('modalDirecciones');
+    if (!modalDireccionesEl.classList.contains('show')) {
+        bootstrap.Modal.getOrCreateInstance(modalDireccionesEl).show();
+    }
 
     axios.get(`${API_CLIENTES}/${clienteId}/direcciones`)
         .then(res => {
@@ -787,8 +791,8 @@ function verDirecciones(clienteId, nombreCliente) {
                     <div>
                         ${direcciones.map(d => `
                             <div class="cf-contacto-item" style="align-items:flex-start">
-                                <div style="display:flex;align-items:flex-start;gap:12px">
-                                    <div class="cf-contacto-avatar ${d.Principal==1||d.Principal===true?'principal':'normal'}" style="margin-top:2px">
+                                <div style="display:flex;align-items:flex-start;gap:12px;flex:1;min-width:0">
+                                <div class="cf-contacto-avatar ${d.Principal==1||d.Principal===true?'principal':'normal'}" style="margin-top:2px">
                                         <i class="bi bi-geo-alt" style="font-size:.9rem"></i>
                                     </div>
                                     <div class="cf-contacto-info">
@@ -884,36 +888,8 @@ async function guardarDireccion() {
 
     const marcarPrincipal = document.getElementById('cfDireccionPrincipal').checked;
 
-    // ---- Si se marca como principal, desmarcar las demás primero ----
-    if (marcarPrincipal) {
-        try {
-            const resp = await axios.get(`${API_CLIENTES}/${clienteId}/direcciones`);
-            const direcciones = resp.data.success !== undefined ? (resp.data.data || []) : resp.data;
-            const otrasPrincipales = direcciones.filter(
-                (d) => (d.Principal == 1 || d.Principal === true) && String(d.ClienteDireccionID) !== String(id)
-            );
-
-            for (const otra of otrasPrincipales) {
-                await axios.put(`${API_DIRECCIONES}/${otra.ClienteDireccionID}`, {
-                    ClienteID:       otra.ClienteID,
-                    TipoDireccion:   otra.TipoDireccion,
-                    Calle:           otra.Calle,
-                    NumeroExterior:  otra.NumeroExterior,
-                    NumeroInterior:  otra.NumeroInterior,
-                    Colonia:         otra.Colonia,
-                    Municipio:       otra.Municipio,
-                    Estado:          otra.Estado,
-                    CodigoPostal:    otra.CodigoPostal,
-                    Pais:            otra.Pais,
-                    Principal:       0,
-                    IsActive:        otra.IsActive,
-                    RowVersion:      otra.RowVersion || 1
-                });
-            }
-        } catch (e) {
-            console.warn('No se pudieron desmarcar otras direcciones principales:', e);
-        }
-    }
+    // Nota: el API ya garantiza una sola dirección Principal por cliente
+    // (ClienteDireccionService::create()/update() desmarca las demás).
 
     const payload = {
         ClienteID:       clienteId,

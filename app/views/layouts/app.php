@@ -32,6 +32,7 @@
         const CF_USUARIO_ID   = <?= (int)($_SESSION['Usuario']['UsuarioID'] ?? 0) ?>;
         const CF_USUARIO_NOMBRE = "<?= htmlspecialchars($_SESSION['Usuario']['Nombre'] ?? '', ENT_QUOTES) ?>";
         const CF_EMPRESA_ID   = <?= (int)($_SESSION['EmpresaID'] ?? 1) ?>;
+        const CF_EMPRESA_NOMBRE = "<?= htmlspecialchars($_SESSION['EmpresaNombre'] ?? '', ENT_QUOTES) ?>";
 
         // Permisos del rol actual por módulo (cf_permisosmatriz), indexados por ModuloCodigo.
         // Uso: CF_PERMISOS['cotizaciones']?.PuedeCrear

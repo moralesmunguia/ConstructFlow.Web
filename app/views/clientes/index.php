@@ -56,15 +56,6 @@
           <span class="cf-resumen-label">Inactivos</span>
         </div>
       </div>
-      <div class="cf-resumen-card">
-        <div class="cf-resumen-icon" style="background:#FEF3C7;color:#D97706;">
-          <i class="bi bi-currency-dollar"></i>
-        </div>
-        <div class="cf-resumen-info">
-          <span class="cf-resumen-value" id="cfCreditoTotal">—</span>
-          <span class="cf-resumen-label">Crédito Total</span>
-        </div>
-      </div>
     </div>
 
     <!-- Tabla -->
@@ -111,7 +102,7 @@
      MODAL: Contactos del Cliente
      ═══════════════════════════════════════════════════════════════ -->
 <div class="modal fade" id="modalContactos" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content cf-modal">
       <div class="cf-modal-header">
         <div class="cf-modal-title-wrap">
@@ -187,7 +178,7 @@
           <div class="cf-field-row">
             <div class="cf-field-group cf-field-full">
               <label class="cf-checkbox-card" style="margin-top:4px;">
-                <input type="checkbox" id="cfContactoPrincipal">
+                <input type="checkbox" id="cfContactoEsPrincipal">
                 <span class="cf-checkbox-indicator"></span>
                 <span class="cf-checkbox-text">Marcar como contacto principal</span>
               </label>
@@ -442,7 +433,7 @@
      MODAL: Direcciones del Cliente
      ═══════════════════════════════════════════════════════════════ -->
 <div class="modal fade" id="modalDirecciones" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content cf-modal">
       <div class="cf-modal-header">
         <div class="cf-modal-title-wrap">
@@ -605,7 +596,7 @@
 /* Resumen cards */
 .cf-resumen-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin-bottom: 24px;
 }
@@ -1022,6 +1013,8 @@
 .cf-contacto-info {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-width: 0;
 }
 .cf-contacto-nombre {
   font-weight: 600;
@@ -1047,6 +1040,7 @@
 .cf-contacto-actions {
   display: flex;
   gap: 6px;
+  flex-shrink: 0;
 }
 .cf-contacto-actions button {
   width: 32px;
