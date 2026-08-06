@@ -24,10 +24,13 @@
     <span>Actividades</span>
 </nav>
 
-<div class="cf-page-header">
+<link rel="stylesheet" href="<?= BASE_URL ?>/public/css/cf-components.css">
+
+<div class="cf-listado-container">
+<div class="cf-listado-header">
     <div>
-        <h1 class="cf-page-title">Actividades</h1>
-        <p class="cf-page-subtitle">Listado de actividades de todos tus proyectos, con filtros y acciones rápidas.</p>
+        <h1 class="cf-listado-title">Actividades</h1>
+        <p class="cf-listado-subtitle">Listado de actividades de todos tus proyectos, con filtros y acciones rápidas.</p>
     </div>
 </div>
 
@@ -51,58 +54,74 @@
 
 <div id="cfActTabPaneListado">
 
-<div class="cf-card mb-3">
-    <div class="row g-2 align-items-end">
-        <div class="col-md-3">
-            <label class="form-label">Proyecto</label>
-            <select id="cfFiltroProyecto" class="form-select form-select-sm"></select>
+<div class="cf-card" style="margin-bottom:16px">
+    <div class="cf-card-body">
+        <div class="cf-field-row-3">
+            <div class="cf-field-group">
+                <label class="cf-label">Proyecto</label>
+                <select id="cfFiltroProyecto" class="cf-input" style="cursor:pointer"></select>
+            </div>
+            <div class="cf-field-group">
+                <label class="cf-label">Responsable</label>
+                <select id="cfFiltroResponsable" class="cf-input" style="cursor:pointer"></select>
+            </div>
+            <div class="cf-field-group">
+                <label class="cf-label">Estado</label>
+                <select id="cfFiltroEstado" class="cf-input" style="cursor:pointer">
+                    <option value="">Todos</option>
+                    <option value="PENDIENTE">Pendiente</option>
+                    <option value="EN_PROCESO">En proceso</option>
+                    <option value="COMPLETADA">Completada</option>
+                    <option value="CANCELADA">Cancelada</option>
+                </select>
+            </div>
         </div>
-        <div class="col-md-3">
-            <label class="form-label">Responsable</label>
-            <select id="cfFiltroResponsable" class="form-select form-select-sm"></select>
-        </div>
-        <div class="col-md-2">
-            <label class="form-label">Estado</label>
-            <select id="cfFiltroEstado" class="form-select form-select-sm">
-                <option value="">Todos</option>
-                <option value="PENDIENTE">Pendiente</option>
-                <option value="EN_PROCESO">En proceso</option>
-                <option value="COMPLETADA">Completada</option>
-                <option value="CANCELADA">Cancelada</option>
-            </select>
-        </div>
-        <div class="col-md-2 form-check mt-4">
-            <input type="checkbox" class="form-check-input" id="cfFiltroVencidas">
-            <label class="form-check-label" for="cfFiltroVencidas">Solo vencidas</label>
-        </div>
-        <div class="col-md-2 d-flex gap-2">
-            <button type="button" class="btn btn-cf-primary btn-sm w-100" id="btnFiltrarActividades"><i class="bi bi-search"></i> Buscar</button>
-            <button type="button" class="btn btn-cf-secondary btn-sm" id="btnLimpiarFiltrosActividades" title="Limpiar"><i class="bi bi-x-lg"></i></button>
+        <div class="cf-field-row" style="margin-top:12px;margin-bottom:0;align-items:center">
+            <div class="cf-field-group">
+                <label class="cf-checkbox-card">
+                    <input type="checkbox" id="cfFiltroVencidas">
+                    <span class="cf-checkbox-indicator"></span>
+                    <span class="cf-checkbox-text">Solo vencidas</span>
+                </label>
+            </div>
+            <div class="cf-field-group" style="flex-direction:row;gap:8px;align-items:flex-end;justify-content:flex-end">
+                <button type="button" class="cf-btn-primary" id="btnFiltrarActividades"><i class="bi bi-search"></i> Buscar</button>
+                <button type="button" class="cf-btn-secondary" id="btnLimpiarFiltrosActividades" title="Limpiar"><i class="bi bi-x-lg"></i></button>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="cf-card">
-    <table class="table cf-table" id="cfTablaActividades" style="width:100%">
-        <thead>
-            <tr>
-                <th>Proyecto</th>
-                <th>WBS</th>
-                <th>Nombre</th>
-                <th>Fase</th>
-                <th>Responsable</th>
-                <th>Inicio</th>
-                <th>Fin</th>
-                <th>Avance</th>
-                <th>Estado</th>
-                <th class="text-center">Hito</th>
-                <th class="text-end">Acciones</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+<div class="cf-card cf-card-table">
+    <div class="cf-table-toolbar">
+        <div class="cf-table-search">
+            <i class="bi bi-search"></i>
+            <input type="text" id="cfBuscarActividades" placeholder="Buscar actividad, proyecto, WBS...">
+        </div>
+    </div>
+    <div class="cf-table-wrap">
+        <table class="cf-table" id="cfTablaActividades" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Proyecto</th>
+                    <th>WBS</th>
+                    <th>Nombre</th>
+                    <th>Fase</th>
+                    <th>Responsable</th>
+                    <th>Inicio</th>
+                    <th>Fin</th>
+                    <th>Avance</th>
+                    <th>Estado</th>
+                    <th class="text-center">Hito</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 </div>
 
+</div>
 </div>
 
 <!-- ============================================================ -->

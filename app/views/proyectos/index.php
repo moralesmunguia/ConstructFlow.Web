@@ -25,13 +25,16 @@
  * El token JWT se adjunta automáticamente vía interceptor de Axios (app.js).
  */
 ?>
-<div class="cf-page-header">
+<link rel="stylesheet" href="<?= BASE_URL ?>/public/css/cf-components.css">
+
+<div class="cf-listado-container">
+<div class="cf-listado-header">
     <div>
-        <h1 class="cf-page-title">Proyectos</h1>
-        <p class="cf-page-subtitle">Listado de proyectos en ejecución y su seguimiento.</p>
+        <h1 class="cf-listado-title">Proyectos</h1>
+        <p class="cf-listado-subtitle">Listado de proyectos en ejecución y su seguimiento.</p>
     </div>
     <div>
-        <button type="button" class="btn btn-cf-primary" id="btnNuevoProyecto">
+        <button type="button" class="cf-btn-primary" id="btnNuevoProyecto">
             <i class="bi bi-plus-lg"></i> Nuevo Proyecto
         </button>
     </div>
@@ -43,37 +46,47 @@
 <div id="cfCardListado">
 
     <!-- ============ FILTROS ============ -->
-    <div class="cf-card mb-3">
-        <div class="row g-3 align-items-end">
-            <div class="col-md-3">
-                <label class="form-label">Cliente</label>
-                <select id="fClienteID" class="form-select">
-                    <option value="">Todos</option>
-                </select>
+    <div class="cf-card" style="margin-bottom:16px">
+        <div class="cf-card-body">
+            <div class="cf-field-row-3">
+                <div class="cf-field-group">
+                    <label class="cf-label">Cliente</label>
+                    <select id="fClienteID" class="cf-input" style="cursor:pointer">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="cf-field-group">
+                    <label class="cf-label">Responsable</label>
+                    <select id="fResponsableID" class="cf-input" style="cursor:pointer">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="cf-field-group">
+                    <label class="cf-label">Estado</label>
+                    <select id="fEstado" class="cf-input" style="cursor:pointer">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
             </div>
-            <div class="col-md-3">
-                <label class="form-label">Responsable</label>
-                <select id="fResponsableID" class="form-select">
-                    <option value="">Todos</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Estado</label>
-                <select id="fEstado" class="form-select">
-                    <option value="">Todos</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <button type="button" class="btn btn-cf-primary w-100" id="btnFiltrar">
-                    <i class="bi bi-funnel"></i> Filtrar
-                </button>
+            <div class="cf-field-row" style="margin-top:12px;margin-bottom:0">
+                <div class="cf-field-group cf-field-full" style="align-items:flex-end">
+                    <button type="button" class="cf-btn-primary" id="btnFiltrar">
+                        <i class="bi bi-funnel"></i> Filtrar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="cf-card cf-card-table">
-        <div class="table-responsive">
-            <table id="tblProyectos" class="table cf-table w-100">
+        <div class="cf-table-toolbar">
+            <div class="cf-table-search">
+                <i class="bi bi-search"></i>
+                <input type="text" id="cfBuscarProyectos" placeholder="Buscar folio, proyecto, cliente...">
+            </div>
+        </div>
+        <div class="cf-table-wrap">
+            <table id="tblProyectos" class="cf-table w-100">
                 <thead>
                     <tr>
                     <th>Folio</th>
@@ -95,99 +108,141 @@
         </div>
     </div>
 </div>
+</div>
 
 <!-- ============================================================ -->
 <!-- FORMULARIO (Nuevo / Editar) -->
 <!-- ============================================================ -->
-<div class="cf-card" id="cfCardFormulario" style="display:none">
-    <div class="cf-page-header">
-        <h2 class="cf-form-titulo" id="cfFormTitulo">Nuevo Proyecto</h2>
-        <div class="cf-page-actions">
-            <button type="button" class="btn btn-cf-secondary" id="btnCancelarFormularioProyecto">Cancelar</button>
-            <button type="button" class="btn btn-cf-primary" id="btnGuardarProyecto">
-                <i class="bi bi-save"></i> Guardar
+<div class="cf-form-container" id="cfCardFormulario" style="display:none">
+    <div class="cf-form-header">
+        <div>
+            <h2 class="cf-form-title" id="cfFormTitulo">Nuevo Proyecto</h2>
+            <p class="cf-form-subtitle">Datos generales y actividades del proyecto</p>
+        </div>
+        <div class="cf-form-actions">
+            <button type="button" class="cf-btn-secondary" id="btnCancelarFormularioProyecto">
+                <i class="bi bi-x-lg"></i> Cancelar
+            </button>
+            <button type="button" class="cf-btn-primary" id="btnGuardarProyecto">
+                <i class="bi bi-check-lg"></i> Guardar
             </button>
         </div>
     </div>
 
-    <div class="row g-3 mt-1">
-        <div class="col-md-6">
-            <label class="form-label">Cliente *</label>
-            <select id="cfClienteID" class="form-select">
-                <option value="">Selecciona un cliente</option>
-            </select>
+    <!-- Card: Datos generales -->
+    <div class="cf-card" style="margin-bottom:16px">
+        <div class="cf-card-header">
+            <div class="cf-card-icon" style="background:#EEF2FF;color:#0B1F47;">
+                <i class="bi bi-building"></i>
+            </div>
+            <span class="cf-card-title">Datos Generales</span>
         </div>
-        <div class="col-md-6">
-            <label class="form-label">Responsable</label>
-            <select id="cfResponsableID" class="form-select">
-                <option value="">Selecciona un responsable</option>
-            </select>
-        </div>
+        <div class="cf-card-body">
+            <div class="cf-field-row">
+                <div class="cf-field-group">
+                    <label class="cf-label">Cliente <span class="cf-required">*</span></label>
+                    <select id="cfClienteID" class="cf-input" style="cursor:pointer">
+                        <option value="">Selecciona un cliente</option>
+                    </select>
+                </div>
+                <div class="cf-field-group">
+                    <label class="cf-label">Responsable</label>
+                    <select id="cfResponsableID" class="cf-input" style="cursor:pointer">
+                        <option value="">Selecciona un responsable</option>
+                    </select>
+                </div>
+            </div>
 
-        <div class="col-md-8">
-            <label class="form-label">Nombre del Proyecto *</label>
-            <input type="text" id="cfNombreProyecto" class="form-control" placeholder="Ej. Remodelación planta baja">
-        </div>
-        <div class="col-md-4">
-            <label class="form-label">Tipo de Proyecto</label>
-            <input type="text" id="cfTipoProyecto" class="form-control" value="Construccion">
-        </div>
+            <div class="cf-field-row">
+                <div class="cf-field-group cf-field-full">
+                    <label class="cf-label">Nombre del Proyecto <span class="cf-required">*</span></label>
+                    <input type="text" id="cfNombreProyecto" class="cf-input" placeholder="Ej. Remodelación planta baja">
+                </div>
+            </div>
 
-        <div class="col-md-4">
-            <label class="form-label">OC / Contrato</label>
-            <input type="text" id="cfNumeroContrato" class="form-control" placeholder="Opcional al crear">
-        </div>
-        <div class="col-md-4">
-            <label class="form-label">Fecha de Inicio</label>
-            <input type="date" id="cfFechaInicio" class="form-control">
-        </div>
-        <div class="col-md-4">
-            <label class="form-label">Fecha de Fin (estimada)</label>
-            <input type="date" id="cfFechaFin" class="form-control">
-        </div>
+            <div class="cf-field-row-3">
+                <div class="cf-field-group">
+                    <label class="cf-label">Tipo de Proyecto</label>
+                    <input type="text" id="cfTipoProyecto" class="cf-input" value="Construccion">
+                </div>
+                <div class="cf-field-group">
+                    <label class="cf-label">OC / Contrato</label>
+                    <input type="text" id="cfNumeroContrato" class="cf-input" placeholder="Opcional al crear">
+                </div>
+                <div class="cf-field-group">
+                </div>
+            </div>
 
-        <div class="col-md-12">
-            <label class="form-label">Ubicación</label>
-            <input type="text" id="cfUbicacionProyecto" class="form-control" placeholder="Dirección / ubicación de la obra">
-        </div>
+            <div class="cf-field-row">
+                <div class="cf-field-group">
+                    <label class="cf-label">Fecha de Inicio</label>
+                    <input type="date" id="cfFechaInicio" class="cf-input">
+                </div>
+                <div class="cf-field-group">
+                    <label class="cf-label">Fecha de Fin (estimada)</label>
+                    <input type="date" id="cfFechaFin" class="cf-input">
+                </div>
+            </div>
 
-        <div class="col-md-6">
-            <label class="form-label">Descripción</label>
-            <textarea id="cfDescripcion" class="form-control" rows="3"></textarea>
-        </div>
-        <div class="col-md-6">
-            <label class="form-label">Observaciones</label>
-            <textarea id="cfObservacionesProyecto" class="form-control" rows="3"></textarea>
+            <div class="cf-field-row">
+                <div class="cf-field-group cf-field-full">
+                    <label class="cf-label">Ubicación</label>
+                    <input type="text" id="cfUbicacionProyecto" class="cf-input" placeholder="Dirección / ubicación de la obra">
+                </div>
+            </div>
+
+            <div class="cf-field-row">
+                <div class="cf-field-group">
+                    <label class="cf-label">Descripción</label>
+                    <textarea id="cfDescripcion" class="cf-textarea" rows="3"></textarea>
+                </div>
+                <div class="cf-field-group">
+                    <label class="cf-label">Observaciones</label>
+                    <textarea id="cfObservacionesProyecto" class="cf-textarea" rows="3"></textarea>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="cf-form-seccion-header d-flex justify-content-between align-items-center mt-4 mb-2">
-        <h3 class="cf-form-seccion mb-0">Actividades</h3>
-        <button type="button" class="btn btn-cf-secondary btn-sm" id="btnAgregarActividadProyecto">
-            <i class="bi bi-plus-lg"></i> Agregar actividad
-        </button>
-    </div>
-    <div class="form-text mb-2" id="cfActividadesNota" style="display:none">
-        Guarda el proyecto primero para poder agregar actividades.
-    </div>
-    <div class="table-responsive">
-        <table class="table cf-table" id="cfTablaActividadesProyecto">
-            <thead>
-                <tr>
-                    <th style="width:8%">WBS</th>
-                    <th style="width:14%">Nombre *</th>
-                    <th style="width:12%">Descripción</th>
-                    <th style="width:12%">Fase</th>
-                    <th style="width:11%">Responsable</th>
-                    <th style="width:8%">Inicio</th>
-                    <th style="width:8%">Fin</th>
-                    <th style="width:9%">Estado</th>
-                    <th style="width:5%" class="text-center">Hito</th>
-                    <th style="width:13%" class="text-end">Acciones</th>
-                </tr>
-            </thead>
-            <tbody><!-- filas dinámicas --></tbody>
-        </table>
+    <!-- Card: Actividades -->
+    <div class="cf-card">
+        <div class="cf-card-header" style="justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:10px">
+                <div class="cf-card-icon" style="background:#FEF3C7;color:#D97706;">
+                    <i class="bi bi-list-check"></i>
+                </div>
+                <span class="cf-card-title">Actividades</span>
+            </div>
+            <button type="button" class="cf-btn-secondary" id="btnAgregarActividadProyecto">
+                <i class="bi bi-plus-lg"></i> Agregar actividad
+            </button>
+        </div>
+        <div class="cf-card-body" style="padding-top:0">
+            <span class="cf-hint" id="cfActividadesNota" style="display:none">
+                Guarda el proyecto primero para poder agregar actividades.
+            </span>
+        </div>
+        <div class="cf-card-body" style="padding:0">
+            <div class="cf-table-wrap">
+                <table class="cf-table" id="cfTablaActividadesProyecto">
+                    <thead>
+                        <tr>
+                            <th style="width:8%">WBS</th>
+                            <th style="width:14%">Nombre *</th>
+                            <th style="width:12%">Descripción</th>
+                            <th style="width:12%">Fase</th>
+                            <th style="width:11%">Responsable</th>
+                            <th style="width:8%">Inicio</th>
+                            <th style="width:8%">Fin</th>
+                            <th style="width:9%">Estado</th>
+                            <th style="width:5%" class="text-center">Hito</th>
+                            <th style="width:13%" class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody><!-- filas dinámicas --></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 

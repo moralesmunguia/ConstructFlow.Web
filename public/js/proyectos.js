@@ -109,6 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
     poblarFiltroEstados();
     cargarCatalogos().then(cargarProyectos);
 
+    document.getElementById('cfBuscarProyectos')?.addEventListener('input', (e) => {
+        dataTable?.search(e.target.value).draw();
+    });
+
     document.getElementById('btnFiltrar')?.addEventListener('click', cargarProyectos);
     document.getElementById('btnNuevoProyecto')?.addEventListener('click', () => {
         if (modoBotonPrincipal === 'actividad') return abrirNuevaActividadDesdeGantt();

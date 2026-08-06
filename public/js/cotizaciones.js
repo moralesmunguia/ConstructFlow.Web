@@ -29,6 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('btnNuevaCotizacion')?.remove();
     }
 
+    document.getElementById('cfBuscarCotizaciones')?.addEventListener('input', (e) => {
+        dataTable?.search(e.target.value).draw();
+    });
+
     cargarCotizaciones().then(() => {
         const parametros = new URLSearchParams(window.location.search);
         const cotizacionEditarID = parametros.get('editar');

@@ -52,6 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarCatalogos().then(cargarActividades);
 
     document.getElementById('btnFiltrarActividades')?.addEventListener('click', cargarActividades);
+    document.getElementById('cfBuscarActividades')?.addEventListener('input', (e) => {
+        dataTable?.search(e.target.value).draw();
+    });
     document.getElementById('btnLimpiarFiltrosActividades')?.addEventListener('click', () => {
         document.getElementById('cfFiltroProyecto').value = '';
         document.getElementById('cfFiltroResponsable').value = '';
