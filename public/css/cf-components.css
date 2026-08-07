@@ -821,6 +821,27 @@
 }
 .cf-btn-secondary:hover { background: #F1F5F9; }
 
+.cf-btn-icon {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  background: #fff;
+  color: #475569;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+.cf-btn-icon:hover {
+  background: #EEF2FF;
+  border-color: #0B1F47;
+  color: #0B1F47;
+}
+
 /* Footer móvil de formulario */
 .cf-form-footer {
   margin-top: 20px;

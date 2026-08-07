@@ -49,6 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btnNuevaAlerta')?.addEventListener('click', abrirNuevaAlerta);
     document.getElementById('btnRevisarAlertas')?.addEventListener('click', revisarAlertasAhora);
     document.getElementById('btnFiltrarAlertas')?.addEventListener('click', cargarAlertas);
+    document.getElementById('cfBuscarAlertas')?.addEventListener('input', (e) => {
+        dataTable?.search(e.target.value).draw();
+    });
     document.getElementById('btnLimpiarFiltrosAlertas')?.addEventListener('click', () => {
         document.getElementById('cfFiltroEstadoAlerta').value = '';
         document.getElementById('cfFiltroPrioridadAlerta').value = '';
