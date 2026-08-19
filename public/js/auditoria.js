@@ -161,8 +161,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ['Acción', a.Accion],
                 ['Nivel', a.Nivel],
                 ['IP', a.IP],
-                ['Valor anterior', a.ValorAnterior],
-                ['Valor nuevo', a.ValorNuevo]
+                ['Valor anterior', formatearValorJson(a.ValorAnterior)],
+                ['Valor nuevo', formatearValorJson(a.ValorNuevo)]
             ];
 
             const filasHtml = campos.map(([etiqueta, valor]) => `<tr>
@@ -170,10 +170,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td style="padding:6px 8px"><strong>${escapeHtml(valor ?? '—')}</strong></td>
             </tr>`).join('');
 
+            // Nivel/IP/Valor anterior/Valor nuevo vienen vacíos en los
+            // registros que no pasaron por AuditoriaService::registrar()
+            // (p. ej. los generados por un mecanismo externo a la app,
+            // como un trigger de BD sobre CF_Proyecto) -- se avisa para
+            // que no se lea como un error de la pantalla.
+            const esRegistroLimitado = !a.Nivel && !a.IP && !a.ValorAnterior && !a.ValorNuevo;
+            const nota = esRegistroLimitado
+                ? `<p class="text-muted" style="font-size:0.8rem;margin-top:10px">
+                     Este registro no incluye Nivel/IP/valores porque se generó fuera del
+                     flujo estándar de auditoría de la aplicación (no vía AuditoriaService).
+                   </p>`
+                : '';
+
             Swal.fire({
                 title: `Auditoría #${auditoriaID}`,
                 width: 640,
-                html: `<div class="text-start cf-table-wrap"><table class="cf-table"><tbody>${filasHtml}</tbody></table></div>`,
+                html: `<div class="text-start cf-table-wrap"><table class="cf-table"><tbody>${filasHtml}</tbody></table></div>${nota}`,
                 confirmButtonText: 'Cerrar'
             });
 
@@ -216,6 +229,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ---- Helpers ----
+    function formatearValorJson(valor) {
+        if (!valor) return null;
+        try {
+            return JSON.stringify(JSON.parse(valor), null, 2);
+        } catch (e) {
+            return valor;
+        }
+    }
+
     function formatearFechaHora(valor) {
         if (!valor) return '—';
         const fecha = new Date(valor.replace(' ', 'T'));
