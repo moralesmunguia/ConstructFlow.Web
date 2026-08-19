@@ -15,7 +15,7 @@
         <ul>
             <?php foreach (($menu ?? []) as $item): ?>
                 <li class="cf-menu-item">
-                    <a href="<?= BASE_URL ?>/index.php?modulo=<?= urlencode($item['ModuloCodigo']) ?>">
+                    <a href="<?= BASE_URL ?>/index.php?modulo=<?= urlencode(strtolower($item['Codigo'] ?? '')) ?>">
                         <i class="bi <?= htmlspecialchars($item['Icono'] ?? 'bi-dot') ?>"></i>
                         <span><?= htmlspecialchars($item['Nombre']) ?></span>
                     </a>

@@ -1,0 +1,65 @@
+{
+  "info": {
+    "name": "MATRIZ-009 Collection",
+    "_postman_id": "matriz-009-collection",
+    "description": "Colección para probar flujo crear/actualizar/eliminar costos y verificar presupuesto",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Crear costo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{token}}"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"CategoriaCostoID\": 1,\n  \"Importe\": 5000.00,\n  \"Concepto\": \"Compra material QA\",\n  \"CreatedUserID\": 1,\n  \"CreatedBy\": \"qa\",\n  \"ModifiedUserID\": 1,\n  \"ModifiedBy\": \"qa\"\n}"
+        },
+        "url": "{{baseUrl}}/api/v1/proyectos/9001/costos"
+      }
+    },
+    {
+      "name": "Actualizar costo",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{token}}"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"CategoriaCostoID\": 1,\n  \"Importe\": 9000.00,\n  \"ModifiedUserID\": 1,\n  \"ModifiedBy\": \"qa\"\n}"
+        },
+        "url": "{{baseUrl}}/api/v1/costos/{{costoID}}"
+      }
+    },
+    {
+      "name": "Eliminar costo",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{token}}"}
+        ],
+        "url": "{{baseUrl}}/api/v1/costos/{{costoID}}"
+      }
+    },
+    {
+      "name": "Verificar presupuesto detalle",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{token}}"}
+        ],
+        "url": "{{baseUrl}}/api/v1/proyectos/9001/presupuesto"
+      }
+    }
+  ],
+  "variable": [
+    {"key": "baseUrl", "value": "http://localhost"},
+    {"key": "token", "value": "<TOKEN>"},
+    {"key": "costoID", "value": "900101"}
+  ]
+}

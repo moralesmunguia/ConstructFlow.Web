@@ -4,11 +4,11 @@ Proyecto: ConstructFlow.Api
 
 Documento: DEF-WEB-009
 
-Versión: 1.1
+Versión: 1.2
 
 Estado: Aprobado para Desarrollo
 
-Fecha: Julio 2026 (actualizado Agosto 2026)
+Fecha: 2026-08-07
 
 1. Objetivo
 
@@ -177,5 +177,7 @@ Versión 1.2 — 2026-08-07: Copia para control de versión; sin cambios funcion
 
 ---
 Nota: si quieres, puedo crear un archivo separado `MATRIZ-009.md` con tablas CSV/Markdown y más ejemplos por categoría para adjuntar al PR.
+---
+Nota: si quieres, puedo añadir un ejemplo de test de integración (PHPUnit) que cubra crear/actualizar/eliminar costos y verifique las modificaciones en `cf_presupuesto` y `cf_presupuestodetalle`.
 ---
 Nota: si quieres, puedo añadir un ejemplo de test de integración (PHPUnit) que cubra crear/actualizar/eliminar costos y verifique las modificaciones en `cf_presupuesto` y `cf_presupuestodetalle`.
